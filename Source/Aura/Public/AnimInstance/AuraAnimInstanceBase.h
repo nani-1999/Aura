@@ -6,9 +6,8 @@
 #include "Animation/AnimInstance.h"
 #include "AuraAnimInstanceBase.generated.h"
 
-/**
- * 
- */
+class AAuraCharacterBase;
+
 UCLASS()
 class AURA_API UAuraAnimInstanceBase : public UAnimInstance
 {
@@ -18,7 +17,7 @@ public:
 	virtual void NativeInitializeAnimation() override;
 
 protected:
-	TObjectPtr<class AAuraCharacterBase> AuraCharacterBase;
+	TObjectPtr<AAuraCharacterBase> AuraCharacterBase;
 
 public:
 	UFUNCTION(BlueprintCallable)
