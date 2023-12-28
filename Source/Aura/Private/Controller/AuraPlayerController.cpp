@@ -18,13 +18,13 @@ void AAuraPlayerController::BeginPlay() {
 	// adding context to subsystem
 	check(AuraContext);
 	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
+
 	check(Subsystem);
 	Subsystem->AddMappingContext(AuraContext, 0);
 
 	// Cursor Settings
 	bShowMouseCursor = true; //mouse cursor display
 	DefaultMouseCursor = EMouseCursor::Default; //mouse shape
-
 	FInputModeGameAndUI InputModeData; //input to effect on game and ui
 	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock); //not locking mouse cursor to the viewport/window
 	InputModeData.SetHideCursorDuringCapture(false); //do not hide cursor while click on viewport/window
@@ -32,7 +32,7 @@ void AAuraPlayerController::BeginPlay() {
 }
 
 void AAuraPlayerController::PlayerTick(float DeltaTime) {
-	Super::Tick(DeltaTime);
+	Super::PlayerTick(DeltaTime);
 
 	CursorTrace();
 }
@@ -47,8 +47,6 @@ void AAuraPlayerController::SetupInputComponent() {
 
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue) {
 	const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>(); //WS- Y | AD - X
-
-	UE_LOG(LogTemp, Warning, TEXT("Pressing"));
 
 	FRotator ControllerRotation = GetControlRotation();
 	FRotator ControllerSurface = FRotator(0.f, ControllerRotation.Yaw, 0.f);
@@ -77,8 +75,6 @@ void AAuraPlayerController::CursorTrace() {
 	}
 	else if (PreviousHitEnemy) {
 		PreviousHitEnemy->UnHighlightActor();
-		PreviousHitEnemy = CurrentHitEnemy;
+		PreviousHitEnemy = nullptr;
 	}
 }
-
-//move not working, check
