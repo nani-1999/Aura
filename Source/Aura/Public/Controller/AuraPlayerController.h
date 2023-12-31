@@ -10,6 +10,7 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 class IEnemyInterface;
+class UEnemyInterface;
 
 UCLASS()
 class AURA_API AAuraPlayerController : public APlayerController
@@ -37,5 +38,7 @@ private:
 
 	// Trace
 	void CursorTrace();
-	TObjectPtr<IEnemyInterface> PreviousHitEnemy;
+	class IEnemyInterface* PreviousHitEnemy; //IEnemyInterface is not UObject, so TObjectPtr doesn't work, so using raw ptr instead
+
+	//change to last cursor trace actor
 };

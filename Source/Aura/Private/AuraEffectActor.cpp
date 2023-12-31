@@ -4,7 +4,9 @@
 #include "AuraEffectActor.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
-#include "Character/AuraCharacterBase.h"
+#include "AbilitySystemInterface.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/AuraAttributeSet.h"
 
 AAuraEffectActor::AAuraEffectActor()
 {
@@ -12,7 +14,7 @@ AAuraEffectActor::AAuraEffectActor()
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 	SetRootComponent(Mesh);
-
+	
 	Sphere = CreateDefaultSubobject<USphereComponent>("Sphere");
 	Sphere->SetupAttachment(Mesh);
 	Sphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -25,6 +27,8 @@ void AAuraEffectActor::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision); //unable to click on instance
+
 	Sphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	Sphere->OnComponentBeginOverlap.AddDynamic(this, &AAuraEffectActor::SphereOverlapBegin);
 }
@@ -36,10 +40,18 @@ void AAuraEffectActor::Tick(float DeltaTime)
 }
 
 void AAuraEffectActor::SphereOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
-	if (OtherActor) {
-		AAuraCharacterBase* AuraCharacterBase = Cast<AAuraCharacterBase>(OtherActor);
-		if (AuraCharacterBase) {
-			UE_LOG(LogTemp, Warning, TEXT("%s Overlapped"), *AuraCharacterBase->GetName());
-		}
+
+	IAbilitySystemInterface* AbilitySystemInterface = Cast<IAbilitySystemInterface>(OtherActor);
+
+	if (AbilitySystemInterface) {
+
+		// @TODO: Change this to apply a Gameplay Effect. For now, using const_cast as a hack!
+		const UAuraAttributeSet* AuraAttributeSet = Cast<UAuraAttributeSet>(AbilitySystemInterface->GetAbilitySystemComponent()->GetAttributeSet(UAuraAttributeSet::StaticClass()));
+
+		UAuraAttributeSet* MutableAuraAttributeSet = const_cast<UAuraAttributeSet*>(AuraAttributeSet);
+
+		MutableAuraAttributeSet->SetHealth(AuraAttributeSet->GetHealth() + 25.f);
+
+		Destroy();
 	}
 }

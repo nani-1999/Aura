@@ -5,8 +5,11 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Controller/AuraPlayerController.h"
 #include "Controller/AuraPlayerState.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/AuraAttributeSet.h"
+#include "UI/HUD/AuraHUD.h"
 
 AAuraCharacter::AAuraCharacter() {
 
@@ -38,23 +41,28 @@ AAuraCharacter::AAuraCharacter() {
 void AAuraCharacter::PossessedBy(AController* NewController) {
 	Super::PossessedBy(NewController);
 
-	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerState);
-
-	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
-	AttributeSet = AuraPlayerState->GetAttributeSet();
-
-	AbilitySystemComponent->InitAbilityActorInfo(AuraPlayerState, this);
+	InitAbilitySystem();
 }
 // client
 void AAuraCharacter::OnRep_PlayerState() {
 	Super::OnRep_PlayerState();
 
+	InitAbilitySystem();
+}
+
+void AAuraCharacter::InitAbilitySystem() {
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
 	check(AuraPlayerState);
 
+	// AbilitySystem
 	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
 	AttributeSet = AuraPlayerState->GetAttributeSet();
-
 	AbilitySystemComponent->InitAbilityActorInfo(AuraPlayerState, this);
+
+	// Also doing Overlay here
+	if (AAuraPlayerController* AuraPlayerController = GetController<AAuraPlayerController>()) {
+		AAuraHUD* AuraHUD = AuraPlayerController->GetHUD<AAuraHUD>();
+
+		AuraHUD->InitOverlay(AuraPlayerController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
+	}
 }
