@@ -7,12 +7,18 @@ AAuraCharacterBase::AAuraCharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(FName("WeaponHandSocket"));
+	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(FName("Weapon"));
 	Weapon->SetupAttachment(GetMesh(), FName("WeaponHandSocket"));
 	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void AAuraCharacterBase::BeginPlay() {
 	Super::BeginPlay();
+
+	AActor* Onar = GetOwner();
+
+	if (Onar) {
+		UE_LOG(LogTemp, Warning, TEXT("%s Owner is %s"), *GetName(), *Onar->GetName());
+	}
 
 }

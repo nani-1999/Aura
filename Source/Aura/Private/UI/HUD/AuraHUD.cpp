@@ -2,31 +2,16 @@
 
 
 #include "UI/HUD/AuraHUD.h"
-#include "UI/Widget/AuraUserWidget.h"
-#include "UI/WidgetController/AuraWidgetController.h"
-#include "Controller/AuraPlayerController.h"
-#include "Controller/AuraPlayerState.h"
-#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "GameFramework/PlayerController.h"
 #include "AbilitySystem/AuraAttributeSet.h"
+#include "UI/Widget/AuraOverlay.h"
 
 
-void AAuraHUD::InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS) {
+void AAuraHUD::CreateOverlayWidget(APlayerController* PC) {
+	checkf(OverlayWidgetClass, TEXT("Unable to Create Overlay Widget due to invalid OverlayWidgetClass"));
 
-	checkf(OverlayWidgetClass, TEXT("Overlay Widget Class is not valid"));
+	OverlayWidget = CreateWidget<UAuraOverlay>(GetWorld(), OverlayWidgetClass);
 
-	// OverlayWidget
-	OverlayWidget = CreateWidget<UAuraUserWidget>(GetWorld(), OverlayWidgetClass);
-
-	// OverlayWidgetController
-	//sicne Widget doens't automatically creates WidgetController itself
-	UAuraWidgetController* OverlayWidgetController = NewObject<UAuraWidgetController>(this, UAuraWidgetController::StaticClass());
-	FWidgetControllerParams WC_Params;
-	WC_Params.PlayerController = PC;
-	WC_Params.PlayerState = PS;
-	WC_Params.AbilitySystemComponent = ASC;
-	WC_Params.AttributeSet = AS;
-	OverlayWidgetController->SetWidgetControllerParams(WC_Params);
-	OverlayWidget->SetWidgetController(OverlayWidgetController);
-
-	OverlayWidget->AddToViewport();
+	OverlayWidget->SetOwningPlayer(PC);
+	OverlayWidget->AddToViewport(); //this will trigger nativeconstruct, it will initvalues and bindvalues
 }

@@ -13,7 +13,6 @@
 
 AAuraCharacter::AAuraCharacter() {
 
-	GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -90.f));
 	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>("CameraBoom");
@@ -57,12 +56,11 @@ void AAuraCharacter::InitAbilitySystem() {
 	// AbilitySystem
 	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
 	AttributeSet = AuraPlayerState->GetAttributeSet();
-	AbilitySystemComponent->InitAbilityActorInfo(AuraPlayerState, this);
+	AbilitySystemComponent->InitAbilityActorInfo(AuraPlayerState, this); // OwnerActor's Owner must be Controller
 
-	// Also doing Overlay here
+	// OverlayWidget - Also this is where HUD initializes Overlay
 	if (AAuraPlayerController* AuraPlayerController = GetController<AAuraPlayerController>()) {
 		AAuraHUD* AuraHUD = AuraPlayerController->GetHUD<AAuraHUD>();
-
-		AuraHUD->InitOverlay(AuraPlayerController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
+		AuraHUD->CreateOverlayWidget(AuraPlayerController);
 	}
 }

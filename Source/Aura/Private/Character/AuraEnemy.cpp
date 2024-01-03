@@ -7,6 +7,8 @@
 #include "AbilitySystem/AuraAttributeSet.h"
 
 AAuraEnemy::AAuraEnemy() {
+	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
+
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 
 	GetMesh()->CustomDepthStencilValue = CUSTOM_DEPTH_RED; //CUSTOM_DEPTH_RED defined in aura.h
