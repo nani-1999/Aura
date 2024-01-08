@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "AttributeSet.h"
 #include "AbilitySystemComponent.h" // must be here
+#include "GameplayEffectExtension.h" // for FGameplayEffectModCallbackData
 #include "AuraAttributeSet.generated.h"
+
 
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
 	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
@@ -27,30 +29,34 @@ public:
 
 	// Attributes
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes")
-	FGameplayAttributeData Health;
+		FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Health); //doc functions
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Vital Attributes")
-	FGameplayAttributeData MaxHealth;
+		FGameplayAttributeData MaxHealth;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxHealth);
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Mana, Category = "Vital Attributes")
-	FGameplayAttributeData Mana;
+		FGameplayAttributeData Mana;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Mana);
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxMana, Category = "Vital Attributes")
-	FGameplayAttributeData MaxMana;
+		FGameplayAttributeData MaxMana;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxMana);
-
-	//showdebug abilitysystem
 
 	// Attribute Replication Notifies from Server
 	UFUNCTION()
-	void OnRep_Health(FGameplayAttributeData& OldHealth) const;
+		void OnRep_Health(FGameplayAttributeData& OldHealth) const;
 	UFUNCTION()
-	void OnRep_MaxHealth(FGameplayAttributeData& OldMaxHealth) const;
+		void OnRep_MaxHealth(FGameplayAttributeData& OldMaxHealth) const;
 	UFUNCTION()
-	void OnRep_Mana(FGameplayAttributeData& OldMana) const;
+		void OnRep_Mana(FGameplayAttributeData& OldMana) const;
 	UFUNCTION()
-	void OnRep_MaxMana(FGameplayAttributeData& OldMaxMana) const;
+		void OnRep_MaxMana(FGameplayAttributeData& OldMaxMana) const;
+
+	// Attribute change
+	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
+	virtual void PreAttributeBaseChange(const FGameplayAttribute& Attribute, float& NewValue) const override;
+	// post GameplayEffect
+	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override; 
 };

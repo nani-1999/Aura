@@ -40,5 +40,8 @@ private:
 	void CursorTrace();
 	class IEnemyInterface* PreviousHitEnemy; //IEnemyInterface is not UObject, so TObjectPtr doesn't work, so using raw ptr instead
 
-	//change to last cursor trace actor
+	// Test
+	UPROPERTY(EditAnywhere, Category = "Test")
+	TObjectPtr<UInputAction> TestAction;
+	void Test();
 };

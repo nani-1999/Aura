@@ -6,6 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "InputMappingContext.h"
 #include "Interaction/EnemyInterface.h"
+#include "Character/AuraCharacter.h"
 
 
 AAuraPlayerController::AAuraPlayerController() {
@@ -44,6 +45,7 @@ void AAuraPlayerController::SetupInputComponent() {
 	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
 
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+	EnhancedInputComponent->BindAction(TestAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Test);
 }
 
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue) {
@@ -78,4 +80,9 @@ void AAuraPlayerController::CursorTrace() {
 		PreviousHitEnemy->UnHighlightActor();
 		PreviousHitEnemy = nullptr;
 	}
+}
+
+// Test
+void AAuraPlayerController::Test() {
+	UE_LOG(LogTemp, Warning, TEXT("Test Triggered"));
 }

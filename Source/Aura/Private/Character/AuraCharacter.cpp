@@ -58,6 +58,9 @@ void AAuraCharacter::InitAbilitySystem() {
 	AttributeSet = AuraPlayerState->GetAttributeSet();
 	AbilitySystemComponent->InitAbilityActorInfo(AuraPlayerState, this); // OwnerActor's Owner must be Controller
 
+	// Effect Applied On ASC
+	//AbilitySystemComponent->OnActiveGameplayEffectAddedDelegateToSelf.AddUObject(this, &AAuraCharacterBase::EffectAppliedOnASC); // to know gameplayeffects that are applied on abilitysystemcomponent, instants doesn't broadcase as explained in asc.h
+
 	// OverlayWidget - Also this is where HUD initializes Overlay
 	if (AAuraPlayerController* AuraPlayerController = GetController<AAuraPlayerController>()) {
 		AAuraHUD* AuraHUD = AuraPlayerController->GetHUD<AAuraHUD>();

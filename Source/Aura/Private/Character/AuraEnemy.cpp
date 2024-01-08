@@ -34,4 +34,6 @@ void AAuraEnemy::BeginPlay() {
 	Super::BeginPlay();
 
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent);
+	//AuraASC->OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &AAuraCharacterBase::EffectAppliedOnASC); // instants doesn't broadcase as explained in asc.h
 }
