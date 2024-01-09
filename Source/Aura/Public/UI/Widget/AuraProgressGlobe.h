@@ -14,10 +14,20 @@ class AURA_API UAuraProgressGlobe : public UUserWidget
 	GENERATED_BODY()
 	
 protected:
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+
+	// Widgets
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UProgressBar> ProgressBar;
 
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UProgressBar> GhostProgressBar;
+
+	// Properties
+	float Value = 1.f;
+	float MaxValue = 1.f;
+
 public:
-	void SetProgressGlobePercent(float Percent);
-	float GetProgressGlobePercent() const;
+	void SetProgressGlobeValue(float NewValue);
+	void SetProgressGlobeMaxValue(float NewMaxValue);
 };

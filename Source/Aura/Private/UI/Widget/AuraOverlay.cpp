@@ -12,7 +12,7 @@
 void UAuraOverlay::NativeConstruct() {
 	InitSubWidgets();
 	BindSubWidgets();
-	BindMessages();
+	BindMessages(); // not particularly in overlay, but can also do anywhere relevent
 
 	UE_LOG(LogTemp, Warning, TEXT("NativeConstruct!!!!!!!"));
 }
@@ -30,8 +30,10 @@ void UAuraOverlay::InitSubWidgets() {
 			float Mana = AuraAttributeSet->GetMana();
 			float MaxMana = AuraAttributeSet->GetMaxMana();
 
-			HealthProgressGlobe->SetProgressGlobePercent((MaxHealth != 0) ? (Health / MaxHealth) : 0.f);
-			ManaProgressGlobe->SetProgressGlobePercent((MaxMana != 0) ? (Mana / MaxMana) : 0.f);
+			HealthProgressGlobe->SetProgressGlobeValue(Health);
+			HealthProgressGlobe->SetProgressGlobeMaxValue(MaxHealth);
+			ManaProgressGlobe->SetProgressGlobeValue(Mana);
+			ManaProgressGlobe->SetProgressGlobeMaxValue(MaxMana);
 		}
 	}
 }
@@ -55,24 +57,16 @@ void UAuraOverlay::BindSubWidgets() {
 	}
 }
 void UAuraOverlay::HealthChanged(const FOnAttributeChangeData& Data) {
-	if (HealthProgressGlobe) HealthProgressGlobe->SetProgressGlobePercent(ValueChanged(Data.NewValue, Data.OldValue, HealthProgressGlobe->GetProgressGlobePercent()));
+	if (HealthProgressGlobe) HealthProgressGlobe->SetProgressGlobeValue(Data.NewValue);
 }
 void UAuraOverlay::MaxHealthChanged(const FOnAttributeChangeData& Data) {
-	if (HealthProgressGlobe) HealthProgressGlobe->SetProgressGlobePercent(MaxValueChanged(Data.NewValue, Data.OldValue, HealthProgressGlobe->GetProgressGlobePercent()));
+	if (HealthProgressGlobe) HealthProgressGlobe->SetProgressGlobeMaxValue(Data.NewValue);
 }
 void UAuraOverlay::ManaChanged(const FOnAttributeChangeData& Data) {
-	if (ManaProgressGlobe) ManaProgressGlobe->SetProgressGlobePercent(ValueChanged(Data.NewValue, Data.OldValue, ManaProgressGlobe->GetProgressGlobePercent()));
+	if (ManaProgressGlobe) ManaProgressGlobe->SetProgressGlobeValue(Data.NewValue);
 }
 void UAuraOverlay::MaxManaChanged(const FOnAttributeChangeData& Data) {
-	if (ManaProgressGlobe) ManaProgressGlobe->SetProgressGlobePercent(MaxValueChanged(Data.NewValue, Data.OldValue, ManaProgressGlobe->GetProgressGlobePercent()));
-}
-float UAuraOverlay::ValueChanged(float NewValue, float OldValue, float Percent) {
-	float MaxValue = OldValue / Percent;
-	return (MaxValue != 0.f) ? (NewValue / MaxValue) : 0.f;
-}
-float UAuraOverlay::MaxValueChanged(float NewValue, float OldValue, float Percent) {
-	float Value = Percent * OldValue;
-	return (NewValue != 0.f) ? (Value / NewValue) : 0.f;
+	if (ManaProgressGlobe) ManaProgressGlobe->SetProgressGlobeMaxValue(Data.NewValue);
 }
 
 void UAuraOverlay::BindMessages() {

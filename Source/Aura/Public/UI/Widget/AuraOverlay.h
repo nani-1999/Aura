@@ -57,10 +57,6 @@ protected:
 	void MaxManaChanged(const FOnAttributeChangeData& Data);
 	void EffectAppliedOnASC(UAbilitySystemComponent* ASC, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle);
 
-	// Helpers
-	float ValueChanged(float NewValue, float OldValue, float Percent);
-	float MaxValueChanged(float NewValue, float OldValue, float Percent);
-
 	// Operations
 	/** Creates, Adds to Viewport, plays animation and automatically destroyed */
 	void CreateAndDisplayMessageWidget(FMessageTableRow* Message);

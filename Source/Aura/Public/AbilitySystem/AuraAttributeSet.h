@@ -27,32 +27,48 @@ public:
 	// must, Keep Track of Attributes
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	// Attributes
+	// Primary Attributes
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Strength, Category = "Primary Attributes")
+	FGameplayAttributeData Strength;
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Intelligence, Category = "Primary Attributes")
+	FGameplayAttributeData Intelligence;
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Resilience, Category = "Primary Attributes")
+	FGameplayAttributeData Resilience;
+
+	// Vital Attributes
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes")
-		FGameplayAttributeData Health;
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Health); //doc functions
-
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Vital Attributes")
-		FGameplayAttributeData MaxHealth;
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxHealth);
-
+	FGameplayAttributeData Health;
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Vital Attributes") //Max values will never be zero
+	FGameplayAttributeData MaxHealth;
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Mana, Category = "Vital Attributes")
-		FGameplayAttributeData Mana;
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Mana);
-
+	FGameplayAttributeData Mana;
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxMana, Category = "Vital Attributes")
-		FGameplayAttributeData MaxMana;
+	FGameplayAttributeData MaxMana;
+
+	// Getters Setters and more
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Health);
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxHealth);
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Mana);
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxMana);
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Strength);
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Intelligence);
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Resilience);
 
 	// Attribute Replication Notifies from Server
 	UFUNCTION()
-		void OnRep_Health(FGameplayAttributeData& OldHealth) const;
+	void OnRep_Health(const FGameplayAttributeData& OldHealth) const;
 	UFUNCTION()
-		void OnRep_MaxHealth(FGameplayAttributeData& OldMaxHealth) const;
+	void OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth) const;
 	UFUNCTION()
-		void OnRep_Mana(FGameplayAttributeData& OldMana) const;
+	void OnRep_Mana(const FGameplayAttributeData& OldMana) const;
 	UFUNCTION()
-		void OnRep_MaxMana(FGameplayAttributeData& OldMaxMana) const;
+	void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const;
+	UFUNCTION()
+	void OnRep_Strength(const FGameplayAttributeData& OldStrength) const;
+	UFUNCTION()
+	void OnRep_Intelligence(const FGameplayAttributeData& OldIntelligence) const;
+	UFUNCTION()
+	void OnRep_Resilienceconst FGameplayAttributeData& OldResilience) const;
 
 	// Attribute change
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
