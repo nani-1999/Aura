@@ -6,12 +6,24 @@
 #include "Character/AuraCharacterBase.h"
 #include "AuraCharacter.generated.h"
 
-/**
- * 
- */
+class USpringArmComponent;
+class UCameraComponent;
+
 UCLASS()
 class AURA_API AAuraCharacter : public AAuraCharacterBase
 {
 	GENERATED_BODY()
-	
+
+public:
+	AAuraCharacter();
+
+protected:
+	virtual void BeginPlay() override;
+
+protected:
+	UPROPERTY(VisibleAnywhere, Category = "Camera")
+	TObjectPtr<USpringArmComponent> CameraBoom;
+
+	UPROPERTY(VisibleAnywhere, Category = "Camera")
+	TObjectPtr<UCameraComponent> FollowCamera;
 };
