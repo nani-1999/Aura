@@ -17,8 +17,10 @@ class AURA_API AAuraCharacter : public AAuraCharacterBase
 public:
 	AAuraCharacter();
 
-protected:
-	virtual void BeginPlay() override;
+	//called when possessed by AController
+	virtual void PossessedBy(AController* NewController) override;
+	//called when playerstate is valid
+	virtual void OnRep_PlayerState() override;
 
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
@@ -26,4 +28,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	TObjectPtr<UCameraComponent> FollowCamera;
+
+	void SetupAbilityActorInfo();
 };

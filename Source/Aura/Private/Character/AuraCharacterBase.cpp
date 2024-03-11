@@ -3,6 +3,8 @@
 
 #include "Character/AuraCharacterBase.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "AbilitySystemComponent.h"
+#include "AttributeSet.h"
 
 // Sets default values
 AAuraCharacterBase::AAuraCharacterBase()
@@ -13,26 +15,5 @@ AAuraCharacterBase::AAuraCharacterBase()
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
 	Weapon->SetupAttachment(GetMesh(), FName("WeaponHandSocket"));
 	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-}
-
-// Called when the game starts or when spawned
-void AAuraCharacterBase::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void AAuraCharacterBase::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
-// Called to bind functionality to input
-void AAuraCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
