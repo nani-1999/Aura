@@ -14,12 +14,14 @@ AAuraCharacter::AAuraCharacter() {
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 420.f, 0.f);
+	GetCharacterMovement()->bConstrainToPlane = true;
+	GetCharacterMovement()->bSnapToPlaneAtStart = true;
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>("CameraBoom");
 	CameraBoom->SetupAttachment(GetRootComponent());
 	CameraBoom->SetUsingAbsoluteRotation(true); //sometimes inherits attached parent rotation
 	CameraBoom->bUsePawnControlRotation = false;
-	CameraBoom->TargetArmLength = 600.f;
+	CameraBoom->TargetArmLength = 450.f;
 	CameraBoom->SetRelativeRotation(FRotator(-30.f, 0.f, 0.f));
 
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>("FollowCamera");

@@ -6,6 +6,7 @@
 #include "InputAction.h" // @For UInputAction
 #include "EnhancedInputSubsystems.h" // @For UEnhancedInputLocalPlayerSubsystem
 #include "EnhancedInputComponent.h" // @For UEnhancedInputComponent
+#include "Interaction/EnemyInterface.h" // @For IEnemyInterface
 
 AAuraPlayerController::AAuraPlayerController() {
 	bReplicates = true;
@@ -33,6 +34,12 @@ void AAuraPlayerController::BeginPlay() {
 	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 	InputModeData.SetHideCursorDuringCapture(false);
 	SetInputMode(InputModeData);
+}
+
+void AAuraPlayerController::PlayerTick(float DeltaTime) {
+	Super::PlayerTick(DeltaTime);
+
+	TraceUnderCursor();
 }
 
 void AAuraPlayerController::SetupInputComponent() {
@@ -63,5 +70,25 @@ void AAuraPlayerController::Move(const FInputActionValue& Value) {
 		// MovementComponent
 		PossessedPawn->AddMovementInput(ForwardDirection, InputAxisValue.Y);
 		PossessedPawn->AddMovementInput(RightDirection, InputAxisValue.X);
+	}
+}
+
+void AAuraPlayerController::TraceUnderCursor() {
+	FHitResult CursorHit;
+	//Gets First Hit of Line Trace
+	GetHitResultUnderCursor(ECollisionChannel::ECC_Pawn, false, CursorHit);
+
+	IEnemyInterface* Current = Cast<IEnemyInterface>(CursorHit.GetActor());
+
+	if (Current) {
+		if (Current != EnemyUnderCursor) {
+			if (EnemyUnderCursor) EnemyUnderCursor->UnHighlightActor();
+			EnemyUnderCursor = Current;
+			EnemyUnderCursor->HighlightActor();
+		}
+	}
+	else if (EnemyUnderCursor) {
+		EnemyUnderCursor->UnHighlightActor();
+		EnemyUnderCursor = Current;
 	}
 }
