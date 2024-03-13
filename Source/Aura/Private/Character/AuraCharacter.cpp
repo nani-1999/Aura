@@ -8,6 +8,8 @@
 #include "PlayerState/AuraPlayerState.h"
 #include "AbilitySystemComponent.h"
 #include "AttributeSet.h"
+#include "GameFramework/PlayerController.h"
+#include "UI/HUD/AuraHUD.h"
 
 AAuraCharacter::AAuraCharacter() {
 
@@ -35,12 +37,14 @@ void AAuraCharacter::PossessedBy(AController* NewController) {
 	Super::PossessedBy(NewController);
 
 	SetupAbilityActorInfo();
+	SetupOverlay();
 }
 
 void AAuraCharacter::OnRep_PlayerState() {
 	Super::OnRep_PlayerState();
 
 	SetupAbilityActorInfo();
+	SetupOverlay();
 }
 
 void AAuraCharacter::SetupAbilityActorInfo() {
@@ -55,7 +59,11 @@ void AAuraCharacter::SetupAbilityActorInfo() {
 	// Owner Actor's Owner must be AController
 	//APlayerState's Owner is automatically set to AController, no worry
 	AbilitySystemComponent->InitAbilityActorInfo(AuraPlayerState, this);
+}
+void AAuraCharacter::SetupOverlay() {
 
-	// @LOG
-	UE_LOG(LogTemp, Warning, TEXT("%s Owner is %s"), *AuraPlayerState->GetName(), *AuraPlayerState->GetOwner()->GetName());
+	APlayerController* PC = GetController<APlayerController>();
+	AAuraHUD* AuraHUD = PC->GetHUD<AAuraHUD>();
+
+	AuraHUD->InitOverlay(PC);
 }

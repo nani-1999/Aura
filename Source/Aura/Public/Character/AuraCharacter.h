@@ -30,4 +30,5 @@ protected:
 	TObjectPtr<UCameraComponent> FollowCamera;
 
 	void SetupAbilityActorInfo();
+	void SetupOverlay();
 };

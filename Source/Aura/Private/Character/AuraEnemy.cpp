@@ -9,9 +9,6 @@
 AAuraEnemy::AAuraEnemy() {
 	GetMesh()->CustomDepthStencilValue = CUSTOM_DEPTH_RED;
 	Weapon->CustomDepthStencilValue = CUSTOM_DEPTH_RED;
-	//We can show the custom depth in instance
-	GetMesh()->SetRenderCustomDepth(true);
-	Weapon->SetRenderCustomDepth(true);
 
 	// Ability System
 	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");

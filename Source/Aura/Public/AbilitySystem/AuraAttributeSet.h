@@ -32,13 +32,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_MaxMana, Category = "Vital Attributes")
 	FGameplayAttributeData MaxMana;
 
-	// Utilities For Attributes
-	// Don't usually use these function, use Effects instead
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Health);
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxHealth);
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Mana);
-	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxMana);
-
 	// Multiplayer, Replication Notify
 	UFUNCTION()
 	void OnRep_Health(const FGameplayAttributeData& OldHealth) const;
@@ -48,4 +41,12 @@ protected:
 	void OnRep_Mana(const FGameplayAttributeData& OldMana) const;
 	UFUNCTION()
 	void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const;
+
+public:
+	// Utilities For Attributes
+	// Don't usually use these function, use Effects instead
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Health);
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxHealth);
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Mana);
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxMana);
 };
