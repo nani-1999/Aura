@@ -40,7 +40,7 @@ void AAuraEffectActor::SphereCollisionOverlapBegin(UPrimitiveComponent* Overlapp
 		const UAuraAttributeSet* AuraAS = Cast<UAuraAttributeSet>(ASC->GetAttributeSet(UAuraAttributeSet::StaticClass()));
 
 		UAuraAttributeSet* AuraAS_notconst = const_cast<UAuraAttributeSet*>(AuraAS);
-		AuraAS_notconst->SetHealth(AuraAS_notconst->GetHealth() + 15.f);
+		AuraAS_notconst->SetHealth(AuraAS_notconst->GetHealth() - 15.f);
 		Destroy();
 
 		//// Const required     and Source not required, for ApplyGameplayEffectSpecToSelf()

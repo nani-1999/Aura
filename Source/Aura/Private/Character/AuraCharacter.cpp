@@ -48,7 +48,6 @@ void AAuraCharacter::OnRep_PlayerState() {
 }
 
 void AAuraCharacter::SetupAbilityActorInfo() {
-
 	//on possession by AController
 	//setting up Ability System for this, from APlayerState
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
@@ -61,7 +60,6 @@ void AAuraCharacter::SetupAbilityActorInfo() {
 	AbilitySystemComponent->InitAbilityActorInfo(AuraPlayerState, this);
 }
 void AAuraCharacter::SetupOverlay() {
-
 	APlayerController* PC = GetController<APlayerController>();
 	AAuraHUD* AuraHUD = PC->GetHUD<AAuraHUD>();
 

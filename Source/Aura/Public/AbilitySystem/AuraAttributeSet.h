@@ -44,7 +44,7 @@ protected:
 
 public:
 	// Utilities For Attributes
-	// Don't usually use these function, use Effects instead
+	// Don't usually use these functions, use Effects instead
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Health);
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxHealth);
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Mana);

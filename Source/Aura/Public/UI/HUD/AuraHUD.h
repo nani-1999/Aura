@@ -15,7 +15,7 @@ class AURA_API AAuraHUD : public AHUD
 	GENERATED_BODY()
 	
 protected:
-	// Overlay
+	// Panel Widgets
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UAuraOverlay> OverlayBP;
 	UPROPERTY(VisibleAnywhere)
