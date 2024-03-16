@@ -10,7 +10,7 @@
 void UAuraOverlay::NativeConstruct() {
 	Super::NativeConstruct();
 
-	InitializeAtomicWidget();
+	InitializeAtomicWidget(); //replacing widget defaults
 	BindAtomicWidget();
 }
 void UAuraOverlay::InitializeAtomicWidget() {
@@ -41,8 +41,8 @@ void UAuraOverlay::MaxHealthChanged(const FOnAttributeChangeData& Data) {
 	HealthProgressBar->SetMaxVal(Data.NewValue);
 }
 void UAuraOverlay::ManaChanged(const FOnAttributeChangeData& Data) {
-	HealthProgressBar->SetVal(Data.NewValue);
+	ManaProgressBar->SetVal(Data.NewValue);
 }
 void UAuraOverlay::MaxManaChanged(const FOnAttributeChangeData& Data) {
-	HealthProgressBar->SetMaxVal(Data.NewValue);
+	ManaProgressBar->SetMaxVal(Data.NewValue);
 }

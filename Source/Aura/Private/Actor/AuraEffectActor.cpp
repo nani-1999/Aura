@@ -2,26 +2,23 @@
 
 
 #include "Actor/AuraEffectActor.h"
-#include "Components/SphereComponent.h"
-#include "Components/StaticMeshComponent.h"
+#include "Components/BoxComponent.h"
 #include "AbilitySystemInterface.h"
 #include "AbilitySystemComponent.h"
-#include "AbilitySystem/AuraAttributeSet.h"
+#include "GameplayEffect.h"
 
 AAuraEffectActor::AAuraEffectActor() :
-	EffectLevel{ 1 }
+	EffectLevel{ 1 },
+	EffectPolicy{ EEffectPolicy::EEP_None }
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	SphereCollision = CreateDefaultSubobject<USphereComponent>("SphereCollision");
-	SetRootComponent(SphereCollision);
-	SphereCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	SphereCollision->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
-	SphereCollision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-	SphereCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
-
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
-	Mesh->SetupAttachment(SphereCollision);
+	BoxCollision = CreateDefaultSubobject<UBoxComponent>("BoxCollision");
+	SetRootComponent(BoxCollision);
+	BoxCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	BoxCollision->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
+	BoxCollision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	BoxCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 }
 
 // Called when the game starts or when spawned
@@ -29,34 +26,55 @@ void AAuraEffectActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AAuraEffectActor::SphereCollisionOverlapBegin);
-	SphereCollision->OnComponentEndOverlap.AddDynamic(this, &AAuraEffectActor::SphereCollisionOverlapEnd);
-}
-
-void AAuraEffectActor::SphereCollisionOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
-	if (IAbilitySystemInterface* AbilitySystemActor = Cast<IAbilitySystemInterface>(OtherActor)) {
-
-		UAbilitySystemComponent* ASC = AbilitySystemActor->GetAbilitySystemComponent();
-		const UAuraAttributeSet* AuraAS = Cast<UAuraAttributeSet>(ASC->GetAttributeSet(UAuraAttributeSet::StaticClass()));
-
-		UAuraAttributeSet* AuraAS_notconst = const_cast<UAuraAttributeSet*>(AuraAS);
-		AuraAS_notconst->SetHealth(AuraAS_notconst->GetHealth() - 15.f);
-		Destroy();
-
-		//// Const required     and Source not required, for ApplyGameplayEffectSpecToSelf()
-		//// Const not required and Source required    , for ApplyGameplayEffectSpecToTarget();
-		//FGameplayEffectContextHandle EffectContextHandle = ASC->MakeEffectContext();
-		//EffectContextHandle.AddSourceObject(this); //source is this, target is AbilitySystemActor 
-
-		//const FGameplayEffectSpecHandle EffectSpecHandle = ASC->MakeOutgoingSpec(Effect, EffectLevel, EffectContextHandle);
-
-		//FActiveGameplayEffectHandle ActiveEffectHandle = ASC->ApplyGameplayEffectSpecToTarget(EffectSpecHandle.Data.ToSharedRef().Get(), ASC);
+	if (EffectPolicy != EEffectPolicy::EEP_None) {
+		BoxCollision->OnComponentBeginOverlap.AddDynamic(this, &AAuraEffectActor::BoxCollisionOverlapBegin);
+		if (EffectPolicy == EEffectPolicy::EEP_ApplyAndRemove) BoxCollision->OnComponentEndOverlap.AddDynamic(this, &AAuraEffectActor::BoxCollisionOverlapEnd);
 	}
 }
-void AAuraEffectActor::SphereCollisionOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
 
+void AAuraEffectActor::BoxCollisionOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
+	UE_LOG(LogTemp, Warning, TEXT("Overlap Begin")); // @LOG
+	if (IAbilitySystemInterface* AbilitySystemActor = Cast<IAbilitySystemInterface>(OtherActor)) {
+		ApplyEffectOnASC(EffectBP, AbilitySystemActor->GetAbilitySystemComponent());
+
+		if (EffectPolicy == EEffectPolicy::EEP_ApplyAndDestroy) Destroy();
+	}
+}
+void AAuraEffectActor::BoxCollisionOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
+	UE_LOG(LogTemp, Warning, TEXT("Overlap End")); // @LOG
+	if (IAbilitySystemInterface* AbilitySystemActor = Cast<IAbilitySystemInterface>(OtherActor)) {
+		RemoveEffectOnASC(AbilitySystemActor->GetAbilitySystemComponent());
+	}
 }
 
-//void AAuraEffectActor::ApplyEffectToASC(TSubclassOf<UGameplayEffect> Effect) {
-//
-//}
+void AAuraEffectActor::ApplyEffectOnASC(TSubclassOf<UGameplayEffect> Effect, UAbilitySystemComponent* ASC) {
+	if (Effect && ASC) {
+		// Const required     and Source not required, for ApplyGameplayEffectSpecToSelf()
+		// Const not required and Source required    , for ApplyGameplayEffectSpecToTarget();
+		FGameplayEffectContextHandle EffectContextHandle = ASC->MakeEffectContext();
+		EffectContextHandle.AddSourceObject(this); 
+
+		FGameplayEffectSpecHandle EffectspecHandle = ASC->MakeOutgoingSpec(Effect, EffectLevel, EffectContextHandle);
+
+		FActiveGameplayEffectHandle ActiveEffectHandle = ASC->ApplyGameplayEffectSpecToTarget(*EffectspecHandle.Data.Get(), ASC); // Handle to Shared_ptr to raw Ptr to *Ptr(value)
+
+		if (EffectPolicy == EEffectPolicy::EEP_ApplyAndRemove) ActiveEffectHandles.Add(ASC, ActiveEffectHandle);
+	}
+}
+void AAuraEffectActor::RemoveEffectOnASC(UAbilitySystemComponent* ASC) {
+	if (ASC && ActiveEffectHandles.Contains(ASC)) {
+
+		UE_LOG(LogTemp, Warning, TEXT("Contains Effect")); //@LOG
+
+		FActiveGameplayEffectHandle* ActiveEffectHandle = ActiveEffectHandles.Find(ASC);
+		bool bRemoveSuccessful = ASC->RemoveActiveGameplayEffect(*ActiveEffectHandle, 1); //for EEffectPolicy::EEP_ApplyAndRemove remove stacks properly
+
+		if (!bRemoveSuccessful) UE_LOG(LogTemp, Error, TEXT("Unable to Remove Effect On ASC | %s"), *GetName());
+
+		ActiveEffectHandles.FindAndRemoveChecked(ASC);
+
+		// @LOG
+		bool bContains = ActiveEffectHandles.Contains(ASC);
+		if (!bContains) UE_LOG(LogTemp, Warning, TEXT("Does not Contains Effect"));
+	}
+}

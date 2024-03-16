@@ -4,11 +4,22 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GameplayEffectTypes.h" // @For FActiveGameplayEffectHandle
 #include "AuraEffectActor.generated.h"
 
-class USphereComponent;
+class UBoxComponent;
 class UStaticMeshComponent;
-//class UGameplayEffect;
+class UAbilitySystemComponent;
+class UGameplayEffect;
+
+UENUM()
+enum class EEffectPolicy : uint8 {
+	//EEP_Apply,           //ApplyEffect OnOverlapBegin
+	EEP_ApplyAndDestroy, //ApplyEffect OnOverlapBegin and Destroy Immediately
+	EEP_ApplyAndRemove,  //ApplyEffect OnOverlapBegin and RemoveEffect OnOverlapEnd
+	EEP_None,
+	EEP_MAX
+};
 
 UCLASS()
 class AURA_API AAuraEffectActor : public AActor
@@ -22,21 +33,26 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere, Category = "Collision")
-	TObjectPtr<USphereComponent> SphereCollision;
-
-	UPROPERTY(VisibleAnywhere, Category = "Mesh")
-	TObjectPtr<UStaticMeshComponent> Mesh;
+	TObjectPtr<UBoxComponent> BoxCollision;
 
 	UFUNCTION()
-	void SphereCollisionOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void BoxCollisionOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	UFUNCTION()
-	void SphereCollisionOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	void BoxCollisionOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	//void ApplyEffectToASC(TSubclassOf<UGameplayEffect> Effect);
+	// Gameplay Effect
+	void ApplyEffectOnASC(TSubclassOf<UGameplayEffect> Effect, UAbilitySystemComponent* ASC);
+	void RemoveEffectOnASC(UAbilitySystemComponent* ASC);
 public:
-	//UPROPERTY(EditAnywhere, Category = "Ability System")
-	//TSubclassOf<UGameplayEffect> Effect;
+	UPROPERTY(EditAnywhere, Category = "Ability System")
+	TSubclassOf<UGameplayEffect> EffectBP;
 
 	UPROPERTY(EditAnywhere, Category = "Ability System")
 	float EffectLevel;
+
+	UPROPERTY(EditAnywhere, Category = "Ability System")
+	EEffectPolicy EffectPolicy;
+
+	UPROPERTY(VisibleAnywhere, Category = "Ability System")
+	TMap<UAbilitySystemComponent*, FActiveGameplayEffectHandle> ActiveEffectHandles; //effect per percollision, if applying two or more effects
 };

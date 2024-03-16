@@ -8,6 +8,8 @@
 UAuraAttributeSet::UAuraAttributeSet() {
 	InitHealth(70.f);
 	InitMaxHealth(100.f);
+	InitMana(50.f);
+	InitMaxMana(100.f);
 }
 
 // Boilerplate Code
@@ -32,4 +34,55 @@ void UAuraAttributeSet::OnRep_Mana(const FGameplayAttributeData& OldMana) const 
 }
 void UAuraAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, MaxMana, OldMaxMana);
+}
+
+void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) {
+	Super::PreAttributeChange(Attribute, NewValue);
+
+	UE_LOG(LogTemp, Warning, TEXT("PostAttributeChange"));
+	// called by base or non-additive
+	// clamping for attribute which have upper limit that changes
+
+	if (Attribute == GetHealthAttribute()) {
+		//no clamping here, since non-additive effects won't be applied on Health
+	}
+	if (Attribute == GetMaxHealthAttribute()) {
+		float HealthVal = GetHealth();
+		if (HealthVal > NewValue) {
+			SetHealth(NewValue);
+		}
+	}
+	if (Attribute == GetManaAttribute()) {
+	}
+	if (Attribute == GetMaxManaAttribute()) {
+		float ManaVal = GetMana();
+		if (ManaVal > NewValue) {
+			SetMana(NewValue);
+		}
+	}
+}
+void UAuraAttributeSet::PreAttributeBaseChange(const FGameplayAttribute& Attribute, float& NewValue) const {
+	Super::PreAttributeBaseChange(Attribute, NewValue);
+
+	UE_LOG(LogTemp, Warning, TEXT("PreAttributeBaseChange"));
+	// called by base only
+	// clamping for attributes which have upper limit
+
+	if (Attribute == GetHealthAttribute()) {
+		NewValue = FMath::Clamp<float>(NewValue, 0.f, GetMaxHealth());
+	}
+	if (Attribute == GetMaxHealthAttribute()) {
+		//no clamping here, since MaxHealth doesn't have upper limit
+	}
+	if (Attribute == GetManaAttribute()) {
+		NewValue = FMath::Clamp<float>(NewValue, 0.f, GetMaxMana());
+	}
+	if (Attribute == GetMaxManaAttribute()) {
+	}
+}
+
+void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) {
+	Super::PostGameplayEffectExecute(Data);
+
+	UE_LOG(LogTemp, Warning, TEXT("PostGameplayEffectExecute"));
 }

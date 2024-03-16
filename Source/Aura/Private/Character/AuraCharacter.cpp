@@ -8,8 +8,10 @@
 #include "PlayerState/AuraPlayerState.h"
 #include "AbilitySystemComponent.h"
 #include "AttributeSet.h"
-#include "GameFramework/PlayerController.h"
+#include "Controller/AuraPlayerController.h"
 #include "UI/HUD/AuraHUD.h"
+
+#include "Blueprint/UserWidget.h"
 
 AAuraCharacter::AAuraCharacter() {
 
@@ -42,9 +44,9 @@ void AAuraCharacter::PossessedBy(AController* NewController) {
 
 void AAuraCharacter::OnRep_PlayerState() {
 	Super::OnRep_PlayerState();
-
+	
 	SetupAbilityActorInfo();
-	SetupOverlay();
+	//SetupOverlay(); //since replicating, we won't setup their overlay, though it causes error
 }
 
 void AAuraCharacter::SetupAbilityActorInfo() {
@@ -60,8 +62,11 @@ void AAuraCharacter::SetupAbilityActorInfo() {
 	AbilitySystemComponent->InitAbilityActorInfo(AuraPlayerState, this);
 }
 void AAuraCharacter::SetupOverlay() {
-	APlayerController* PC = GetController<APlayerController>();
-	AAuraHUD* AuraHUD = PC->GetHUD<AAuraHUD>();
-
-	AuraHUD->InitOverlay(PC);
+	//since other player's controller player will be replicated, we have all their controllers
+	if (AAuraPlayerController* AuraPC = GetController<AAuraPlayerController>()) {
+		//since other player's HUD won't be replicated, so accessing their HUD and creating overlay may cause error
+		if (AAuraHUD* AuraHUD = AuraPC->GetHUD<AAuraHUD>()) {
+			AuraHUD->InitOverlay(AuraPC);
+		}
+	}
 }

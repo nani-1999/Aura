@@ -20,10 +20,10 @@ void AAuraPlayerController::BeginPlay() {
 	// Enhanced Input Subsystem
 	//since we added "EnhancedInput" modules in Build.cs
 	UEnhancedInputLocalPlayerSubsystem* EnhancedInputSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
-	check(EnhancedInputSubsystem);
+	//check(EnhancedInputSubsystem); //since we use replication we won't checking this
 
 	// Input Mapping Context
-	EnhancedInputSubsystem->AddMappingContext(AuraContext, 0);
+	if (EnhancedInputSubsystem) EnhancedInputSubsystem->AddMappingContext(AuraContext, 0);
 
 	// Mouse Cursor - Settings
 	bShowMouseCursor = true;
