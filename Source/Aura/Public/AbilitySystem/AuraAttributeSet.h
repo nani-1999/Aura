@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AttributeSet.h"
 #include "AbilitySystemComponent.h" // @For Utility MACRO
+#include "GameplayEffectExtension.h" // for FGameplayEffectModCallbackData
 #include "AuraAttributeSet.generated.h"
 
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
@@ -29,7 +30,7 @@ public:
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
 protected:
-	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes") //marking attribute for replication, also replication notify function binding
+	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes") //replication notify function binding, also attribute marked for replication
 	FGameplayAttributeData Health;
 	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_MaxHealth, Category = "Vital Attributes")
 	FGameplayAttributeData MaxHealth;

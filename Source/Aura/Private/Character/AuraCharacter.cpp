@@ -6,8 +6,8 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "PlayerState/AuraPlayerState.h"
-#include "AbilitySystemComponent.h"
-#include "AttributeSet.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/AuraAttributeSet.h"
 #include "Controller/AuraPlayerController.h"
 #include "UI/HUD/AuraHUD.h"
 
@@ -60,6 +60,10 @@ void AAuraCharacter::SetupAbilityActorInfo() {
 	// Owner Actor's Owner must be AController
 	//APlayerState's Owner is automatically set to AController, no worry
 	AbilitySystemComponent->InitAbilityActorInfo(AuraPlayerState, this);
+
+	// AbilitySystemComponent Callbacks binding to Delegates
+	//calling it here because, no early calling problem and calling right when needed
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->BindEffectsApplied();
 }
 void AAuraCharacter::SetupOverlay() {
 	//since other player's controller player will be replicated, we have all their controllers

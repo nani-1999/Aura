@@ -36,10 +36,29 @@ void UAuraAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) 
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, MaxMana, OldMaxMana);
 }
 
+void UAuraAttributeSet::PreAttributeBaseChange(const FGameplayAttribute& Attribute, float& NewValue) const {
+	Super::PreAttributeBaseChange(Attribute, NewValue);
+
+	UE_LOG(LogTemp, Warning, TEXT("PreAttributeBaseChange"));
+	// called by base only
+	// clamping for attributes which have upper limit
+
+	if (Attribute == GetHealthAttribute()) {
+		NewValue = FMath::Clamp<float>(NewValue, 0.f, GetMaxHealth());
+	}
+	if (Attribute == GetMaxHealthAttribute()) {
+		//no clamping here, since MaxHealth doesn't have upper limit
+	}
+	if (Attribute == GetManaAttribute()) {
+		NewValue = FMath::Clamp<float>(NewValue, 0.f, GetMaxMana());
+	}
+	if (Attribute == GetMaxManaAttribute()) {
+	}
+}
 void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) {
 	Super::PreAttributeChange(Attribute, NewValue);
 
-	UE_LOG(LogTemp, Warning, TEXT("PostAttributeChange"));
+	UE_LOG(LogTemp, Warning, TEXT("PreAttributeChange"));
 	// called by base or non-additive
 	// clamping for attribute which have upper limit that changes
 
@@ -61,28 +80,24 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 		}
 	}
 }
-void UAuraAttributeSet::PreAttributeBaseChange(const FGameplayAttribute& Attribute, float& NewValue) const {
-	Super::PreAttributeBaseChange(Attribute, NewValue);
-
-	UE_LOG(LogTemp, Warning, TEXT("PreAttributeBaseChange"));
-	// called by base only
-	// clamping for attributes which have upper limit
-
-	if (Attribute == GetHealthAttribute()) {
-		NewValue = FMath::Clamp<float>(NewValue, 0.f, GetMaxHealth());
-	}
-	if (Attribute == GetMaxHealthAttribute()) {
-		//no clamping here, since MaxHealth doesn't have upper limit
-	}
-	if (Attribute == GetManaAttribute()) {
-		NewValue = FMath::Clamp<float>(NewValue, 0.f, GetMaxMana());
-	}
-	if (Attribute == GetMaxManaAttribute()) {
-	}
-}
 
 void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) {
 	Super::PostGameplayEffectExecute(Data);
 
 	UE_LOG(LogTemp, Warning, TEXT("PostGameplayEffectExecute"));
+	// called when UGameplayEffect effects AbilitySystemComponent
+	// won't be called by non-additive
+
+	//FGameplayEffectModCallbackData has FGameplayEffectSpec
+	//from spec we can get contexthandle
+
+	const FGameplayEffectSpec EffectSpec = Data.EffectSpec;
+
+	const FGameplayEffectContextHandle EffectContextHandle = EffectSpec.GetEffectContext();
+
+	UAbilitySystemComponent* ASC = EffectContextHandle.GetOriginalInstigatorAbilitySystemComponent();
+
+	if (ASC->AbilityActorInfo.IsValid() && ASC->AbilityActorInfo->AvatarActor.IsValid()) {
+		UE_LOG(LogTemp, Warning, TEXT("All Valid"));
+	}
 }

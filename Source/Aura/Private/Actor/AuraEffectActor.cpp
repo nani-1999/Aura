@@ -52,7 +52,7 @@ void AAuraEffectActor::ApplyEffectOnASC(TSubclassOf<UGameplayEffect> Effect, UAb
 		// Const required     and Source not required, for ApplyGameplayEffectSpecToSelf()
 		// Const not required and Source required    , for ApplyGameplayEffectSpecToTarget();
 		FGameplayEffectContextHandle EffectContextHandle = ASC->MakeEffectContext();
-		EffectContextHandle.AddSourceObject(this); 
+		EffectContextHandle.AddSourceObject(this);
 
 		FGameplayEffectSpecHandle EffectspecHandle = ASC->MakeOutgoingSpec(Effect, EffectLevel, EffectContextHandle);
 
