@@ -21,6 +21,6 @@ protected:
 public:
 	void BindAppliedEffects();
 
-	FEffectTags EffectAssetTags;
-	FEffectTags EffectGrantedTags;
+	FEffectTags OnAppliedEffectAssetTags;
+	FEffectTags OnAppliedEffectGrantedTags;
 };

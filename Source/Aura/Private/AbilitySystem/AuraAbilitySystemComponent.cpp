@@ -19,6 +19,14 @@ void UAuraAbilitySystemComponent::EffectAppliedToSelf(UAbilitySystemComponent* A
 	UE_LOG(LogTemp, Warning, TEXT("%s Self Applied on %s"), *EffectName, *EffectActor);
 
 	// Broadcasting Effect GameplayTags
+	FGameplayTagContainer AssetTags;
+	EffectSpec.GetAllAssetTags(AssetTags); // @Doc
+	OnAppliedEffectAssetTags.Broadcast(AssetTags);
+
+	//displaying effect tags
+	for (FGameplayTag Tag : AssetTags) {
+		UE_LOG(LogTemp, Warning, TEXT("Applied Effect Tag: %s"), *Tag.ToString());
+	}
 }
 void UAuraAbilitySystemComponent::EffectAppliedToTarget(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle) {
 
