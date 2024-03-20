@@ -50,13 +50,15 @@ void AAuraEffectActor::BoxCollisionOverlapEnd(UPrimitiveComponent* OverlappedCom
 void AAuraEffectActor::ApplyEffectOnASC(TSubclassOf<UGameplayEffect> Effect, UAbilitySystemComponent* ASC) {
 	if (Effect && ASC) {
 		// Const required     and Source not required, for ApplyGameplayEffectSpecToSelf()
-		// Const not required and Source required    , for ApplyGameplayEffectSpecToTarget();
+		// Const not required and Source required    , for ApplyGameplayEffectSpecToTarget()
 		FGameplayEffectContextHandle EffectContextHandle = ASC->MakeEffectContext();
 		EffectContextHandle.AddSourceObject(this);
 
-		FGameplayEffectSpecHandle EffectspecHandle = ASC->MakeOutgoingSpec(Effect, EffectLevel, EffectContextHandle);
+		// Const required,     For ApplyGameplayEffectSpecToSelf()
+		// Const not required, For ApplyGameplayEffectSpecToTarget()
+		FGameplayEffectSpecHandle EffectSpecHandle = ASC->MakeOutgoingSpec(Effect, EffectLevel, EffectContextHandle);
 
-		FActiveGameplayEffectHandle ActiveEffectHandle = ASC->ApplyGameplayEffectSpecToTarget(*EffectspecHandle.Data.Get(), ASC); // Handle to Shared_ptr to raw Ptr to *Ptr(value)
+		FActiveGameplayEffectHandle ActiveEffectHandle = ASC->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(), ASC); // Handle to Shared_ptr to raw Ptr to *Ptr(value)
 
 		if (EffectPolicy == EEffectPolicy::EEP_ApplyAndRemove) ActiveEffectHandles.Add(ASC, ActiveEffectHandle);
 	}
@@ -64,7 +66,7 @@ void AAuraEffectActor::ApplyEffectOnASC(TSubclassOf<UGameplayEffect> Effect, UAb
 void AAuraEffectActor::RemoveEffectOnASC(UAbilitySystemComponent* ASC) {
 	if (ASC && ActiveEffectHandles.Contains(ASC)) {
 
-		UE_LOG(LogTemp, Warning, TEXT("Contains Effect")); //@LOG
+		UE_LOG(LogTemp, Warning, TEXT("Contains Effect. Removing Effect")); //@LOG
 
 		FActiveGameplayEffectHandle* ActiveEffectHandle = ActiveEffectHandles.Find(ASC);
 		bool bRemoveSuccessful = ASC->RemoveActiveGameplayEffect(*ActiveEffectHandle, 1); //for EEffectPolicy::EEP_ApplyAndRemove remove stacks properly
@@ -75,6 +77,6 @@ void AAuraEffectActor::RemoveEffectOnASC(UAbilitySystemComponent* ASC) {
 
 		// @LOG
 		bool bContains = ActiveEffectHandles.Contains(ASC);
-		if (!bContains) UE_LOG(LogTemp, Warning, TEXT("Does not Contains Effect"));
+		if (!bContains) UE_LOG(LogTemp, Warning, TEXT("Does not Contains Effect. Effect Removed"));
 	}
 }

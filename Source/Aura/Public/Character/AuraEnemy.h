@@ -19,6 +19,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	void InitAbilityActorInfo();
+
 public:
 	// Custom Depth
 	virtual void HighlightActor() override;

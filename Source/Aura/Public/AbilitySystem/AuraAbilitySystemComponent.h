@@ -7,9 +7,8 @@
 #include "GameplayEffectTypes.h" // @For FGameplayEffectSpec, FActiveGameplayEffectHandle
 #include "AuraAbilitySystemComponent.generated.h"
 
-/**
- * 
- */
+DECLARE_MULTICAST_DELEGATE_OneParam(FEffectTags, FGameplayTagContainer&);
+
 UCLASS()
 class AURA_API UAuraAbilitySystemComponent : public UAbilitySystemComponent
 {
@@ -20,5 +19,8 @@ protected:
 	void EffectAppliedToTarget(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle);
 
 public:
-	void BindEffectsApplied();
+	void BindAppliedEffects();
+
+	FEffectTags EffectAssetTags;
+	FEffectTags EffectGrantedTags;
 };

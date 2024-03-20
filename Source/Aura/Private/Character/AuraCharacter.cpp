@@ -63,7 +63,7 @@ void AAuraCharacter::SetupAbilityActorInfo() {
 
 	// AbilitySystemComponent Callbacks binding to Delegates
 	//calling it here because, no early calling problem and calling right when needed
-	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->BindEffectsApplied();
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->BindAppliedEffects();
 }
 void AAuraCharacter::SetupOverlay() {
 	//since other player's controller player will be replicated, we have all their controllers

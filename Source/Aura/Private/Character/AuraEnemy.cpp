@@ -21,8 +21,7 @@ AAuraEnemy::AAuraEnemy() {
 void AAuraEnemy::BeginPlay() {
 	Super::BeginPlay();
 
-	// UAbilitySystemComponent, Owner vs Avatar
-	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	InitAbilityActorInfo();
 }
 
 void AAuraEnemy::HighlightActor() {
@@ -33,4 +32,11 @@ void AAuraEnemy::HighlightActor() {
 void AAuraEnemy::UnHighlightActor() {
 	GetMesh()->SetRenderCustomDepth(false);
 	Weapon->SetRenderCustomDepth(false);
+}
+
+void AAuraEnemy::InitAbilityActorInfo() {
+	// UAbilitySystemComponent, Owner vs Avatar
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->BindAppliedEffects();
 }
