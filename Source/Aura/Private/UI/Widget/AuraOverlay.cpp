@@ -6,12 +6,15 @@
 #include "PlayerState/AuraPlayerState.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
+#include "UI/Widget/AuraMessage.h"
 
 void UAuraOverlay::NativeConstruct() {
 	Super::NativeConstruct();
 
 	InitializeAtomicWidget(); //replacing widget defaults
 	BindAtomicWidget();
+
+	BindMessages();
 }
 void UAuraOverlay::InitializeAtomicWidget() {
 	AAuraPlayerState* AuraPS = GetOwningPlayerState<AAuraPlayerState>();
@@ -45,4 +48,24 @@ void UAuraOverlay::ManaChanged(const FOnAttributeChangeData& Data) {
 }
 void UAuraOverlay::MaxManaChanged(const FOnAttributeChangeData& Data) {
 	ManaProgressBar->SetMaxVal(Data.NewValue);
+}
+
+void UAuraOverlay::BindMessages() {
+	AAuraPlayerState* AuraPS = GetOwningPlayerState<AAuraPlayerState>();
+	UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(AuraPS->GetAbilitySystemComponent());
+	UAuraAttributeSet* AuraAS = Cast<UAuraAttributeSet>(AuraPS->GetAttributeSet());
+
+	AuraASC->OnAppliedEffectAssetTags.AddUObject(this, &UAuraOverlay::CreateAndDisplayMessages);
+}
+void UAuraOverlay::CreateAndDisplayMessages(FGameplayTagContainer& AssetTags) {
+	if (AssetTags.IsEmpty()) return;
+
+	for (const FGameplayTag& Tag : AssetTags) {
+		FAuraMessageRow* MessageRow = Messages->FindRow<FAuraMessageRow>(Tag.GetTagName(), FString(""));
+		if (MessageRow) {
+			UAuraMessage* MessageWidget = CreateWidget<UAuraMessage>(this, MessageRow->MessageBP);
+			MessageWidget->DisplayMessage(Tag, MessageRow->Icon, MessageRow->Title, MessageRow->Detail);
+			MessageWidget->AddToViewport();
+		}
+	}
 }

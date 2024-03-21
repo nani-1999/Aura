@@ -4,10 +4,34 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "GameplayTagContainer.h" // @For FGameplayTag
+#include "Engine/DataTable.h" // @For UTableRowBase
 #include "AuraOverlay.generated.h"
 
 class UAuraProgressBar;
 struct FOnAttributeChangeData;
+class UAuraMessage;
+
+USTRUCT()
+struct FAuraMessageRow : public FTableRowBase {
+
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere)
+	FGameplayTag MessageTag = FGameplayTag();
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UTexture2D> Icon;
+
+	UPROPERTY(EditAnywhere)
+	FText Title;
+
+	UPROPERTY(EditAnywhere)
+	FText Detail;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UAuraMessage> MessageBP;
+};
 
 UCLASS()
 class AURA_API UAuraOverlay : public UUserWidget
@@ -24,6 +48,12 @@ protected:
 	TObjectPtr<UAuraProgressBar> HealthProgressBar;
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UAuraProgressBar> ManaProgressBar;
+
+	// Messages
+	void BindMessages();
+	void CreateAndDisplayMessages(FGameplayTagContainer& AssetTags);
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UDataTable> Messages;
 
 	// Callbacks
 	void HealthChanged(const FOnAttributeChangeData& Data);
