@@ -10,6 +10,7 @@
 class USkeletalMeshComponent;
 class UAbilitySystemComponent;
 class UAttributeSet;
+class UGameplayEffect;
 
 UCLASS()
 class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInterface
@@ -24,6 +25,7 @@ public:
 	FORCEINLINE UAttributeSet* GetAttributeSet() { return AttributeSet; }
 
 protected:
+	// Weapon
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 
@@ -33,4 +35,11 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Ability System")
 	TObjectPtr<UAttributeSet> AttributeSet;
+
+	// Attribute Defaults
+	UPROPERTY(EditAnywhere, Category = "Ability System")
+	TSubclassOf<UGameplayEffect> AttributeDefaults;
+	void InitAttributeDefaults();
+	
+	//setupoverlay rename, try
 };

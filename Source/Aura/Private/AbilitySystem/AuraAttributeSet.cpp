@@ -111,6 +111,7 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 	UE_LOG(LogTemp, Warning, TEXT("PreAttributeChange"));
 	// called by base or non-additive
 	// clamping for attribute which have upper limit that changes
+	// change for attribute that depend one other attribute that changes
 
 	if (Attribute == GetHealthAttribute()) {
 		//no clamping here, since non-additive effects won't be applied on Health
