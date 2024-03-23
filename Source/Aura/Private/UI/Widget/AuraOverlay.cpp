@@ -63,9 +63,13 @@ void UAuraOverlay::CreateAndDisplayMessages(FGameplayTagContainer& AssetTags) {
 	for (const FGameplayTag& Tag : AssetTags) {
 		FAuraMessageRow* MessageRow = Messages->FindRow<FAuraMessageRow>(Tag.GetTagName(), FString(""));
 		if (MessageRow) {
-			UAuraMessage* MessageWidget = CreateWidget<UAuraMessage>(this, MessageRow->MessageBP);
-			MessageWidget->DisplayMessage(Tag, MessageRow->Icon, MessageRow->Title, MessageRow->Detail);
-			MessageWidget->AddToViewport();
+			UAuraMessage* MessageWidget = CreateWidget<UAuraMessage>(GetWorld(), MessageRow->MessageBP);
+			if (MessageWidget) {
+				MessageWidget->DisplayMessage(Tag, MessageRow->Icon, MessageRow->Title, MessageRow->Detail);
+			}
+			else {
+				UE_LOG(LogTemp, Error, TEXT("Unable to Create Message Widget in AuraOverlay"));
+			}
 		}
 	}
 }

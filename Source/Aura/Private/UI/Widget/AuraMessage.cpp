@@ -16,4 +16,6 @@ void UAuraMessage::DisplayMessage(FGameplayTag NewMessageTag, UTexture2D* NewIco
 	Icon->SetBrushFromTexture(NewIcon);
 	Title->SetText(NewTitle);
 	if (Detail) Detail->SetText(NewDetail);
+
+	AddToViewport();
 }

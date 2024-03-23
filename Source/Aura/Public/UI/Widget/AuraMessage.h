@@ -37,6 +37,5 @@ protected:
 	virtual void OnAnimationFinishedPlaying(UUMGSequencePlayer& Player) override { RemoveFromParent(); }
 
 public:
-	// Properties Setter
 	void DisplayMessage(FGameplayTag NewMessageTag, UTexture2D* NewIcon, FText NewTitle, FText NewDetail = FText());
 };
