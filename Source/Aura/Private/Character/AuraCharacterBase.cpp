@@ -20,7 +20,7 @@ AAuraCharacterBase::AAuraCharacterBase()
 void AAuraCharacterBase::InitAttributeDefaults() {
 
 	if (AttributeDefaults == nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("AttributeDefaults is InValid, unable to set on %s"), *GetName());
+		UE_LOG(LogTemp, Error, TEXT("AttributeDefaults is InValid, unable to set on %s"), *GetName());
 		return;
 	}
 

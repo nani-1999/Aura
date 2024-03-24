@@ -40,6 +40,4 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Ability System")
 	TSubclassOf<UGameplayEffect> AttributeDefaults;
 	void InitAttributeDefaults();
-	
-	//setupoverlay rename, try
 };

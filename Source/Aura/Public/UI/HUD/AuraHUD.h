@@ -22,5 +22,5 @@ protected:
 	TObjectPtr<UAuraOverlay> Overlay;
 
 public:
-	void InitOverlay(APlayerController* PC);
+	void SetupOverlay(APlayerController* PC);
 };

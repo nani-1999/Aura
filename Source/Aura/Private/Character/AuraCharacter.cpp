@@ -73,7 +73,7 @@ void AAuraCharacter::SetupOverlay() {
 	if (AAuraPlayerController* AuraPC = GetController<AAuraPlayerController>()) {
 		//since other player's HUD won't be replicated, so accessing their HUD and creating overlay may cause error
 		if (AAuraHUD* AuraHUD = AuraPC->GetHUD<AAuraHUD>()) {
-			AuraHUD->InitOverlay(AuraPC);
+			AuraHUD->SetupOverlay(AuraPC);
 		}
 	}
 }
