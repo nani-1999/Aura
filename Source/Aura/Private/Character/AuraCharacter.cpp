@@ -11,7 +11,6 @@
 #include "Controller/AuraPlayerController.h"
 #include "UI/HUD/AuraHUD.h"
 
-#include "Blueprint/UserWidget.h"
 
 AAuraCharacter::AAuraCharacter() {
 
@@ -65,7 +64,7 @@ void AAuraCharacter::SetupAbilityActorInfo() {
 	//calling it here because, no early calling problem and calling right when needed
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->BindAppliedEffects();
 
-	// AuraAttributeSet Attributes Default
+	// Attributes Defaults
 	InitAttributeDefaults();
 }
 void AAuraCharacter::SetupOverlay() {
@@ -76,4 +75,10 @@ void AAuraCharacter::SetupOverlay() {
 			AuraHUD->SetupOverlay(AuraPC);
 		}
 	}
+}
+
+int32 AAuraCharacter::GetLvl() const {
+	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	check(AuraPlayerState);
+	return AuraPlayerState->GetLvl();
 }

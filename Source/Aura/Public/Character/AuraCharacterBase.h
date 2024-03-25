@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
+#include "Interaction/CombatInterface.h"
 #include "AuraCharacterBase.generated.h"
 
 class USkeletalMeshComponent;
@@ -13,16 +14,19 @@ class UAttributeSet;
 class UGameplayEffect;
 
 UCLASS()
-class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInterface
+class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
 {
 	GENERATED_BODY()
 
 public:
 	AAuraCharacterBase();
 
-	// Getters & Setters
+	// AbilitySystemInterface
 	FORCEINLINE virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
 	FORCEINLINE UAttributeSet* GetAttributeSet() { return AttributeSet; }
+
+	// CombatInterface
+	FORCEINLINE virtual int32 GetLvl() const override { return Lvl; }
 
 protected:
 	// Weapon
@@ -38,6 +42,16 @@ protected:
 
 	// Attribute Defaults
 	UPROPERTY(EditAnywhere, Category = "Ability System")
-	TSubclassOf<UGameplayEffect> AttributeDefaults;
-	void InitAttributeDefaults();
+	TSubclassOf<UGameplayEffect> VitalAttributeDefaults;
+	UPROPERTY(EditAnywhere, Category = "Ability System")
+	TSubclassOf<UGameplayEffect> PrimaryAttributeDefaults;
+	UPROPERTY(EditAnywhere, Category = "Ability System")
+	TSubclassOf<UGameplayEffect> SecondaryAttributeDefaults;
+	FORCEINLINE void InitAttributeDefaults() { ApplyEffectToSelf(SecondaryAttributeDefaults); ApplyEffectToSelf(PrimaryAttributeDefaults); ApplyEffectToSelf(VitalAttributeDefaults); }
+
+	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> EffectBP);
+
+	// Level
+	UPROPERTY(VisibleAnywhere, Category = "Ability System")
+	int32 Lvl = 1;
 };

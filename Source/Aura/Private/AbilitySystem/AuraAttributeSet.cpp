@@ -2,8 +2,8 @@
 
 
 #include "AbilitySystem/AuraAttributeSet.h"
-#include "AbilitySystemComponent.h" // @For GAMEPLAYATTRIBUTE_REPNOTIFY MACRO
-#include "Net/UnrealNetwork.h"
+#include "AbilitySystemComponent.h" // @For GAMEPLAYATTRIBUTE_REPNOTIFY
+#include "Net/UnrealNetwork.h" // @For DOREPLIFETIME_CONDITION_NOTIFY
 
 UAuraAttributeSet::UAuraAttributeSet() {
 	//InitHealth(70.f);
@@ -94,6 +94,7 @@ void UAuraAttributeSet::PreAttributeBaseChange(const FGameplayAttribute& Attribu
 	// clamping for attributes which have upper limit
 
 	if (Attribute == GetHealthAttribute()) {
+		UE_LOG(LogTemp, Error, TEXT("%s NewValue: %f | MaxHealth Value: %f"), *(Attribute.AttributeName), NewValue, GetMaxHealth());
 		NewValue = FMath::Clamp<float>(NewValue, 0.f, GetMaxHealth());
 	}
 	if (Attribute == GetMaxHealthAttribute()) {

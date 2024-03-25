@@ -22,6 +22,10 @@ public:
 	//called when playerstate is valid
 	virtual void OnRep_PlayerState() override;
 
+	// CombatInterface
+	//since PlayerState's Level is the real one
+	virtual int32 GetLvl() const override;
+
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	TObjectPtr<USpringArmComponent> CameraBoom;

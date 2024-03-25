@@ -17,16 +17,15 @@ AAuraCharacterBase::AAuraCharacterBase()
 	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
-void AAuraCharacterBase::InitAttributeDefaults() {
+void AAuraCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> EffectBP) {
 
-	if (AttributeDefaults == nullptr) {
-		UE_LOG(LogTemp, Error, TEXT("AttributeDefaults is InValid, unable to set on %s"), *GetName());
-		return;
-	}
+	checkf(EffectBP, TEXT("AttributeDefaults is InValid, in AuraCharacterBase"));
 
-	checkf(AbilitySystemComponent, TEXT("AbilitySystemComponent is InValid, unable to set AttributeDefaults"));
+	checkf(AbilitySystemComponent, TEXT("AbilitySystemComponent is InValid, in AuraCharacterBase"));
 
 	const FGameplayEffectContextHandle ContextHandle;
-	const FGameplayEffectSpecHandle EffectSpecHandle = AbilitySystemComponent->MakeOutgoingSpec(AttributeDefaults, 1, ContextHandle);
+	//calling GetLvl(), since AuraCharacter Lvl is not real level
+	//always use GetLvl() instead of directly accessing Lvl
+	const FGameplayEffectSpecHandle EffectSpecHandle = AbilitySystemComponent->MakeOutgoingSpec(EffectBP, GetLvl(), ContextHandle); 
 	AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
 }
