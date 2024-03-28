@@ -13,6 +13,7 @@ UMMC_MaxMana::UMMC_MaxMana() {
 }
 
 float UMMC_MaxMana::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const {
+	Super::CalculateBaseMagnitude_Implementation(Spec);
 
 	const FGameplayTagContainer* SourceTags = Spec.CapturedSourceTags.GetAggregatedTags();
 	const FGameplayTagContainer* TargetTags = Spec.CapturedTargetTags.GetAggregatedTags();

@@ -11,6 +11,8 @@
 class UAuraProgressBar;
 struct FOnAttributeChangeData;
 class UAuraMessage;
+class UButton;
+class UAuraAttributeMenu;
 
 USTRUCT()
 struct FAuraMessageRow : public FTableRowBase {
@@ -39,7 +41,7 @@ class AURA_API UAuraOverlay : public UUserWidget
 	GENERATED_BODY()
 	
 protected:
-	virtual void NativeConstruct() override;
+	virtual void NativeOnInitialized() override;
 	void InitializeAtomicWidget();
 	void BindAtomicWidget();
 
@@ -54,6 +56,13 @@ protected:
 	void CreateAndDisplayMessages(FGameplayTagContainer& AssetTags);
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UDataTable> Messages;
+
+	// Attribute Menu
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UButton> AttributeMenuButton;
+	void AttributeMenuButton_Clicked();
+	UPROPERTY(EditAnywhere, Category = "Attribute Menu")
+	TSubclassOf<UAuraAttributeMenu> AttributeMenu;
 
 	// Callbacks
 	void HealthChanged(const FOnAttributeChangeData& Data);

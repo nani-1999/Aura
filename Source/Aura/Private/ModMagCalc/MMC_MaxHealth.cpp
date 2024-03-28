@@ -13,6 +13,7 @@ UMMC_MaxHealth::UMMC_MaxHealth() {
 }
 
 float UMMC_MaxHealth::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const {
+	Super::CalculateBaseMagnitude_Implementation(Spec);
 
 	// getting tags
 	//since, getcaptureattributemagnitude() requires these

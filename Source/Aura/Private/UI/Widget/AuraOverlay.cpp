@@ -7,15 +7,23 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "UI/Widget/AuraMessage.h"
+#include "Components/Button.h"
+#include "UI/Widget/AuraAttributeMenu.h"
 
-void UAuraOverlay::NativeConstruct() {
-	Super::NativeConstruct();
+void UAuraOverlay::NativeOnInitialized() {
+	Super::NativeOnInitialized();
 
+	// Atomic
 	InitializeAtomicWidget(); //replacing widget defaults
 	BindAtomicWidget();
 
+	// Messages
 	BindMessages();
+
+	// Attribute Menu
+	AttributeMenuButton->OnClicked.AddDynamic(this, &UAuraOverlay::AttributeMenuButton_Clicked);
 }
+
 void UAuraOverlay::InitializeAtomicWidget() {
 	AAuraPlayerState* AuraPS = GetOwningPlayerState<AAuraPlayerState>();
 	UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(AuraPS->GetAbilitySystemComponent());
@@ -72,4 +80,8 @@ void UAuraOverlay::CreateAndDisplayMessages(FGameplayTagContainer& AssetTags) {
 			}
 		}
 	}
+}
+
+void UAuraOverlay::AttributeMenuButton_Clicked() {
+	UE_LOG(LogTemp, Warning, TEXT("AuraAttributeMenu Button Clicked"));
 }
