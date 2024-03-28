@@ -84,4 +84,18 @@ void UAuraOverlay::CreateAndDisplayMessages(FGameplayTagContainer& AssetTags) {
 
 void UAuraOverlay::AttributeMenuButton_Clicked() {
 	UE_LOG(LogTemp, Warning, TEXT("AuraAttributeMenu Button Clicked"));
+	
+	if (AttributeMenuBP) {
+		AttributeMenuButton->SetIsEnabled(false);
+		UAuraAttributeMenu* AttributeMenu = CreateWidget<UAuraAttributeMenu>(GetWorld(), AttributeMenuBP);
+		AttributeMenu->SetOwningPlayer(GetOwningPlayer());
+		AttributeMenu->CloseButton->OnClicked.AddDynamic(this, &UAuraOverlay::AttributeMenuButton_Enable);
+		AttributeMenu->AddToViewport();
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("AttributeMenuBP is Invalid, in AuraOverlay"));
+	}
+}
+void UAuraOverlay::AttributeMenuButton_Enable() {
+	AttributeMenuButton->SetIsEnabled(true);
 }

@@ -15,17 +15,19 @@ class AURA_API UAuraAttributeMenu : public UUserWidget
 {
 	GENERATED_BODY()
 	
-protected:
-	virtual void NativeOnInitialized() override;
-
-	void InitializeAtomicWidget();
-	void BindAtomicWidget();
-
+public:
 	// Close
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> CloseButton;
+
+protected:
+	virtual void NativeOnInitialized() override;
+
 	UFUNCTION()
 	void CloseButton_Clicked();
+
+	void InitializeAtomicWidget();
+	void BindAtomicWidget();
 
 	// Attribute Points
 	UPROPERTY(meta = (BindWidget))

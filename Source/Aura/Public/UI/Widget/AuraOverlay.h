@@ -58,11 +58,16 @@ protected:
 	TObjectPtr<UDataTable> Messages;
 
 	// Attribute Menu
+	UPROPERTY(EditAnywhere, Category = "Attribute Menu")
+	TSubclassOf<UAuraAttributeMenu> AttributeMenuBP;
+
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> AttributeMenuButton;
+	UFUNCTION()
 	void AttributeMenuButton_Clicked();
-	UPROPERTY(EditAnywhere, Category = "Attribute Menu")
-	TSubclassOf<UAuraAttributeMenu> AttributeMenu;
+
+	UFUNCTION()
+	void AttributeMenuButton_Enable();
 
 	// Callbacks
 	void HealthChanged(const FOnAttributeChangeData& Data);

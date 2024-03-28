@@ -8,17 +8,19 @@
 #include "AbilitySystemComponent.h"
 #include "PlayerState/AuraPlayerState.h"
 
+
 void UAuraAttributeMenu::NativeOnInitialized() {
 	Super::NativeOnInitialized();
 
-	CloseButton->OnClicked.AddDynamic(this, &UAuraAttributeMenu::CloseButton_Clicked);
-
 	InitializeAtomicWidget(); //replacing widget defaults
 	BindAtomicWidget();
+
+	CloseButton->OnClicked.AddDynamic(this, &UAuraAttributeMenu::CloseButton_Clicked);
 }
 
 void UAuraAttributeMenu::CloseButton_Clicked() {
-	UE_LOG(LogTemp, Warning, TEXT("AuraAttributeMenu CloseButton Clicked"));
+	UE_LOG(LogTemp, Warning, TEXT("CloseButton Clicked"));
+	RemoveFromParent();
 }
 
 void UAuraAttributeMenu::InitializeAtomicWidget() {
@@ -26,7 +28,7 @@ void UAuraAttributeMenu::InitializeAtomicWidget() {
 	UAbilitySystemComponent* ASC = AuraPS->GetAbilitySystemComponent();
 	UAuraAttributeSet* AuraAS = Cast<UAuraAttributeSet>(AuraPS->GetAttributeSet());
 
-	AttributePoints->SetLabelName("AttributePoints");
+	AttributePoints->SetLabelName("Attribute Points");
 	AttributePoints->SetLabelValue(0.f);
 	
 	Strength->SetLabelName("Strength");
