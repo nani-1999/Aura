@@ -1,0 +1,13 @@
+.vs
+Binaries
+Build
+Content
+DerivedDataCache
+Intermediate
+Platforms
+Plugins
+Saved
+Script
+*.sln
+*.uproject
+*.vsconfig
