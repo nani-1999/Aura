@@ -3,6 +3,8 @@
 
 #include "Character/AuraCharacterBase.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "AbilitySystemComponent.h"
+#include "AttributeSet.h"
 
 AAuraCharacterBase::AAuraCharacterBase()
 {
@@ -17,4 +19,5 @@ void AAuraCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+
 }
