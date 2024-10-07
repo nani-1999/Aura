@@ -19,5 +19,9 @@ void AAuraCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
 
+void AAuraCharacterBase::InitAbilitySystemInfo() {
+
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }

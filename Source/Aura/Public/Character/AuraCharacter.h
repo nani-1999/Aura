@@ -17,6 +17,10 @@ class AURA_API AAuraCharacter : public AAuraCharacterBase
 public:
 	AAuraCharacter();
 
+	// Getters
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	virtual UAttributeSet* GetAttributeSet() const override;
+
 protected:
 	virtual void BeginPlay();
 
@@ -25,4 +29,7 @@ protected:
 	TObjectPtr<USpringArmComponent> CameraBoom;
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UCameraComponent> FollowCamera;
+
+	// AbilitySystem
+	virtual void InitAbilitySystemInfo() override;
 };

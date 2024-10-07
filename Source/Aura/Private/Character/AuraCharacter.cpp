@@ -5,6 +5,9 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "AbilitySystemComponent.h"
+#include "AttributeSet.h"
+#include "GameMode/AuraPlayerState.h"
 
 AAuraCharacter::AAuraCharacter() {
 
@@ -32,4 +35,16 @@ void AAuraCharacter::BeginPlay() {
 	Super::BeginPlay();
 
 
+}
+
+UAbilitySystemComponent* AAuraCharacter::GetAbilitySystemComponent() const {
+	return GetPlayerState<AAuraPlayerState>()->GetAbilitySystemComponent();
+}
+UAttributeSet* AAuraCharacter::GetAttributeSet() const {
+	return GetPlayerState<AAuraPlayerState>()->GetAttributeSet();
+}
+
+void AAuraCharacter::InitAbilitySystemInfo() {
+
+	AbilitySystemComponent->InitAbilityActorInfo(GetPlayerState(), this);
 }
