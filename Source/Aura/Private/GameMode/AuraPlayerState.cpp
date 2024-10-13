@@ -5,6 +5,8 @@
 #include "GameplayAbilitySystem/AbilitySystem/AuraAbilitySystemComponent.h"
 #include "GameplayAbilitySystem/AbilitySystem/AuraAttributeSet.h"
 
+#include "Aura/Nani/NaniUtility.h"
+
 AAuraPlayerState::AAuraPlayerState() {
 
 	NetUpdateFrequency = 100.f;

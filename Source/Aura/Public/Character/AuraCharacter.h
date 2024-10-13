@@ -21,8 +21,13 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	virtual UAttributeSet* GetAttributeSet() const override;
 
+	/** server only, called when a controller possess this pawn */
+	virtual void PossessedBy(AController* NewController) override;
+	/** client only, called when a playerstate is ready and replicating */
+	virtual void OnRep_PlayerState() override;
+
 protected:
-	virtual void BeginPlay();
+	virtual void BeginPlay() override;
 
 	// Components
 	UPROPERTY(VisibleAnywhere)
@@ -31,5 +36,5 @@ protected:
 	TObjectPtr<UCameraComponent> FollowCamera;
 
 	// AbilitySystem
-	virtual void InitAbilitySystemInfo() override;
+	virtual void InitAbilitySystem() override;
 };

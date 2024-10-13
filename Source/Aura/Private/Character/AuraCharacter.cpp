@@ -8,6 +8,9 @@
 #include "AbilitySystemComponent.h"
 #include "AttributeSet.h"
 #include "GameMode/AuraPlayerState.h"
+#include "UI/HUD/AuraHUD.h"
+
+#include "Aura/Nani/NaniUtility.h"
 
 AAuraCharacter::AAuraCharacter() {
 
@@ -34,7 +37,6 @@ AAuraCharacter::AAuraCharacter() {
 void AAuraCharacter::BeginPlay() {
 	Super::BeginPlay();
 
-
 }
 
 UAbilitySystemComponent* AAuraCharacter::GetAbilitySystemComponent() const {
@@ -44,7 +46,29 @@ UAttributeSet* AAuraCharacter::GetAttributeSet() const {
 	return GetPlayerState<AAuraPlayerState>()->GetAttributeSet();
 }
 
-void AAuraCharacter::InitAbilitySystemInfo() {
+void AAuraCharacter::PossessedBy(AController* NewController) {
+	Super::PossessedBy(NewController);
 
-	AbilitySystemComponent->InitAbilityActorInfo(GetPlayerState(), this);
+	// AbilitySystem
+	InitAbilitySystem();
+}
+void AAuraCharacter::OnRep_PlayerState() {
+	Super::OnRep_PlayerState();
+
+	// AbilitySystem
+	InitAbilitySystem();
+}
+
+void AAuraCharacter::InitAbilitySystem() {
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+	AAuraPlayerState* AuraPS = GetPlayerState<AAuraPlayerState>();\
+
+	// AbilityActorInfo
+	ASC->InitAbilityActorInfo(AuraPS, this);
+
+	// Overlay
+	if (IsLocallyControlled()) {
+		AAuraHUD* AuraHUD = GetController<APlayerController>()->GetHUD<AAuraHUD>();
+		NANI_LOG(Warning, "%s is LocallyControlled", *GetName());
+	}
 }

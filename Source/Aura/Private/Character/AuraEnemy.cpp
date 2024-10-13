@@ -7,13 +7,17 @@
 #include "GameplayAbilitySystem/AbilitySystem/AuraAttributeSet.h"
 
 AAuraEnemy::AAuraEnemy() {
+
+	// custom depth
 	GetMesh()->SetRenderCustomDepth(true);
 	Weapon->SetRenderCustomDepth(true);
 	GetMesh()->CustomDepthStencilValue = CUSTOM_DEPTH_RED;
 	Weapon->CustomDepthStencilValue = CUSTOM_DEPTH_RED;
 
+	// AbilitySystem
 	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>(FName("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>(FName("AttributeSet"));
 }
@@ -21,11 +25,12 @@ AAuraEnemy::AAuraEnemy() {
 void AAuraEnemy::BeginPlay() {
 	Super::BeginPlay();
 
+	// custom depth
 	GetMesh()->SetRenderCustomDepth(false);
 	Weapon->SetRenderCustomDepth(false);
 
 	// AbilitySystem
-	InitAbilitySystemInfo();
+	InitAbilitySystem();
 }
 
 void AAuraEnemy::Highlight() {
@@ -35,4 +40,10 @@ void AAuraEnemy::Highlight() {
 void AAuraEnemy::UnHighlight() {
 	GetMesh()->SetRenderCustomDepth(false);
 	Weapon->SetRenderCustomDepth(false);
+}
+
+void AAuraEnemy::InitAbilitySystem() {
+
+	// AbilityActorInfo
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
