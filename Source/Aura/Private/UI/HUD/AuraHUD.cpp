@@ -3,16 +3,22 @@
 
 #include "UI/HUD/AuraHUD.h"
 #include "UI/Widget/AuraOverlay.h"
+#include "UI/WidgetManager/AuraOverlayManager.h"
+
+#include "Aura/Nani/NaniUtility.h"
 
 void AAuraHUD::InitOverlay(APlayerController* PC) {
+	// checking for blueprint
+	checkf(OverlayBP != nullptr/* && OverlayManagerBP != NULL*/, TEXT("OverlayBP is Invalid, in AuraHUD.cpp, ObjectName: %s"), *GetName());
+	// checking if Overlay already existed
+	checkf(Overlay == nullptr && OverlayManager == nullptr, TEXT("Overlay already Exist, in AuraHUD.cpp, ObjectName: %s"), *GetName());
 
-	if (OverlayBP != NULL && Overlay != nullptr) {
+	if (Overlay != nullptr) NANI_LOG(Warning, "Overlay Already Exist");
 
-	}
-}
-void AAuraHUD::StartOverlay() {
-
-}
-void AAuraHUD::EndOverlay() {
-
+	// Overlay
+	Overlay = CreateWidget<UAuraOverlay>(GetWorld(), OverlayBP);
+	// OverlayManager
+	OverlayManager = NewObject<UAuraOverlayManager>(Overlay);
+	OverlayManager->SetupOverlay(Overlay);
+	Overlay->AddToViewport();
 }

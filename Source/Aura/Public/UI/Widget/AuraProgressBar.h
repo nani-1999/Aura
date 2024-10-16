@@ -31,5 +31,5 @@ protected:
 
 public:
 	FORCEINLINE void SetValue(float NewValue) { Value = NewValue; SetPercent(); }
-	FORCEINLINE void SetMaxValue(float NewMaxValue) { NewMaxValue = NewMaxValue; SetPercent(); }
+	FORCEINLINE void SetMaxValue(float NewMaxValue) { MaxValue = NewMaxValue; SetPercent(); }
 };

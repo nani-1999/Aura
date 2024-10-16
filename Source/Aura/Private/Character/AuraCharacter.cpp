@@ -69,6 +69,7 @@ void AAuraCharacter::InitAbilitySystem() {
 	// Overlay
 	if (IsLocallyControlled()) {
 		AAuraHUD* AuraHUD = GetController<APlayerController>()->GetHUD<AAuraHUD>();
+		AuraHUD->InitOverlay(GetController<APlayerController>());
 		NANI_LOG(Warning, "%s is LocallyControlled", *GetName());
 	}
 }
