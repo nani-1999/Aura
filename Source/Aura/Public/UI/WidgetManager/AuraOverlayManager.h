@@ -7,7 +7,6 @@
 #include "AuraOverlayManager.generated.h"
 
 class UAuraOverlay;
-class APlayerController;
 struct FOnAttributeChangeData;
 
 UCLASS()
@@ -22,9 +21,22 @@ protected:
 	// Callbacks
 	void HealthChanged(const FOnAttributeChangeData& Data);
 	void ManaChanged(const FOnAttributeChangeData& Data);
+	void StrengthChanged(const FOnAttributeChangeData& Data);
+	void IntelligenceChanged(const FOnAttributeChangeData& Data);
+	void ResilienceChanged(const FOnAttributeChangeData& Data);
+	void VigorChanged(const FOnAttributeChangeData& Data);
+	void ArmorChanged(const FOnAttributeChangeData& Data);
+	void ArmorPenetrationChanged(const FOnAttributeChangeData& Data);
+	void BlockChanceChanged(const FOnAttributeChangeData& Data);
+	void CriticalHitChanceChanged(const FOnAttributeChangeData& Data);
+	void CriticalHitDamageChanged(const FOnAttributeChangeData& Data);
+	void CriticalHitResistanceChanged(const FOnAttributeChangeData& Data);
+	void HealthRegenerationChanged(const FOnAttributeChangeData& Data);
+	void ManaRegenerationChanged(const FOnAttributeChangeData& Data);
 	void MaxHealthChanged(const FOnAttributeChangeData& Data);
 	void MaxManaChanged(const FOnAttributeChangeData& Data);
 
 public:
 	void SetupOverlay(UAuraOverlay* OverlayVal);
+	void InitAttributeMenu();
 };

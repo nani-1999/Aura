@@ -22,9 +22,9 @@ public:
 	// Widget
 	//// Vital
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Vital_HealthValue;
+	TObjectPtr<UTextBlock> Vital_Health;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Vital_ManaValue;
+	TObjectPtr<UTextBlock> Vital_Mana;
 	//// Primary
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> Primary_Strength;
@@ -52,7 +52,7 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> Secondary_ManaRegeneration;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_MaxHealthValue;
+	TObjectPtr<UTextBlock> Secondary_MaxHealth;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_MaxManaValue;
+	TObjectPtr<UTextBlock> Secondary_MaxMana;
 };

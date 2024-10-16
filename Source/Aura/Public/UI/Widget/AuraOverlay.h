@@ -10,7 +10,7 @@ class UAuraProgressBar;
 class UButton;
 class UAuraAttributeMenu;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAuraWidgetDelegate, UUserWidget*, AuraWidget);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAuraWidgetDelegate);
 
 UCLASS()
 class AURA_API UAuraOverlay : public UUserWidget
@@ -30,15 +30,17 @@ public:
 
 	// Window
 	//// Attribute Menu
+	UPROPERTY()
+	TObjectPtr<UAuraAttributeMenu> AttributeMenu;
+	FAuraWidgetDelegate OnAttributeMenuCreated; // need for initializing beginning values
+
+protected:
+	// Window
+	//// Attribute Menu
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> AttributeMenu_Btn;
 	UPROPERTY(EditAnywhere, Category = "ClassDefaults | AttributeMenu")
 	TSubclassOf<UAuraAttributeMenu> AttributeMenuBP;
-	UPROPERTY()
-	TObjectPtr<UAuraAttributeMenu> AttributeMenu;
-	FAuraWidgetDelegate OnAttributeMenuCreated;
-
-protected:
 	UFUNCTION()
 	void AttributeMenu_Btn_Clicked();
 	UFUNCTION()

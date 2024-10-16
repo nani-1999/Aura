@@ -10,8 +10,8 @@ void UAuraOverlay::NativeOnInitialized() {
 	Super::NativeOnInitialized();
 
 	// Attribute Menu
-	//AttributeMenu_Btn->OnClicked.AddDynamic(this, &UAuraOverlay::AttributeMenu_Btn_Clicked);
-	//AttributeMenu_Btn->SetIsEnabled(true);
+	AttributeMenu_Btn->OnClicked.AddDynamic(this, &UAuraOverlay::AttributeMenu_Btn_Clicked);
+	AttributeMenu_Btn->SetIsEnabled(true);
 }
 
 void UAuraOverlay::AttributeMenu_Btn_Clicked() {
@@ -20,7 +20,7 @@ void UAuraOverlay::AttributeMenu_Btn_Clicked() {
 	AttributeMenu_Btn->SetIsEnabled(false);
 
 	AttributeMenu = CreateWidget<UAuraAttributeMenu>(GetWorld(), AttributeMenuBP);
-	OnAttributeMenuCreated.Broadcast(AttributeMenu); //for WidgetManager to setup data binding
+	OnAttributeMenuCreated.Broadcast(); //for WidgetManager to setup
 	AttributeMenu->CloseBtn->OnClicked.AddDynamic(this, &UAuraOverlay::AttributeMenu_CloseBtn_Clicked);
 }
 void UAuraOverlay::AttributeMenu_CloseBtn_Clicked() {
