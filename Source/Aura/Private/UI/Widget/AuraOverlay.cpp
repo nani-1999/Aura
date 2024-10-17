@@ -10,8 +10,8 @@ void UAuraOverlay::NativeOnInitialized() {
 	Super::NativeOnInitialized();
 
 	// Attribute Menu
-	AttributeMenu_Btn->OnClicked.AddDynamic(this, &UAuraOverlay::AttributeMenu_Btn_Clicked);
-	AttributeMenu_Btn->SetIsEnabled(true);
+	//AttributeMenu_Btn->OnClicked.AddDynamic(this, &UAuraOverlay::AttributeMenu_Btn_Clicked);
+	//AttributeMenu_Btn->SetIsEnabled(true);
 }
 
 void UAuraOverlay::AttributeMenu_Btn_Clicked() {

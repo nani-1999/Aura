@@ -38,5 +38,6 @@ protected:
 
 public:
 	void SetupOverlay(UAuraOverlay* OverlayVal);
+	UFUNCTION()
 	void InitAttributeMenu();
 };

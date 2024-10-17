@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GameplayEffectTypes.h"
 #include "EffectActor.generated.h"
 
 UENUM()
@@ -18,6 +19,7 @@ enum class EEffectPolicy : uint8 {
 class UBoxComponent;
 class UGameplayEffect;
 struct FActiveGameplayEffectHandle;
+class UAbilitySystemComponent;
 
 UCLASS()
 class AURA_API AEffectActor : public AActor
@@ -47,8 +49,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults | Effect")
 	TSubclassOf<UGameplayEffect> EffectBP;
 
-	//UPROPERTY()
-	//TArray<FActiveGameplayEffectHandle> ActiveEffects;
+	UPROPERTY()
+	TMap<UAbilitySystemComponent*, FActiveGameplayEffectHandle> ActiveEffects;
 
 	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults | EffectLevel")
 	float EffectLevel;

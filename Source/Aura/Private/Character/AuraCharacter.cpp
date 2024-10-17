@@ -61,15 +61,15 @@ void AAuraCharacter::OnRep_PlayerState() {
 
 void AAuraCharacter::InitAbilitySystem() {
 	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
-	AAuraPlayerState* AuraPS = GetPlayerState<AAuraPlayerState>();\
+	AAuraPlayerState* AuraPS = GetPlayerState<AAuraPlayerState>();
+	APlayerController* PC = GetController<APlayerController>();
 
 	// AbilityActorInfo
 	ASC->InitAbilityActorInfo(AuraPS, this);
 
 	// Overlay
 	if (IsLocallyControlled()) {
-		AAuraHUD* AuraHUD = GetController<APlayerController>()->GetHUD<AAuraHUD>();
-		AuraHUD->InitOverlay(GetController<APlayerController>());
+		PC->GetHUD<AAuraHUD>()->InitOverlay(PC);
 		NANI_LOG(Warning, "%s is LocallyControlled", *GetName());
 	}
 }
