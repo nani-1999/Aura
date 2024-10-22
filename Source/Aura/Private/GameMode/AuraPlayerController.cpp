@@ -9,6 +9,9 @@
 #include "InputActionValue.h" // FInputActionValue
 #include "Interface/HighlightInterface.h"
 
+#include "UI/Widget/AuraMessage.h"
+#include "GameplayTagContainer.h"
+
 AAuraPlayerController::AAuraPlayerController() {
 	bReplicates = true;
 }
@@ -22,7 +25,7 @@ void AAuraPlayerController::BeginPlay() {
 	//check(EnhancedInputSubsystem); //since we use replication we won't checking this
 
 	// Input Mapping Context
-	if (EnhancedInputSubsystem) EnhancedInputSubsystem->AddMappingContext(IMC_Aura, 0);
+	if (EnhancedInputSubsystem)	EnhancedInputSubsystem->AddMappingContext(IMC_Aura, 0);
 
 	// Mouse Cursor - Settings
 	bShowMouseCursor = true;
@@ -54,6 +57,7 @@ void AAuraPlayerController::SetupInputComponent() {
 	UAuraEnhancedInputComponent* AuraEnhancedInputComponent = CastChecked<UAuraEnhancedInputComponent>(InputComponent);
 
 	AuraEnhancedInputComponent->BindAction(IA_Move, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+	AuraEnhancedInputComponent->BindAction(IA_Test, ETriggerEvent::Started, this, &AAuraPlayerController::TestPressed);
 }
 
 void AAuraPlayerController::Move(const FInputActionValue& Value) {
@@ -70,6 +74,11 @@ void AAuraPlayerController::Move(const FInputActionValue& Value) {
 		PossessedPawn->AddMovementInput(ForwardDirection, Value2D.X);
 		PossessedPawn->AddMovementInput(RightDirection, Value2D.Y);
 	}
+}
+void AAuraPlayerController::TestPressed(const FInputActionValue& Value) {
+	UE_LOG(LogTemp, Warning, TEXT("TestPressed"));
+
+	UAuraMessage::CreateMessage(GetWorld(), TestMessageBP, FGameplayTag::EmptyTag, nullptr, FText::FromString(FString("")));
 }
 
 //

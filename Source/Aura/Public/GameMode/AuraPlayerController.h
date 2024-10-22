@@ -11,6 +11,8 @@ class UInputAction;
 struct FInputActionValue;
 class IHighlightInterface;
 
+class UAuraMessage;
+
 UCLASS()
 class AURA_API AAuraPlayerController : public APlayerController
 {
@@ -30,13 +32,21 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UInputAction> IA_Move;
 
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UInputAction> IA_Test;
+
 	// InputComponent
 	virtual void SetupInputComponent() override;
 
 	// Input Binding
 	void Move(const FInputActionValue& Value);
+	void TestPressed(const FInputActionValue& Value);
 
 	// TraceUnderCursor
 	void TraceUnderCursor();
 	TScriptInterface<IHighlightInterface> TracedHighlightInterface;
+
+	// Test
+	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults | Test")
+	TSubclassOf<UAuraMessage> TestMessageBP;
 };

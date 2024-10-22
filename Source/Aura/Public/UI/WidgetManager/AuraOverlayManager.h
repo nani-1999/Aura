@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "GameplayTagContainer.h"
 #include "AuraOverlayManager.generated.h"
 
 class UAuraOverlay;
@@ -35,6 +36,9 @@ protected:
 	void ManaRegenerationChanged(const FOnAttributeChangeData& Data);
 	void MaxHealthChanged(const FOnAttributeChangeData& Data);
 	void MaxManaChanged(const FOnAttributeChangeData& Data);
+
+	//
+	//void AppliedEffectAssetTags(const FGameplayTagContainer& Tags);
 
 public:
 	void SetupOverlay(UAuraOverlay* OverlayVal);

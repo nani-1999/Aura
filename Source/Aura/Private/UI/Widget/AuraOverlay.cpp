@@ -5,6 +5,7 @@
 #include "Components/Button.h"
 #include "UI/Widget/AuraProgressBar.h"
 #include "UI/Widget/AuraAttributeMenu.h"
+#include "Components/SizeBox.h"
 
 void UAuraOverlay::NativeOnInitialized() {
 	Super::NativeOnInitialized();
@@ -20,7 +21,7 @@ void UAuraOverlay::AttributeMenu_Btn_Clicked() {
 	AttributeMenu_Btn->SetIsEnabled(false);
 
 	AttributeMenu = CreateWidget<UAuraAttributeMenu>(GetWorld(), AttributeMenuBP);
-	OnAttributeMenuCreated.Broadcast(); //for WidgetManager to setup
+	OnAttributeMenuCreated.Broadcast(); //telling WidgetManager, its ready for setup
 	AttributeMenu->CloseBtn->OnClicked.AddDynamic(this, &UAuraOverlay::AttributeMenu_CloseBtn_Clicked);
 }
 void UAuraOverlay::AttributeMenu_CloseBtn_Clicked() {

@@ -8,12 +8,12 @@
 #include "EffectActor.generated.h"
 
 UENUM()
-enum class EEffectPolicy : uint8 {
-	//EEP_Apply,           //ApplyEffect OnOverlapBegin
-	EEP_ApplyAndDestroy,   //ApplyEffect OnOverlapBegin and Destroy Immediately
-	EEP_ApplyAndRemove,    //ApplyEffect OnOverlapBegin and RemoveEffect OnOverlapEnd
-	EEP_None,              //disables collision
-	EEP_MAX
+enum class EEffectApplicationPolicy : uint8 {
+	//EEAP_Apply,           //ApplyEffect OnOverlapBegin
+	EEAP_ApplyAndDestroy,   //ApplyEffect OnOverlapBegin and Destroy Immediately
+	EEAP_ApplyAndRemove,    //ApplyEffect OnOverlapBegin and RemoveEffect OnOverlapEnd
+	EEAP_None,              //disables collision
+	EEAP_MAX
 };
 
 class UBoxComponent;
@@ -37,13 +37,13 @@ protected:
 	TObjectPtr<UBoxComponent> BoxCollision;
 
 	UFUNCTION()
-	void BoxCollisionOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void BoxCollisionOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSwEEAP, const FHitResult& SwEEAPResult);
 	UFUNCTION()
 	void BoxCollisionOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	// Effect Policy
 	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults | EffectPolicy")
-	EEffectPolicy EffectPolicy;
+	EEffectApplicationPolicy EffectApplicationPolicy;
 
 	// GameplayEffect
 	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults | Effect")
@@ -52,6 +52,6 @@ protected:
 	UPROPERTY()
 	TMap<UAbilitySystemComponent*, FActiveGameplayEffectHandle> ActiveEffects;
 
-	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults | EffectLevel")
+	UPROPERTY(EditAnywhere, Category = "ClassDefaults | EffectLevel")
 	float EffectLevel;
 };
