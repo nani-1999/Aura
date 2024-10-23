@@ -38,7 +38,7 @@ protected:
 	void MaxManaChanged(const FOnAttributeChangeData& Data);
 
 	//
-	//void AppliedEffectAssetTags(const FGameplayTagContainer& Tags);
+	void AppliedEffectAssetTags(const FGameplayTagContainer& Tags);
 
 public:
 	void SetupOverlay(UAuraOverlay* OverlayVal);

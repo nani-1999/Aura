@@ -5,7 +5,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "GameplayAbilitySystem/AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystemComponent.h"
 #include "AttributeSet.h"
 #include "GameMode/AuraPlayerState.h"
 #include "UI/HUD/AuraHUD.h"
@@ -23,7 +23,6 @@ AAuraCharacter::AAuraCharacter() {
 
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(FName("CameraComponent"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
@@ -72,19 +71,19 @@ void AAuraCharacter::InitAbilitySystem() {
 	// AbilityActorInfo
 	ASC->InitAbilityActorInfo(AuraPS, this);
 
-	//Binding Applied Effect Tags for Assets Tags
-	//if (HasAuthority()) {
-	//	NANI_LOG(Warning, "%s | BindingAssetTags in Authority", *GetName());
-	//	Cast<UAuraAbilitySystemComponent>(ASC)->BindAppliedEffectTags();
-	//}
-	//else if (IsLocallyControlled()) {
-	//	NANI_LOG(Warning, "%s | Binding AssetTags in Local", *GetName());
-	//	Cast<UAuraAbilitySystemComponent>(ASC)->BindAppliedEffectTags();
-	//}
-
-	// Overlay
+	//Overlay
 	if (IsLocallyControlled()) {
-		NANI_LOG(Warning, "%s is LocallyControlled", *GetName());
+		NANI_LOG(Warning, "%s | InitOverlay Locally", *GetName());
 		PC->GetHUD<AAuraHUD>()->InitOverlay(PC);
 	}
+	
+	//
+	ASC->OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &AAuraCharacter::EffectAppliedToSelf); //this delegate called only on server anta
+}
+void AAuraCharacter::EffectAppliedToSelf(UAbilitySystemComponent* ASC, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle) {
+	NANI_LOG(Warning, "%s | EffectAppliedToSelf", *ASC->GetAvatarActor()->GetName());
+
+	FGameplayTagContainer AssetTags;
+	EffectSpec.GetAllAssetTags(AssetTags);
+	OnAppliedEffectAssetTags.Broadcast(AssetTags);
 }

@@ -5,7 +5,7 @@
 #include "UI/Widget/AuraOverlay.h"
 #include "GameFramework/PlayerController.h"
 #include "GameMode/AuraPlayerState.h"
-#include "GameplayAbilitySystem/AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystemComponent.h"
 #include "GameplayAbilitySystem/AbilitySystem/AuraAttributeSet.h"
 #include "UI/Widget/AuraProgressBar.h"
 #include "UI/Widget/AuraAttributeMenu.h"
@@ -13,6 +13,7 @@
 #include "GameplayAbilitySystem/GameplayTags/AuraGameplayTags.h"
 
 #include "Aura/Nani/NaniUtility.h"
+#include "Character/AuraCharacter.h"
 
 void UAuraOverlayManager::SetupOverlay(UAuraOverlay* OverlayVal) {
 	// saving Overlay here
@@ -23,7 +24,7 @@ void UAuraOverlayManager::SetupOverlay(UAuraOverlay* OverlayVal) {
 	// Getting PlayerController's PlayerState
 	AAuraPlayerState* AuraPS = PC->GetPlayerState<AAuraPlayerState>();
 	// Getting PlayerState's AbilitySystem
-	UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(AuraPS->GetAbilitySystemComponent());
+	UAbilitySystemComponent* ASC = AuraPS->GetAbilitySystemComponent();
 	UAuraAttributeSet* AuraAS = Cast<UAuraAttributeSet>(AuraPS->GetAttributeSet());
 
 	// Initializing Overlay
@@ -38,35 +39,32 @@ void UAuraOverlayManager::SetupOverlay(UAuraOverlay* OverlayVal) {
 	// Binding Overlay
 	// 
 	//// Atomic
-	
+	AAuraCharacter* ASCAvatar = Cast<AAuraCharacter>(ASC->GetAvatarActor());
+	ASCAvatar->OnAppliedEffectAssetTags.AddUObject(this, &UAuraOverlayManager::AppliedEffectAssetTags);
 	//// Window
 	////// Attribute Menu
 	Overlay->OnAttributeMenuCreated.AddDynamic(this, &UAuraOverlayManager::InitAttributeMenu);
 	//// Getting all data required by Overlay 
-	AuraASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetHealthAttribute()).AddUObject(this, &UAuraOverlayManager::HealthChanged);
-	AuraASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetManaAttribute()).AddUObject(this, &UAuraOverlayManager::ManaChanged);
-	AuraASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetStrengthAttribute()).AddUObject(this, &UAuraOverlayManager::StrengthChanged);
-	AuraASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetIntelligenceAttribute()).AddUObject(this, &UAuraOverlayManager::IntelligenceChanged);
-	AuraASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetResilienceAttribute()).AddUObject(this, &UAuraOverlayManager::ResilienceChanged);
-	AuraASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetVigorAttribute()).AddUObject(this, &UAuraOverlayManager::VigorChanged);
-	AuraASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetArmorAttribute()).AddUObject(this, &UAuraOverlayManager::ArmorChanged);
-	AuraASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetArmorPenetrationAttribute()).AddUObject(this, &UAuraOverlayManager::ArmorPenetrationChanged);
-	AuraASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetBlockChanceAttribute()).AddUObject(this, &UAuraOverlayManager::BlockChanceChanged);
-	AuraASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetCriticalHitChanceAttribute()).AddUObject(this, &UAuraOverlayManager::CriticalHitChanceChanged);
-	AuraASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetCriticalHitDamageAttribute()).AddUObject(this, &UAuraOverlayManager::CriticalHitDamageChanged);
-	AuraASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetCriticalHitResistanceAttribute()).AddUObject(this, &UAuraOverlayManager::CriticalHitResistanceChanged);
-	AuraASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetHealthRegenerationAttribute()).AddUObject(this, &UAuraOverlayManager::HealthRegenerationChanged);
-	AuraASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetManaRegenerationAttribute()).AddUObject(this, &UAuraOverlayManager::ManaRegenerationChanged);
-	AuraASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetMaxHealthAttribute()).AddUObject(this, &UAuraOverlayManager::MaxHealthChanged);
-	AuraASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetMaxManaAttribute()).AddUObject(this, &UAuraOverlayManager::MaxManaChanged);
+	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetHealthAttribute()).AddUObject(this, &UAuraOverlayManager::HealthChanged);
+	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetManaAttribute()).AddUObject(this, &UAuraOverlayManager::ManaChanged);
+	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetStrengthAttribute()).AddUObject(this, &UAuraOverlayManager::StrengthChanged);
+	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetIntelligenceAttribute()).AddUObject(this, &UAuraOverlayManager::IntelligenceChanged);
+	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetResilienceAttribute()).AddUObject(this, &UAuraOverlayManager::ResilienceChanged);
+	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetVigorAttribute()).AddUObject(this, &UAuraOverlayManager::VigorChanged);
+	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetArmorAttribute()).AddUObject(this, &UAuraOverlayManager::ArmorChanged);
+	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetArmorPenetrationAttribute()).AddUObject(this, &UAuraOverlayManager::ArmorPenetrationChanged);
+	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetBlockChanceAttribute()).AddUObject(this, &UAuraOverlayManager::BlockChanceChanged);
+	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetCriticalHitChanceAttribute()).AddUObject(this, &UAuraOverlayManager::CriticalHitChanceChanged);
+	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetCriticalHitDamageAttribute()).AddUObject(this, &UAuraOverlayManager::CriticalHitDamageChanged);
+	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetCriticalHitResistanceAttribute()).AddUObject(this, &UAuraOverlayManager::CriticalHitResistanceChanged);
+	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetHealthRegenerationAttribute()).AddUObject(this, &UAuraOverlayManager::HealthRegenerationChanged);
+	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetManaRegenerationAttribute()).AddUObject(this, &UAuraOverlayManager::ManaRegenerationChanged);
+	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetMaxHealthAttribute()).AddUObject(this, &UAuraOverlayManager::MaxHealthChanged);
+	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetMaxManaAttribute()).AddUObject(this, &UAuraOverlayManager::MaxManaChanged);
 }
 
 void UAuraOverlayManager::AppliedEffectAssetTags(const FGameplayTagContainer& Tags) {
-	UE_LOG(LogTemp, Warning, TEXT("Getting Asset Tags in OverlayManager"));
-
-	for (const FGameplayTag& Tag : Tags) {
-		UE_LOG(LogTemp, Warning, TEXT("Applied GameplayEffect Asset TAgs: %s"), *Tag.ToString());
-	}
+	NANI_LOG(Warning, "00000000000000000000000AppliedEffectAssetTAgs");
 }
 
 void UAuraOverlayManager::InitAttributeMenu() {
@@ -98,6 +96,7 @@ void UAuraOverlayManager::InitAttributeMenu() {
 }
 
 void UAuraOverlayManager::HealthChanged(const FOnAttributeChangeData& Data) {
+	NANI_LOG(Warning, "Health Changed");
 	Overlay->Health_ProgressBar->SetValue(Data.NewValue);
 	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Vital_Health->SetText(FText::AsNumber(Data.NewValue));
 }

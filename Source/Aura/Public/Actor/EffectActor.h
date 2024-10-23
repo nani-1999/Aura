@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "GameplayEffectTypes.h"
+#include "GameplayEffectTypes.h" // @For FActiveGameplayEffectHandle
 #include "EffectActor.generated.h"
 
 UENUM()
@@ -18,7 +18,6 @@ enum class EEffectApplicationPolicy : uint8 {
 
 class UBoxComponent;
 class UGameplayEffect;
-struct FActiveGameplayEffectHandle;
 class UAbilitySystemComponent;
 
 UCLASS()

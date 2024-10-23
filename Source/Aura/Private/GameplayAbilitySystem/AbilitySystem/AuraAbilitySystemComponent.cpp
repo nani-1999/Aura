@@ -7,7 +7,6 @@
 
 //void UAuraAbilitySystemComponent::BindAppliedEffectTags() {
 //
-//
 //	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UAuraAbilitySystemComponent::EffectAppliedToSelf);
 //	OnGameplayEffectAppliedDelegateToTarget.AddUObject(this, &UAuraAbilitySystemComponent::EffectAppliedToTarget);
 //

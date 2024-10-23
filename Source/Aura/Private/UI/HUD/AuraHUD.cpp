@@ -17,7 +17,7 @@ void AAuraHUD::InitOverlay(APlayerController* PC) {
 	Overlay = CreateWidget<UAuraOverlay>(GetWorld(), OverlayBP);
 	Overlay->SetOwningPlayer(PC);
 	// OverlayManager
-	OverlayManager = NewObject<UAuraOverlayManager>(Overlay);
+	OverlayManager = NewObject<UAuraOverlayManager>(PC);
 	OverlayManager->SetupOverlay(Overlay);
 
 	// Adding Overlay to Viewport

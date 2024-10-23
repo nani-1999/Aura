@@ -4,10 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "AuraCharacterBase.h"
+#include "GameplayEffectTypes.h" // @For FGameplayEffectSpec, FActiveGameplayEffectHandle
 #include "AuraCharacter.generated.h"
 
 class USpringArmComponent;
 class UCameraComponent;
+
+class UAbilitySystemComponent;
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FAppliedEffectTagsDelegate, const FGameplayTagContainer&);
 
 UCLASS()
 class AURA_API AAuraCharacter : public AAuraCharacterBase
@@ -26,6 +31,8 @@ public:
 	/** client only, called when a playerstate is ready and replicating */
 	virtual void OnRep_PlayerState() override;
 
+	FAppliedEffectTagsDelegate OnAppliedEffectAssetTags;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -37,4 +44,7 @@ protected:
 
 	// AbilitySystem
 	virtual void InitAbilitySystem() override;
+
+	//
+	void EffectAppliedToSelf(UAbilitySystemComponent* ASC, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle);
 };

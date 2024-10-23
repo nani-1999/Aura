@@ -6,7 +6,6 @@
 #include "GameplayEffect.h"
 #include "AbilitySystemInterface.h"
 #include "AbilitySystemComponent.h"
-#include "GameplayEffectTypes.h"
 
 #include "Aura/Nani/NaniUtility.h"
 
@@ -35,35 +34,44 @@ void AEffectActor::BeginPlay() {
 }
 
 void AEffectActor::BoxCollisionOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSwEEAP, const FHitResult& SwEEAPResult) {
-	if (EffectApplicationPolicy == EEffectApplicationPolicy::EEAP_ApplyAndDestroy) Destroy();
-
-	if (!HasAuthority()) return;
-
+	
 	if (const IAbilitySystemInterface* ASI = Cast<IAbilitySystemInterface>(OtherActor)) {
-		NANI_LOG(Warning, "%s is Begin Overlap on %s", *OtherActor->GetName(), *GetName());
 		UAbilitySystemComponent* ASC = ASI->GetAbilitySystemComponent();
 
-		FGameplayEffectContextHandle EffectContextHandle;
-		EffectContextHandle.AddSourceObject(this);
-		const FGameplayEffectSpecHandle EffectSpecHandle = ASC->MakeOutgoingSpec(EffectBP, EffectLevel, EffectContextHandle);
-		FActiveGameplayEffectHandle ActiveEffectHandle = ASC->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(), ASC);
+		// ApplyEffect
+		if (HasAuthority()) {
+			NANI_LOG(Warning, "%s is Begin Overlap on %s", *OtherActor->GetName(), *GetName());
 
-		if (EffectApplicationPolicy == EEffectApplicationPolicy::EEAP_ApplyAndRemove) ActiveEffects.Add(ASC, ActiveEffectHandle);
+			FGameplayEffectContextHandle EffectContextHandle;
+			EffectContextHandle.AddSourceObject(this);
+			const FGameplayEffectSpecHandle EffectSpecHandle = ASC->MakeOutgoingSpec(EffectBP, EffectLevel, EffectContextHandle);
+			FActiveGameplayEffectHandle ActiveEffectHandle = ASC->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(), ASC);
 
-		// @Important, ActiveEffect must be stored inside who ever casted it
-		// valid checking since applying instant effects don't give FActiveGameplayEffectHandle, welp instant effects don't binded to EndOverlap
-		//if (ActiveEffectHandle.IsValid() && EffectApplicationPolicy == EEffectApplicationPolicy::EEAP_ApplyAndRemove) {
-		//	ActiveEffects.Add(ASC, ActiveEffectHandle);
+			if (EffectApplicationPolicy == EEffectApplicationPolicy::EEAP_ApplyAndRemove) ActiveEffects.Add(ASC, ActiveEffectHandle);
+
+			// @Important, ActiveEffect must be stored inside who ever casted it
+			// valid checking since applying instant effects don't give FActiveGameplayEffectHandle, welp instant effects don't binded to EndOverlap
+			//if (ActiveEffectHandle.IsValid() && EffectApplicationPolicy == EEffectApplicationPolicy::EEAP_ApplyAndRemove) {
+			//	ActiveEffects.Add(ASC, ActiveEffectHandle);
+			//}
+		}
+
+		// Broadcasting AppliedEffect AssetTags, Locally
+		//if (true) {
+		//	const UGameplayEffect* Effect = EffectBP.GetDefaultObject();
 		//}
+
+		if (EffectApplicationPolicy == EEffectApplicationPolicy::EEAP_ApplyAndDestroy) Destroy();
 	}
 }
 
 void AEffectActor::BoxCollisionOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
-	if (!HasAuthority()) return;
 
 	if (const IAbilitySystemInterface* ASI = Cast<IAbilitySystemInterface>(OtherActor)) {
-		NANI_LOG(Warning, "%s is End Overlap on %s", *OtherActor->GetName(), *GetName());
-		UAbilitySystemComponent* ASC = ASI->GetAbilitySystemComponent();
-		ASC->RemoveActiveGameplayEffect(ActiveEffects.FindAndRemoveChecked(ASC));
+		if (HasAuthority()) {
+			NANI_LOG(Warning, "%s is End Overlap on %s", *OtherActor->GetName(), *GetName());
+			UAbilitySystemComponent* ASC = ASI->GetAbilitySystemComponent();
+			ASC->RemoveActiveGameplayEffect(ActiveEffects.FindAndRemoveChecked(ASC));
+		}
 	}
 }
