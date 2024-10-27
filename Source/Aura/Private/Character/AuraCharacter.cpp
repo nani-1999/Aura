@@ -63,27 +63,20 @@ void AAuraCharacter::OnRep_PlayerState() {
 }
 
 void AAuraCharacter::InitAbilitySystem() {
-
 	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
 	AAuraPlayerState* AuraPS = GetPlayerState<AAuraPlayerState>();
-	APlayerController* PC = GetController<APlayerController>();
 
-	// AbilityActorInfo
 	ASC->InitAbilityActorInfo(AuraPS, this);
 
 	//Overlay
 	if (IsLocallyControlled()) {
-		NANI_LOG(Warning, "%s | InitOverlay Locally", *GetName());
-		PC->GetHUD<AAuraHUD>()->InitOverlay(PC);
-	}
-	
-	//
-	ASC->OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &AAuraCharacter::EffectAppliedToSelf); //this delegate called only on server anta
-}
-void AAuraCharacter::EffectAppliedToSelf(UAbilitySystemComponent* ASC, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle) {
-	NANI_LOG(Warning, "%s | EffectAppliedToSelf", *ASC->GetAvatarActor()->GetName());
+		APlayerController* PC = GetController<APlayerController>();
 
-	FGameplayTagContainer AssetTags;
-	EffectSpec.GetAllAssetTags(AssetTags);
-	OnAppliedEffectAssetTags.Broadcast(AssetTags);
+		NANI_LOG(Warning, "%s | Initializing Overlay Locally", *GetName());
+		PC->GetHUD<AAuraHUD>()->InitOverlay(PC);
+
+		// @Important, this will only be triggered in Servers
+		// even if you bind it in client and apply effect on client, it worn't trigger
+		//ASC->OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &AAuraCharacter::EffectAppliedToSelf);
+	}
 }

@@ -6,6 +6,7 @@
 #include "GameplayEffect.h"
 #include "AbilitySystemInterface.h"
 #include "AbilitySystemComponent.h"
+#include "GameplayAbilitySystem/AbilitySystem/AuraAbilitySystemComponent.h"
 
 #include "Aura/Nani/NaniUtility.h"
 
@@ -36,31 +37,20 @@ void AEffectActor::BeginPlay() {
 void AEffectActor::BoxCollisionOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSwEEAP, const FHitResult& SwEEAPResult) {
 	
 	if (const IAbilitySystemInterface* ASI = Cast<IAbilitySystemInterface>(OtherActor)) {
-		UAbilitySystemComponent* ASC = ASI->GetAbilitySystemComponent();
 
-		// ApplyEffect
+		UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(ASI->GetAbilitySystemComponent());
+
 		if (HasAuthority()) {
-			NANI_LOG(Warning, "%s is Begin Overlap on %s", *OtherActor->GetName(), *GetName());
-
-			FGameplayEffectContextHandle EffectContextHandle;
-			EffectContextHandle.AddSourceObject(this);
-			const FGameplayEffectSpecHandle EffectSpecHandle = ASC->MakeOutgoingSpec(EffectBP, EffectLevel, EffectContextHandle);
-			FActiveGameplayEffectHandle ActiveEffectHandle = ASC->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(), ASC);
-
-			if (EffectApplicationPolicy == EEffectApplicationPolicy::EEAP_ApplyAndRemove) ActiveEffects.Add(ASC, ActiveEffectHandle);
-
-			// @Important, ActiveEffect must be stored inside who ever casted it
-			// valid checking since applying instant effects don't give FActiveGameplayEffectHandle, welp instant effects don't binded to EndOverlap
-			//if (ActiveEffectHandle.IsValid() && EffectApplicationPolicy == EEffectApplicationPolicy::EEAP_ApplyAndRemove) {
-			//	ActiveEffects.Add(ASC, ActiveEffectHandle);
-			//}
+			NANI_LOG(Warning, "%s | Applying Effect on Authority", *GetName());
+			// Applying Effect on Authority
+			ApplyEffectToTargetASC(AuraASC);
+		}
+		if (AuraASC->IsLocalASC()) {
+			// this will only be happening locally
+			BroadcastAssetTagsToTargetASC(AuraASC);
 		}
 
-		// Broadcasting AppliedEffect AssetTags, Locally
-		//if (true) {
-		//	const UGameplayEffect* Effect = EffectBP.GetDefaultObject();
-		//}
-
+		// Destroying irrespective of proxy
 		if (EffectApplicationPolicy == EEffectApplicationPolicy::EEAP_ApplyAndDestroy) Destroy();
 	}
 }
@@ -68,10 +58,39 @@ void AEffectActor::BoxCollisionOverlapBegin(UPrimitiveComponent* OverlappedCompo
 void AEffectActor::BoxCollisionOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
 
 	if (const IAbilitySystemInterface* ASI = Cast<IAbilitySystemInterface>(OtherActor)) {
-		if (HasAuthority()) {
-			NANI_LOG(Warning, "%s is End Overlap on %s", *OtherActor->GetName(), *GetName());
-			UAbilitySystemComponent* ASC = ASI->GetAbilitySystemComponent();
-			ASC->RemoveActiveGameplayEffect(ActiveEffects.FindAndRemoveChecked(ASC));
-		}
+		if (!HasAuthority()) return;
+
+		UAbilitySystemComponent* ASC = ASI->GetAbilitySystemComponent();
+		ASC->RemoveActiveGameplayEffect(ActiveEffects.FindAndRemoveChecked(ASC));
+	}
+}
+
+void AEffectActor::ApplyEffectToTargetASC(UAbilitySystemComponent* TargetASC) {
+	// ContextHandle
+	FGameplayEffectContextHandle EffectContextHandle;
+	EffectContextHandle.AddSourceObject(this);
+	// EffectSpecHandle
+	const FGameplayEffectSpecHandle EffectSpecHandle = TargetASC->MakeOutgoingSpec(EffectBP, EffectLevel, EffectContextHandle);
+	// Applying Effecct
+	FActiveGameplayEffectHandle ActiveEffectHandle = TargetASC->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(), TargetASC);
+
+	// @Important, ActiveEffect must be stored inside who ever casted it
+	// valid checking since applying instant effects don't give FActiveGameplayEffectHandle, welp instant effects don't binded to EndOverlap
+	if (EffectApplicationPolicy == EEffectApplicationPolicy::EEAP_ApplyAndRemove) ActiveEffects.Add(TargetASC, ActiveEffectHandle);
+}
+
+void AEffectActor::BroadcastAssetTagsToTargetASC(UAbilitySystemComponent* TargetASC) {
+	// Getting AssetTags from Effect Blueprint
+	const FGameplayTagContainer AssetTags = EffectBP.GetDefaultObject()->InheritableGameplayEffectTags.CombinedTags;
+
+	// If there are no asset tags we are returning
+	if (AssetTags.Num() <= 0) return;
+
+	// Broadcasting it to AuraASC
+	Cast<UAuraAbilitySystemComponent>(TargetASC)->OnAppliedEffectAssetTags.Broadcast(AssetTags);
+
+	//
+	for (const FGameplayTag& Tag : AssetTags) {
+		NANI_LOG(Warning, "%s Applying AssetTag: %s on %s", *GetName(), *Tag.ToString(), *TargetASC->GetAvatarActor()->GetName());
 	}
 }

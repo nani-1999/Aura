@@ -48,9 +48,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults | Effect")
 	TSubclassOf<UGameplayEffect> EffectBP;
 
+	void ApplyEffectToTargetASC(UAbilitySystemComponent* TargetASC);
+
 	UPROPERTY()
 	TMap<UAbilitySystemComponent*, FActiveGameplayEffectHandle> ActiveEffects;
 
+	void BroadcastAssetTagsToTargetASC(UAbilitySystemComponent* TargetASC);
+
+	// Effect Level
 	UPROPERTY(EditAnywhere, Category = "ClassDefaults | EffectLevel")
 	float EffectLevel;
+
 };

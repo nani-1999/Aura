@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Engine/DataTable.h"
 #include "AuraOverlay.generated.h"
 
 class UAuraProgressBar;
@@ -12,12 +13,29 @@ class UAuraAttributeMenu;
 class USizeBox;
 class UAuraMessage;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAuraWidgetDelegate);
+
+USTRUCT()
+struct FMessageTableRow : public FTableRowBase {
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults")
+	TSubclassOf<UAuraMessage> MessageClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults")
+	TObjectPtr<UTexture2D> IconTexture;
+
+	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults")
+	FText TitleText;
+
+	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults")
+	FText DetailText;
+};
+
 UCLASS()
 class AURA_API UAuraOverlay : public UUserWidget
 {
 	GENERATED_BODY()
-
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAuraWidgetDelegate);
 
 protected:
 	virtual void NativeOnInitialized() override;
@@ -30,10 +48,10 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UAuraProgressBar> Mana_ProgressBar;
 	//// Message
-	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults | Message")
-	TSubclassOf<UAuraMessage> ItemMessageBP;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<USizeBox> ItemMessage_Slot;
+	TObjectPtr<USizeBox> PickUpMessage_Slot;
+	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults | Message")
+	TObjectPtr<UDataTable> MessageDataTable;
 
 	// Window
 	//// Attribute Menu
@@ -51,7 +69,7 @@ protected:
 	UFUNCTION()
 	void AttributeMenu_Btn_Clicked();
 	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults | AttributeMenu")
-	TSubclassOf<UAuraAttributeMenu> AttributeMenuBP;
+	TSubclassOf<UAuraAttributeMenu> AttributeMenuClass;
 	UFUNCTION()
 	void AttributeMenu_CloseBtn_Clicked();
 };

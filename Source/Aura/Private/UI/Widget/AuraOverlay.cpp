@@ -16,11 +16,11 @@ void UAuraOverlay::NativeOnInitialized() {
 }
 
 void UAuraOverlay::AttributeMenu_Btn_Clicked() {
-	checkf(AttributeMenuBP, TEXT("AttributeMenuBP is Invalid, in AuraOverlay.cpp, ObjectName: %s"), *GetName());
+	checkf(AttributeMenuClass, TEXT("AttributeMenuClass is Invalid, in AuraOverlay.cpp, ObjectName: %s"), *GetName());
 
 	AttributeMenu_Btn->SetIsEnabled(false);
 
-	AttributeMenu = CreateWidget<UAuraAttributeMenu>(GetWorld(), AttributeMenuBP);
+	AttributeMenu = CreateWidget<UAuraAttributeMenu>(GetWorld(), AttributeMenuClass);
 	OnAttributeMenuCreated.Broadcast(); //telling WidgetManager, its ready for setup
 	AttributeMenu->CloseBtn->OnClicked.AddDynamic(this, &UAuraOverlay::AttributeMenu_CloseBtn_Clicked);
 }

@@ -36,6 +36,8 @@ struct FAuraMessageTags {
 	FGameplayTag Message_PickUp_HealthCrystal;
 	FGameplayTag Message_PickUp_ManaPotion;
 	FGameplayTag Message_PickUp_ManaShard;
+	// Quest
+	FGameplayTag Message_Quest_Beginner;
 };
 
 struct FAuraGameplayTags {

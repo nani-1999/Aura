@@ -5,32 +5,24 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "Animation/WidgetAnimation.h"
+#include "Blueprint/UserWidget.h"
 
-void UAuraMessage::NativeOnInitialized() {
-	Super::NativeOnInitialized();
+void UAuraMessage::NativeConstruct() {
+	Super::NativeConstruct();
 
 	PlayAnimation(SlideFadeOut);
-
-	UE_LOG(LogTemp, Warning, TEXT("Widget Animation Playing"));
 }
 
-UAuraMessage* UAuraMessage::CreateMessage(UWorld* WorldContext, TSubclassOf<UAuraMessage> MessageBP, const FGameplayTag& Tag, UTexture2D* IconTexture, const FText TitleText) {
 
-	UE_LOG(LogTemp, Warning, TEXT("Before Widget Created"));
+UAuraMessage* UAuraMessage::CreateMessage(UWorld* WorldContext, TSubclassOf<UAuraMessage> MessageClass, UTexture2D* IconTexture, const FText& TitleText, const FText& DetailText) {
 
-	UAuraMessage* AuraMessage = CreateWidget<UAuraMessage>(WorldContext, MessageBP);
+	UAuraMessage* AuraMessage = CreateWidget<UAuraMessage>(WorldContext, MessageClass);
 
-	UE_LOG(LogTemp, Warning, TEXT("Widget Created"));
+	UE_LOG(LogTemp, Warning, TEXT("AuraMessage | Widget Created"));
 
-	//AuraMessage->MessageTag = Tag;
-	//AuraMessage->Icon->SetBrushFromTexture(IconTexture);
-	//AuraMessage->Title->SetText(TitleText);
-
-	FVector2D ViewportSize;
-	GEngine->GameViewport->GetViewportSize(ViewportSize);
-
-
-	UE_LOG(LogTemp, Warning, TEXT("Widget Added To Viewport"));
+	AuraMessage->Icon->SetBrushFromTexture(IconTexture);
+	AuraMessage->Title->SetText(TitleText);
+	if (AuraMessage->Detail) AuraMessage->Detail->SetText(DetailText);
 
 	return AuraMessage;
 }

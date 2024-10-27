@@ -11,6 +11,8 @@
 
 #include "UI/Widget/AuraMessage.h"
 #include "GameplayTagContainer.h"
+#include "Character/AuraCharacter.h"
+#include "Aura/Nani/NaniUtility.h"
 
 AAuraPlayerController::AAuraPlayerController() {
 	bReplicates = true;
@@ -76,9 +78,10 @@ void AAuraPlayerController::Move(const FInputActionValue& Value) {
 	}
 }
 void AAuraPlayerController::TestPressed(const FInputActionValue& Value) {
-	UE_LOG(LogTemp, Warning, TEXT("TestPressed"));
+	NANI_LOG(Warning, "%s | TestPressed", *GetName());
 
-	UAuraMessage::CreateMessage(GetWorld(), TestMessageBP, FGameplayTag::EmptyTag, nullptr, FText::FromString(FString("")));
+	AAuraCharacter* AuraChar = GetPawn<AAuraCharacter>();
+	AuraChar->Test();
 }
 
 //

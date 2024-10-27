@@ -5,15 +5,17 @@
 #include "UI/Widget/AuraOverlay.h"
 #include "GameFramework/PlayerController.h"
 #include "GameMode/AuraPlayerState.h"
-#include "AbilitySystemComponent.h"
+#include "GameplayAbilitySystem/AbilitySystem/AuraAbilitySystemComponent.h"
 #include "GameplayAbilitySystem/AbilitySystem/AuraAttributeSet.h"
 #include "UI/Widget/AuraProgressBar.h"
 #include "UI/Widget/AuraAttributeMenu.h"
 #include "Components/TextBlock.h"
 #include "GameplayAbilitySystem/GameplayTags/AuraGameplayTags.h"
+#include "Engine/DataTable.h"
+#include "UI/Widget/AuraMessage.h"
+#include "Components/SizeBox.h"
 
 #include "Aura/Nani/NaniUtility.h"
-#include "Character/AuraCharacter.h"
 
 void UAuraOverlayManager::SetupOverlay(UAuraOverlay* OverlayVal) {
 	// saving Overlay here
@@ -28,7 +30,7 @@ void UAuraOverlayManager::SetupOverlay(UAuraOverlay* OverlayVal) {
 	UAuraAttributeSet* AuraAS = Cast<UAuraAttributeSet>(AuraPS->GetAttributeSet());
 
 	// Initializing Overlay
-	// 
+	//
 	//// Atomic
 	////// Globe Progress Bar
 	Overlay->Health_ProgressBar->SetValue(AuraAS->GetHealth());
@@ -37,10 +39,10 @@ void UAuraOverlayManager::SetupOverlay(UAuraOverlay* OverlayVal) {
 	Overlay->Mana_ProgressBar->SetMaxValue(AuraAS->GetMaxMana());
 
 	// Binding Overlay
-	// 
+	//
 	//// Atomic
-	AAuraCharacter* ASCAvatar = Cast<AAuraCharacter>(ASC->GetAvatarActor());
-	ASCAvatar->OnAppliedEffectAssetTags.AddUObject(this, &UAuraOverlayManager::AppliedEffectAssetTags);
+	////// Message
+	Cast<UAuraAbilitySystemComponent>(ASC)->OnAppliedEffectAssetTags.AddDynamic(this, &UAuraOverlayManager::AppliedEffectAssetTags);
 	//// Window
 	////// Attribute Menu
 	Overlay->OnAttributeMenuCreated.AddDynamic(this, &UAuraOverlayManager::InitAttributeMenu);
@@ -64,7 +66,31 @@ void UAuraOverlayManager::SetupOverlay(UAuraOverlay* OverlayVal) {
 }
 
 void UAuraOverlayManager::AppliedEffectAssetTags(const FGameplayTagContainer& Tags) {
-	NANI_LOG(Warning, "00000000000000000000000AppliedEffectAssetTAgs");
+	for (const FGameplayTag& Tag : Tags) {
+		DisplayMessage(*Tag.ToString());
+		UE_LOG(LogTemp, Warning, TEXT("Tag Parent: %s"), *Tag.RequestDirectParent().ToString());
+	}
+}
+void UAuraOverlayManager::DisplayMessage(const FName MessageName) {
+	// Getting Message Assets for Displaying Message Widget on Overlay
+	// can use DataAsset which we can have a function to get Specific TableRow based on MessageName, i.e., Message.Quest, Message.Pickup
+	FMessageTableRow* MessageTR = Overlay->MessageDataTable->FindRow<FMessageTableRow>(MessageName, TEXT(""));
+
+	// we crash if we can't find assets for displaying message
+	checkf(MessageTR, TEXT("AuraOverlayManager | Message TableRow is invalid"));
+
+	// checking if the have Assets with that MessageName
+	if (MessageTR) {
+		// clearning the Slot before adding Message
+		Overlay->PickUpMessage_Slot->ClearChildren();
+
+		// creating Message
+		UAuraMessage* AuraM = UAuraMessage::CreateMessage(GetWorld(), MessageTR->MessageClass, MessageTR->IconTexture, MessageTR->TitleText, MessageTR->DetailText);
+
+		// adding the created Message to the Slot
+		// the message will destroy itself after completing animation
+		Overlay->PickUpMessage_Slot->AddChild(AuraM);
+	}
 }
 
 void UAuraOverlayManager::InitAttributeMenu() {
@@ -96,7 +122,6 @@ void UAuraOverlayManager::InitAttributeMenu() {
 }
 
 void UAuraOverlayManager::HealthChanged(const FOnAttributeChangeData& Data) {
-	NANI_LOG(Warning, "Health Changed");
 	Overlay->Health_ProgressBar->SetValue(Data.NewValue);
 	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Vital_Health->SetText(FText::AsNumber(Data.NewValue));
 }
