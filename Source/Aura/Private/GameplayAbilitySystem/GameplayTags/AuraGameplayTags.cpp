@@ -6,12 +6,13 @@
 
 FAuraAttributeTags FAuraGameplayTags::AttributeTags;
 FAuraMessageTags FAuraGameplayTags::MessageTags;
+FAuraCharacterClassTags FAuraGameplayTags::CharacterClassTags;
 
 void FAuraGameplayTags::AddNativeGameplayTags() {
 
 	UGameplayTagsManager& GameplayTagsManager = UGameplayTagsManager::Get();
 
-	// Attribute Tags
+	// Attribute
 	//// Vital
 	GameplayTagsManager.AddNativeGameplayTag(FName("Attribute.Vital.Health"));
 	GameplayTagsManager.AddNativeGameplayTag(FName("Attribute.Vital.Mana"));
@@ -40,11 +41,16 @@ void FAuraGameplayTags::AddNativeGameplayTags() {
 	GameplayTagsManager.AddNativeGameplayTag(FName("Message.PickUp.ManaShard"));
 	//// Quest
 	GameplayTagsManager.AddNativeGameplayTag(FName("Message.Quest.Beginner"));
+
+	// Character Class
+	GameplayTagsManager.AddNativeGameplayTag(FName("CharacterClass.Elementalist"));
+	GameplayTagsManager.AddNativeGameplayTag(FName("CharacterClass.Ranger"));
+	GameplayTagsManager.AddNativeGameplayTag(FName("CharacterClass.Warrior"));
 }
 
 void FAuraGameplayTags::CopyNativeGameplayTags() {
 
-	// Attribute Tags
+	// Attribute
 	//// Vital
 	AttributeTags.Attribute_Vital_Health = FGameplayTag::RequestGameplayTag(FName("Attribute.Vital.Health"));
 	AttributeTags.Attribute_Vital_Mana = FGameplayTag::RequestGameplayTag(FName("Attribute.Vital.Mana"));
@@ -73,4 +79,9 @@ void FAuraGameplayTags::CopyNativeGameplayTags() {
 	MessageTags.Message_PickUp_ManaShard = FGameplayTag::RequestGameplayTag(FName("Message.PickUp.ManaShard"));
 	//// Quest
 	MessageTags.Message_Quest_Beginner = FGameplayTag::RequestGameplayTag(FName("Message.Quest.Beginner"));
+
+	// Character Class
+	CharacterClassTags.CharacterClass_Elementalist = FGameplayTag::RequestGameplayTag(FName("CharacterClass.Elementalist"));
+	CharacterClassTags.CharacterClass_Ranger = FGameplayTag::RequestGameplayTag(FName("CharacterClass.Ranger"));
+	CharacterClassTags.CharacterClass_Warrior = FGameplayTag::RequestGameplayTag(FName("CharacterClass.Warrior"));
 }

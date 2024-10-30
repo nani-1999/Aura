@@ -22,10 +22,16 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 
+	FORCEINLINE int32 GetCharacterLevel() const { return CharacterLevel; }
+
 protected:
 	// AbilitySystem
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
+
+	// Character Level
+	UPROPERTY()
+	int32 CharacterLevel;
 };

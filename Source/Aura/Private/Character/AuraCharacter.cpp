@@ -45,6 +45,10 @@ UAttributeSet* AAuraCharacter::GetAttributeSet() const {
 	return GetPlayerState<AAuraPlayerState>()->GetAttributeSet();
 }
 
+int32 AAuraCharacter::GetCharacterLevel() const {
+	return GetPlayerState<AAuraPlayerState>()->GetCharacterLevel();
+}
+
 void AAuraCharacter::PossessedBy(AController* NewController) {
 	Super::PossessedBy(NewController);
 
@@ -79,4 +83,7 @@ void AAuraCharacter::InitAbilitySystem() {
 		// even if you bind it in client and apply effect on client, it worn't trigger
 		//ASC->OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &AAuraCharacter::EffectAppliedToSelf);
 	}
+
+	// calling super's version after InitAbilityActorInfo is set
+	Super::InitAbilitySystem();
 }

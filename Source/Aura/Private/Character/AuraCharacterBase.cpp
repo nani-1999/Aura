@@ -6,8 +6,11 @@
 #include "AbilitySystemComponent.h"
 #include "AttributeSet.h"
 #include "Components/CapsuleComponent.h"
+#include "GameplayEffect.h"
+#include "DataAsset/AuraCharacterClassInfo.h"
 
-AAuraCharacterBase::AAuraCharacterBase()
+AAuraCharacterBase::AAuraCharacterBase() :
+	CharacterLevel{ 1 }
 {
 	PrimaryActorTick.bCanEverTick = false;
 
@@ -25,4 +28,24 @@ void AAuraCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void AAuraCharacterBase::InitAbilitySystem() {
+
+	// Attribute Defaults
+	InitAttributeDefaults();
+}
+
+void AAuraCharacterBase::InitAttributeDefaults() {
+	// checking
+	checkf(CharacterClassInfo, TEXT("AuraCharacterBAse | CharacterClassInfo is Invalid | ObjectName: %s"), *GetName());
+
+	// Initializing Attribute Defaults in the form of GameplayEffects
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+	const FGameplayEffectContextHandle EffectContextHandle = ASC->MakeEffectContext();
+
+	// Applying secondaryattributes first, since they are inf effect
+	ASC->ApplyGameplayEffectToSelf(CharacterClassInfo->Secondary_AttributeDefaults.GetDefaultObject(), GetCharacterLevel(), EffectContextHandle);
+	ASC->ApplyGameplayEffectToSelf(CharacterClassInfo->GetPrimaryAttributeDefaults(GetCharacterClass()).GetDefaultObject(), GetCharacterLevel(), EffectContextHandle);
+	ASC->ApplyGameplayEffectToSelf(CharacterClassInfo->Vital_AttributeDefaults.GetDefaultObject(), GetCharacterLevel(), EffectContextHandle);
 }

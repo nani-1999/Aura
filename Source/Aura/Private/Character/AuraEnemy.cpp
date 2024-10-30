@@ -46,4 +46,7 @@ void AAuraEnemy::InitAbilitySystem() {
 
 	// AbilityActorInfo
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+
+	// calling super's version after InitAbilityActorInfo is set
+	Super::InitAbilitySystem();
 }

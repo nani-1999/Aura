@@ -7,7 +7,9 @@
 
 #include "Aura/Nani/NaniUtility.h"
 
-AAuraPlayerState::AAuraPlayerState() {
+AAuraPlayerState::AAuraPlayerState() :
+	CharacterLevel{ 1 }
+{
 
 	NetUpdateFrequency = 100.f;
 

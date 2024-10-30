@@ -67,10 +67,12 @@ void AEffectActor::BoxCollisionOverlapEnd(UPrimitiveComponent* OverlappedCompone
 
 void AEffectActor::ApplyEffectToTargetASC(UAbilitySystemComponent* TargetASC) {
 	// ContextHandle
-	FGameplayEffectContextHandle EffectContextHandle;
-	EffectContextHandle.AddSourceObject(this);
+	FGameplayEffectContextHandle EffectContextHandle = TargetASC->MakeEffectContext(); //instigator is set by makecontexthandle
+	EffectContextHandle.AddSourceObject(this); //source is setting here
+
 	// EffectSpecHandle
 	const FGameplayEffectSpecHandle EffectSpecHandle = TargetASC->MakeOutgoingSpec(EffectBP, EffectLevel, EffectContextHandle);
+
 	// Applying Effecct
 	FActiveGameplayEffectHandle ActiveEffectHandle = TargetASC->ApplyGameplayEffectSpecToTarget(*EffectSpecHandle.Data.Get(), TargetASC);
 

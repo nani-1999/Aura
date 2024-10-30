@@ -39,11 +39,17 @@ struct FAuraMessageTags {
 	// Quest
 	FGameplayTag Message_Quest_Beginner;
 };
+struct FAuraCharacterClassTags {
+	FGameplayTag CharacterClass_Elementalist;
+	FGameplayTag CharacterClass_Ranger;
+	FGameplayTag CharacterClass_Warrior;
+};
 
 struct FAuraGameplayTags {
 private:
 	static FAuraAttributeTags AttributeTags;
 	static FAuraMessageTags MessageTags;
+	static FAuraCharacterClassTags CharacterClassTags;
 
 public:
 	/** Do not call this, can only be called by UAssetManager on InitialLoading */
@@ -53,4 +59,5 @@ public:
 
 	static const FAuraAttributeTags& GetAttributeTags() { return AttributeTags; }
 	static const FAuraMessageTags& GetMessageTags() { return MessageTags; }
+	static const FAuraCharacterClassTags& GetCharacterClassTags() { return CharacterClassTags; }
 };

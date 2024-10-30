@@ -40,4 +40,7 @@ protected:
 
 	// AbilitySystem
 	virtual void InitAbilitySystem() override;
+
+	// Character Level
+	virtual int32 GetCharacterLevel() const override;
 };
