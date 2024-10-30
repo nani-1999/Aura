@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
 #include "GameplayTagContainer.h"
+#include "Interface/CombatInterface.h"
 #include "AuraCharacterBase.generated.h"
 
 class USkeletalMeshComponent;
@@ -14,7 +15,7 @@ class UAttributeSet;
 class UAuraCharacterClassInfo;
 
 UCLASS()
-class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInterface
+class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
 {
 	GENERATED_BODY()
 
@@ -25,7 +26,7 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
 	virtual UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 
-	virtual int32 GetCharacterLevel() const { return CharacterLevel; }
+	virtual int32 GetCharacterLevel() const override { return CharacterLevel; }
 	const FGameplayTag& GetCharacterClass() const { return CharacterClass; }
 
 protected:
@@ -35,7 +36,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 
-	// AbilitySystem
+	// Ability System
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 	UPROPERTY()
@@ -43,7 +44,7 @@ protected:
 
 	virtual void InitAbilitySystem();
 
-	// CharacterLevel
+	// Character Level
 	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults|Character")
 	int32 CharacterLevel;
 

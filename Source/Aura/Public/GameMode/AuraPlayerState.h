@@ -24,6 +24,9 @@ public:
 
 	FORCEINLINE int32 GetCharacterLevel() const { return CharacterLevel; }
 
+	// for registering property replication
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 protected:
 	// AbilitySystem
 	UPROPERTY()
@@ -32,6 +35,9 @@ protected:
 	TObjectPtr<UAttributeSet> AttributeSet;
 
 	// Character Level
-	UPROPERTY()
+	UPROPERTY(ReplicatedUsing = OnRep_CharacterLevel)
 	int32 CharacterLevel;
+
+	UFUNCTION()
+	void OnRep_CharacterLevel(const int32& OldCharacterLevel) const {}
 };

@@ -4,13 +4,11 @@
 #include "GameMode/AuraPlayerState.h"
 #include "GameplayAbilitySystem/AbilitySystem/AuraAbilitySystemComponent.h"
 #include "GameplayAbilitySystem/AbilitySystem/AuraAttributeSet.h"
-
-#include "Aura/Nani/NaniUtility.h"
+#include "Net/UnrealNetwork.h" // @For DOREPLIFETIME_CONDITION_NOTIFY
 
 AAuraPlayerState::AAuraPlayerState() :
 	CharacterLevel{ 1 }
 {
-
 	NetUpdateFrequency = 100.f;
 
 	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>(FName("AbilitySystemComponent"));
@@ -18,4 +16,10 @@ AAuraPlayerState::AAuraPlayerState() :
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>(FName("AttributeSet"));
+}
+
+void AAuraPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AAuraPlayerState, CharacterLevel);
 }

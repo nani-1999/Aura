@@ -2,7 +2,6 @@
 
 
 #include "Character/AuraEnemy.h"
-#include "Aura/Aura.h"
 #include "GameplayAbilitySystem/AbilitySystem/AuraAbilitySystemComponent.h"
 #include "GameplayAbilitySystem/AbilitySystem/AuraAttributeSet.h"
 
