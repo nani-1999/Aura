@@ -9,11 +9,12 @@ UMMC_MaxHealth::UMMC_MaxHealth() {
 	VigorDef.AttributeSource = EGameplayEffectAttributeCaptureSource::Target;
 	VigorDef.bSnapshot = false;
 
+	// first we capture the attribute
 	RelevantAttributesToCapture.Add(VigorDef);
 }
 
 float UMMC_MaxHealth::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const {
-	Super::CalculateBaseMagnitude_Implementation(Spec);
+	//Super::CalculateBaseMagnitude_Implementation(Spec); //no need
 
 	// getting tags
 	//since, getcaptureattributemagnitude() requires these

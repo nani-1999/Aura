@@ -17,42 +17,59 @@ class AURA_API UAuraAttributeMenu : public UUserWidget
 public:
 	// Button
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> CloseBtn;
+	TObjectPtr<UButton> Close_Btn;
 
 	// Widget
+	//// Attribute Points
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> AttributePoints_Txt;
+
 	//// Vital
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Vital_Health;
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Vital_Mana;
+	//UPROPERTY(meta = (BindWidget))
+	//TObjectPtr<UTextBlock> Vital_Health_Txt;
+	//UPROPERTY(meta = (BindWidget))
+	//TObjectPtr<UTextBlock> Vital_Mana_Txt;
+
 	//// Primary
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Primary_Strength;
+	TObjectPtr<UTextBlock> Primary_Strength_Txt;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Primary_Intelligence;
+	TObjectPtr<UButton> Primary_Strength_Btn;
+
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Primary_Resilience;
+	TObjectPtr<UTextBlock> Primary_Intelligence_Txt;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Primary_Vigor;
+	TObjectPtr<UButton> Primary_Intelligence_Btn;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> Primary_Resilience_Txt;
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UButton> Primary_Resilience_Btn;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> Primary_Vigor_Txt;
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UButton> Primary_Vigor_Btn;
+
 	//// Secondary
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_Armor;
+	TObjectPtr<UTextBlock> Secondary_Armor_Txt;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_ArmorPenetration;
+	TObjectPtr<UTextBlock> Secondary_ArmorPenetration_Txt;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_BlockChance;
+	TObjectPtr<UTextBlock> Secondary_BlockChance_Txt;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_CriticalHitChance;
+	TObjectPtr<UTextBlock> Secondary_CriticalHitChance_Txt;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_CriticalHitDamage;
+	TObjectPtr<UTextBlock> Secondary_CriticalHitDamage_Txt;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_CriticalHitResistance;
+	TObjectPtr<UTextBlock> Secondary_CriticalHitResistance_Txt;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_HealthRegeneration;
+	TObjectPtr<UTextBlock> Secondary_HealthRegeneration_Txt;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_ManaRegeneration;
+	TObjectPtr<UTextBlock> Secondary_ManaRegeneration_Txt;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_MaxHealth;
+	TObjectPtr<UTextBlock> Secondary_MaxHealth_Txt;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_MaxMana;
+	TObjectPtr<UTextBlock> Secondary_MaxMana_Txt;
 };

@@ -46,7 +46,8 @@ void UAuraOverlayManager::SetupOverlay(UAuraOverlay* OverlayVal) {
 	//// Window
 	////// Attribute Menu
 	Overlay->OnAttributeMenuCreated.AddDynamic(this, &UAuraOverlayManager::InitAttributeMenu);
-	//// Getting all data required by Overlay 
+
+	// Getting all data required by Overlay 
 	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetHealthAttribute()).AddUObject(this, &UAuraOverlayManager::HealthChanged);
 	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetManaAttribute()).AddUObject(this, &UAuraOverlayManager::ManaChanged);
 	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetStrengthAttribute()).AddUObject(this, &UAuraOverlayManager::StrengthChanged);
@@ -103,73 +104,73 @@ void UAuraOverlayManager::InitAttributeMenu() {
 	UAuraAttributeSet* AuraAS = Cast<UAuraAttributeSet>(AuraPS->GetAttributeSet());
 
 	// Initializing Attribute Menu
-	Overlay->AttributeMenu->Vital_Health->SetText(FText::AsNumber(AuraAS->GetHealth()));
-	Overlay->AttributeMenu->Vital_Mana->SetText(FText::AsNumber(AuraAS->GetMana()));
-	Overlay->AttributeMenu->Primary_Strength->SetText(FText::AsNumber(AuraAS->GetStrength()));
-	Overlay->AttributeMenu->Primary_Intelligence->SetText(FText::AsNumber(AuraAS->GetIntelligence()));
-	Overlay->AttributeMenu->Primary_Resilience->SetText(FText::AsNumber(AuraAS->GetResilience()));
-	Overlay->AttributeMenu->Primary_Vigor->SetText(FText::AsNumber(AuraAS->GetVigor()));
-	Overlay->AttributeMenu->Secondary_Armor->SetText(FText::AsNumber(AuraAS->GetArmor()));
-	Overlay->AttributeMenu->Secondary_ArmorPenetration->SetText(FText::AsNumber(AuraAS->GetArmorPenetration()));
-	Overlay->AttributeMenu->Secondary_BlockChance->SetText(FText::AsNumber(AuraAS->GetBlockChance()));
-	Overlay->AttributeMenu->Secondary_CriticalHitChance->SetText(FText::AsNumber(AuraAS->GetCriticalHitChance()));
-	Overlay->AttributeMenu->Secondary_CriticalHitDamage->SetText(FText::AsNumber(AuraAS->GetCriticalHitDamage()));
-	Overlay->AttributeMenu->Secondary_CriticalHitResistance->SetText(FText::AsNumber(AuraAS->GetCriticalHitResistance()));
-	Overlay->AttributeMenu->Secondary_HealthRegeneration->SetText(FText::AsNumber(AuraAS->GetHealthRegeneration()));
-	Overlay->AttributeMenu->Secondary_ManaRegeneration->SetText(FText::AsNumber(AuraAS->GetManaRegeneration()));
-	Overlay->AttributeMenu->Secondary_MaxHealth->SetText(FText::AsNumber(AuraAS->GetMaxHealth()));
-	Overlay->AttributeMenu->Secondary_MaxMana->SetText(FText::AsNumber(AuraAS->GetMaxMana()));
+	//Overlay->AttributeMenu->Vital_Health_Txt->SetText(FText::AsNumber(AuraAS->GetHealth()));
+	//Overlay->AttributeMenu->Vital_Mana_Txt->SetText(FText::AsNumber(AuraAS->GetMana()));
+	Overlay->AttributeMenu->Primary_Strength_Txt->SetText(FText::AsNumber(AuraAS->GetStrength()));
+	Overlay->AttributeMenu->Primary_Intelligence_Txt->SetText(FText::AsNumber(AuraAS->GetIntelligence()));
+	Overlay->AttributeMenu->Primary_Resilience_Txt->SetText(FText::AsNumber(AuraAS->GetResilience()));
+	Overlay->AttributeMenu->Primary_Vigor_Txt->SetText(FText::AsNumber(AuraAS->GetVigor()));
+	Overlay->AttributeMenu->Secondary_Armor_Txt->SetText(FText::AsNumber(AuraAS->GetArmor()));
+	Overlay->AttributeMenu->Secondary_ArmorPenetration_Txt->SetText(FText::AsNumber(AuraAS->GetArmorPenetration()));
+	Overlay->AttributeMenu->Secondary_BlockChance_Txt->SetText(FText::AsNumber(AuraAS->GetBlockChance()));
+	Overlay->AttributeMenu->Secondary_CriticalHitChance_Txt->SetText(FText::AsNumber(AuraAS->GetCriticalHitChance()));
+	Overlay->AttributeMenu->Secondary_CriticalHitDamage_Txt->SetText(FText::AsNumber(AuraAS->GetCriticalHitDamage()));
+	Overlay->AttributeMenu->Secondary_CriticalHitResistance_Txt->SetText(FText::AsNumber(AuraAS->GetCriticalHitResistance()));
+	Overlay->AttributeMenu->Secondary_HealthRegeneration_Txt->SetText(FText::AsNumber(AuraAS->GetHealthRegeneration()));
+	Overlay->AttributeMenu->Secondary_ManaRegeneration_Txt->SetText(FText::AsNumber(AuraAS->GetManaRegeneration()));
+	Overlay->AttributeMenu->Secondary_MaxHealth_Txt->SetText(FText::AsNumber(AuraAS->GetMaxHealth()));
+	Overlay->AttributeMenu->Secondary_MaxMana_Txt->SetText(FText::AsNumber(AuraAS->GetMaxMana()));
 }
 
 void UAuraOverlayManager::HealthChanged(const FOnAttributeChangeData& Data) {
 	Overlay->Health_ProgressBar->SetValue(Data.NewValue);
-	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Vital_Health->SetText(FText::AsNumber(Data.NewValue));
+	//if (Overlay->AttributeMenu) Overlay->AttributeMenu->Vital_Health_Txt->SetText(FText::AsNumber(Data.NewValue));
 }
 void UAuraOverlayManager::ManaChanged(const FOnAttributeChangeData& Data) {
 	Overlay->Mana_ProgressBar->SetValue(Data.NewValue);
-	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Vital_Mana->SetText(FText::AsNumber(Data.NewValue));
+	//if (Overlay->AttributeMenu) Overlay->AttributeMenu->Vital_Mana_Txt->SetText(FText::AsNumber(Data.NewValue));
 }
 void UAuraOverlayManager::StrengthChanged(const FOnAttributeChangeData& Data) {
-	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Primary_Strength->SetText(FText::AsNumber(Data.NewValue));
+	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Primary_Strength_Txt->SetText(FText::AsNumber(Data.NewValue));
 }
 void UAuraOverlayManager::IntelligenceChanged(const FOnAttributeChangeData& Data) {
-	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Primary_Intelligence->SetText(FText::AsNumber(Data.NewValue));
+	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Primary_Intelligence_Txt->SetText(FText::AsNumber(Data.NewValue));
 }
 void UAuraOverlayManager::ResilienceChanged(const FOnAttributeChangeData& Data) {
-	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Primary_Resilience->SetText(FText::AsNumber(Data.NewValue));
+	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Primary_Resilience_Txt->SetText(FText::AsNumber(Data.NewValue));
 }
 void UAuraOverlayManager::VigorChanged(const FOnAttributeChangeData& Data) {
-	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Primary_Vigor->SetText(FText::AsNumber(Data.NewValue));
+	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Primary_Vigor_Txt->SetText(FText::AsNumber(Data.NewValue));
 }
 void UAuraOverlayManager::ArmorChanged(const FOnAttributeChangeData& Data) {
-	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_Armor->SetText(FText::AsNumber(Data.NewValue));
+	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_Armor_Txt->SetText(FText::AsNumber(Data.NewValue));
 }
 void UAuraOverlayManager::ArmorPenetrationChanged(const FOnAttributeChangeData& Data) {
-	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_ArmorPenetration->SetText(FText::AsNumber(Data.NewValue));
+	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_ArmorPenetration_Txt->SetText(FText::AsNumber(Data.NewValue));
 }
 void UAuraOverlayManager::BlockChanceChanged(const FOnAttributeChangeData& Data) {
-	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_BlockChance->SetText(FText::AsNumber(Data.NewValue));
+	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_BlockChance_Txt->SetText(FText::AsNumber(Data.NewValue));
 }
 void UAuraOverlayManager::CriticalHitChanceChanged(const FOnAttributeChangeData& Data) {
-	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_CriticalHitChance->SetText(FText::AsNumber(Data.NewValue));
+	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_CriticalHitChance_Txt->SetText(FText::AsNumber(Data.NewValue));
 }
 void UAuraOverlayManager::CriticalHitDamageChanged(const FOnAttributeChangeData& Data) {
-	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_CriticalHitDamage->SetText(FText::AsNumber(Data.NewValue));
+	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_CriticalHitDamage_Txt->SetText(FText::AsNumber(Data.NewValue));
 }
 void UAuraOverlayManager::CriticalHitResistanceChanged(const FOnAttributeChangeData& Data) {
-	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_CriticalHitResistance->SetText(FText::AsNumber(Data.NewValue));
+	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_CriticalHitResistance_Txt->SetText(FText::AsNumber(Data.NewValue));
 }
 void UAuraOverlayManager::HealthRegenerationChanged(const FOnAttributeChangeData& Data) {
-	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_HealthRegeneration->SetText(FText::AsNumber(Data.NewValue));
+	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_HealthRegeneration_Txt->SetText(FText::AsNumber(Data.NewValue));
 }
 void UAuraOverlayManager::ManaRegenerationChanged(const FOnAttributeChangeData& Data) {
-	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_ManaRegeneration->SetText(FText::AsNumber(Data.NewValue));
+	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_ManaRegeneration_Txt->SetText(FText::AsNumber(Data.NewValue));
 }
 void UAuraOverlayManager::MaxHealthChanged(const FOnAttributeChangeData& Data) {
 	Overlay->Health_ProgressBar->SetMaxValue(Data.NewValue);
-	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_MaxHealth->SetText(FText::AsNumber(Data.NewValue));
+	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_MaxHealth_Txt->SetText(FText::AsNumber(Data.NewValue));
 }
 void UAuraOverlayManager::MaxManaChanged(const FOnAttributeChangeData& Data) {
 	Overlay->Mana_ProgressBar->SetMaxValue(Data.NewValue);
-	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_MaxMana->SetText(FText::AsNumber(Data.NewValue));
+	if (Overlay->AttributeMenu) Overlay->AttributeMenu->Secondary_MaxMana_Txt->SetText(FText::AsNumber(Data.NewValue));
 }
