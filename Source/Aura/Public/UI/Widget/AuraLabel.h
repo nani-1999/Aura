@@ -7,6 +7,7 @@
 #include "AuraLabel.generated.h"
 
 class UTextBlock;
+class UButton;
 
 UCLASS()
 class AURA_API UAuraLabel : public UUserWidget
@@ -18,4 +19,12 @@ protected:
 	TObjectPtr<UTextBlock> LabelName;
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> LabelValue;
+
+public:
+	UPROPERTY(meta = (BindWidgetOptional))
+	TObjectPtr<UButton> LabelButton;
+
+	// Setters
+	void SetLabelName(const FText NameTxt);
+	void SetLabelValue(const FText ValueTxt);
 };

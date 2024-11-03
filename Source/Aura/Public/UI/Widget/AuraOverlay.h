@@ -52,6 +52,7 @@ public:
 	TObjectPtr<USizeBox> PickUpMessage_Slot;
 	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults | Message")
 	TObjectPtr<UDataTable> MessageDataTable;
+	void DisplayMessage(const FName MessageName);
 
 	// Window
 	//// Attribute Menu
@@ -59,7 +60,7 @@ public:
 	TObjectPtr<USizeBox> AttributeMenu_Slot;
 	UPROPERTY()
 	TObjectPtr<UAuraAttributeMenu> AttributeMenu;
-	FAuraWidgetDelegate OnAttributeMenuCreated; // need for initializing beginning values
+	FAuraWidgetDelegate OnAttributeMenuCreated;
 
 protected:
 	// Window

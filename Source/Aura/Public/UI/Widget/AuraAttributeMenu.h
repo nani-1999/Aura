@@ -8,68 +8,57 @@
 
 class UTextBlock;
 class UButton;
+class UAuraLabel;
 
 UCLASS()
 class AURA_API UAuraAttributeMenu : public UUserWidget
 {
 	GENERATED_BODY()
 	
+protected:
+	virtual void NativeOnInitialized() override;
+
 public:
-	// Button
+	virtual void RemoveFromParent() override { UE_LOG(LogTemp, Warning, TEXT("AttributeMenu | Widget Removed")); Super::RemoveFromParent(); }
+
+	// Close Button
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> Close_Btn;
 
 	// Widget
 	//// Attribute Points
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> AttributePoints_Txt;
-
-	//// Vital
-	//UPROPERTY(meta = (BindWidget))
-	//TObjectPtr<UTextBlock> Vital_Health_Txt;
-	//UPROPERTY(meta = (BindWidget))
-	//TObjectPtr<UTextBlock> Vital_Mana_Txt;
+	TObjectPtr<UAuraLabel> AttributePoints;
 
 	//// Primary
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Primary_Strength_Txt;
+	TObjectPtr<UAuraLabel> Primary_Strength;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> Primary_Strength_Btn;
-
+	TObjectPtr<UAuraLabel> Primary_Intelligence;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Primary_Intelligence_Txt;
+	TObjectPtr<UAuraLabel> Primary_Resilience;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> Primary_Intelligence_Btn;
-
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Primary_Resilience_Txt;
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> Primary_Resilience_Btn;
-
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Primary_Vigor_Txt;
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> Primary_Vigor_Btn;
+	TObjectPtr<UAuraLabel> Primary_Vigor;
 
 	//// Secondary
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_Armor_Txt;
+	TObjectPtr<UAuraLabel> Secondary_Armor;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_ArmorPenetration_Txt;
+	TObjectPtr<UAuraLabel> Secondary_ArmorPenetration;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_BlockChance_Txt;
+	TObjectPtr<UAuraLabel> Secondary_BlockChance;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_CriticalHitChance_Txt;
+	TObjectPtr<UAuraLabel> Secondary_CriticalHitChance;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_CriticalHitDamage_Txt;
+	TObjectPtr<UAuraLabel> Secondary_CriticalHitDamage;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_CriticalHitResistance_Txt;
+	TObjectPtr<UAuraLabel> Secondary_CriticalHitResistance;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_HealthRegeneration_Txt;
+	TObjectPtr<UAuraLabel> Secondary_HealthRegeneration;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_ManaRegeneration_Txt;
+	TObjectPtr<UAuraLabel> Secondary_ManaRegeneration;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_MaxHealth_Txt;
+	TObjectPtr<UAuraLabel> Secondary_MaxHealth;
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UTextBlock> Secondary_MaxMana_Txt;
+	TObjectPtr<UAuraLabel> Secondary_MaxMana;
 };

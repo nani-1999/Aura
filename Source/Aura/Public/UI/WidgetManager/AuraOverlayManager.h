@@ -41,9 +41,6 @@ protected:
 	UFUNCTION()
 	void AppliedEffectAssetTags(const FGameplayTagContainer& Tags);
 
-	// Message
-	void DisplayMessage(const FName MessageName);
-
 public:
 	// Overlay
 	void SetupOverlay(UAuraOverlay* OverlayVal);
