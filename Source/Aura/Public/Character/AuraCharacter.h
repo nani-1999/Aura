@@ -43,4 +43,7 @@ protected:
 
 	// Character Level
 	virtual int32 GetCharacterLevel() const override;
+
+	// HUD
+	void InitLocalPlayerHUD();
 };

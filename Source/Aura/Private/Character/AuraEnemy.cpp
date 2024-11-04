@@ -42,6 +42,9 @@ void AAuraEnemy::UnHighlight() {
 }
 
 void AAuraEnemy::InitAbilitySystem() {
+
+	if (!HasAuthority()) return;
+
 	// AbilityActorInfo
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 

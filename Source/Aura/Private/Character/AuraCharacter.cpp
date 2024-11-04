@@ -56,17 +56,22 @@ void AAuraCharacter::PossessedBy(AController* NewController) {
 
 	// AbilitySystem
 	InitAbilitySystem();
+
+	// HUD
+	InitLocalPlayerHUD();
 }
 void AAuraCharacter::OnRep_PlayerState() {
 	Super::OnRep_PlayerState();
 
-	NANI_LOG(Warning, "%s | OnRep_PlayerState()", *GetName());
-
-	// AbilitySystem
-	InitAbilitySystem();
+	// HUD
+	InitLocalPlayerHUD();
 }
 
 void AAuraCharacter::InitAbilitySystem() {
+
+	// this will only be executed on authority
+
+	if (!HasAuthority()) return;
 
 	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
 	AAuraPlayerState* AuraPS = GetPlayerState<AAuraPlayerState>();
@@ -75,16 +80,21 @@ void AAuraCharacter::InitAbilitySystem() {
 
 	// calling super's version after InitAbilityActorInfo is set
 	Super::InitAbilitySystem();
+}
+
+void AAuraCharacter::InitLocalPlayerHUD() {
+
+	// this will only be executed on local player
+
+	if (!IsLocallyControlled()) return;
 
 	//Overlay
-	if (IsLocallyControlled()) {
-		APlayerController* PC = GetController<APlayerController>();
+	// setting up Overlay locally controlled player
+	APlayerController* PC = GetController<APlayerController>();
+	PC->GetHUD<AAuraHUD>()->InitOverlay(PC);
+	NANI_LOG(Warning, "%s | Initializing Overlay Locally", *GetName());
 
-		NANI_LOG(Warning, "%s | Initializing Overlay Locally", *GetName());
-		PC->GetHUD<AAuraHUD>()->InitOverlay(PC);
-
-		// @Important, this will only be triggered in Servers
-		// even if you bind it in client and apply effect on client, it worn't trigger
-		//ASC->OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &AAuraCharacter::EffectAppliedToSelf);
-	}
+	// @Important, this will only be triggered in Servers
+	// even if you bind it in client and apply effect on client, it worn't trigger
+	//ASC->OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &AAuraCharacter::EffectAppliedToSelf);
 }

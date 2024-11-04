@@ -33,11 +33,15 @@ void AAuraCharacterBase::BeginPlay()
 
 void AAuraCharacterBase::InitAbilitySystem() {
 
+	// must be called after ASC's AbilityActorInfo is set
+
+	if (!HasAuthority()) return;
+
 	// Attribute Defaults
 	InitAttributeDefaults();
 
 	// Startup Abilities
-	//GiveStartupAbilities();
+	GiveStartupAbilities();
 }
 
 void AAuraCharacterBase::InitAttributeDefaults() {
