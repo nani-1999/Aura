@@ -44,12 +44,17 @@ struct FAuraCharacterClassTags {
 	FGameplayTag CharacterClass_Ranger;
 	FGameplayTag CharacterClass_Warrior;
 };
+struct FAuraAbilityTags {
+	FGameplayTag Ability_HitReact;
+	FGameplayTag Ability_FireBall;
+};
 
 struct FAuraGameplayTags {
 private:
 	static FAuraAttributeTags AttributeTags;
 	static FAuraMessageTags MessageTags;
 	static FAuraCharacterClassTags CharacterClassTags;
+	static FAuraAbilityTags AbilityTags;
 
 public:
 	/** Do not call this, can only be called by UAssetManager on InitialLoading */
@@ -60,4 +65,5 @@ public:
 	static const FAuraAttributeTags& GetAttributeTags() { return AttributeTags; }
 	static const FAuraMessageTags& GetMessageTags() { return MessageTags; }
 	static const FAuraCharacterClassTags& GetCharacterClassTags() { return CharacterClassTags; }
+	static const FAuraAbilityTags& GetAbilityTags() { return AbilityTags; }
 };

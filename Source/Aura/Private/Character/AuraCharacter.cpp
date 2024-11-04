@@ -67,10 +67,14 @@ void AAuraCharacter::OnRep_PlayerState() {
 }
 
 void AAuraCharacter::InitAbilitySystem() {
+
 	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
 	AAuraPlayerState* AuraPS = GetPlayerState<AAuraPlayerState>();
 
 	ASC->InitAbilityActorInfo(AuraPS, this);
+
+	// calling super's version after InitAbilityActorInfo is set
+	Super::InitAbilitySystem();
 
 	//Overlay
 	if (IsLocallyControlled()) {
@@ -83,7 +87,4 @@ void AAuraCharacter::InitAbilitySystem() {
 		// even if you bind it in client and apply effect on client, it worn't trigger
 		//ASC->OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &AAuraCharacter::EffectAppliedToSelf);
 	}
-
-	// calling super's version after InitAbilityActorInfo is set
-	Super::InitAbilitySystem();
 }

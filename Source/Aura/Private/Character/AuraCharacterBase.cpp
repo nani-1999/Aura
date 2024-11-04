@@ -8,6 +8,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameplayEffect.h"
 #include "DataAsset/AuraCharacterClassInfo.h"
+#include "Abilities/GameplayAbility.h"
 
 AAuraCharacterBase::AAuraCharacterBase() :
 	CharacterLevel{ 1 }
@@ -34,11 +35,14 @@ void AAuraCharacterBase::InitAbilitySystem() {
 
 	// Attribute Defaults
 	InitAttributeDefaults();
+
+	// Startup Abilities
+	//GiveStartupAbilities();
 }
 
 void AAuraCharacterBase::InitAttributeDefaults() {
 	// checking
-	checkf(CharacterClassInfo, TEXT("AuraCharacterBAse | CharacterClassInfo is Invalid | ObjectName: %s"), *GetName());
+	checkf(CharacterClassInfo, TEXT("AuraCharacterBase | CharacterClassInfo is Invalid | ObjectName: %s"), *GetName());
 
 	// Initializing Attribute Defaults in the form of GameplayEffects
 	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
@@ -48,4 +52,17 @@ void AAuraCharacterBase::InitAttributeDefaults() {
 	ASC->ApplyGameplayEffectToSelf(CharacterClassInfo->Secondary_AttributeDefaults.GetDefaultObject(), GetCharacterLevel(), EffectContextHandle);
 	ASC->ApplyGameplayEffectToSelf(CharacterClassInfo->GetPrimaryAttributeDefaults(GetCharacterClass()).GetDefaultObject(), GetCharacterLevel(), EffectContextHandle);
 	ASC->ApplyGameplayEffectToSelf(CharacterClassInfo->Vital_AttributeDefaults.GetDefaultObject(), GetCharacterLevel(), EffectContextHandle);
+}
+
+void AAuraCharacterBase::GiveStartupAbilities() {
+	// checking
+	checkf(CharacterClassInfo, TEXT("AuraCharacterBase | CharacterClassInfo is Invalid | ObjectName: %s"), *GetName());
+
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+
+	// giving common abilities
+	for (TSubclassOf<UGameplayAbility>& AbilityClass : CharacterClassInfo->StartupAbilities) {
+		const FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, GetCharacterLevel());
+		ASC->GiveAbility(AbilitySpec);
+	}
 }

@@ -42,7 +42,6 @@ void AAuraEnemy::UnHighlight() {
 }
 
 void AAuraEnemy::InitAbilitySystem() {
-
 	// AbilityActorInfo
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 

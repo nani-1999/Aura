@@ -27,6 +27,7 @@ public:
 	virtual UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 
 	virtual int32 GetCharacterLevel() const override { return CharacterLevel; }
+
 	const FGameplayTag& GetCharacterClass() const { return CharacterClass; }
 
 protected:
@@ -56,6 +57,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults|Character")
 	TObjectPtr<UAuraCharacterClassInfo> CharacterClassInfo;
 
-	// Attribute Defaults
+	// Attributes
 	void InitAttributeDefaults(); 
+
+	// Abilities
+	void GiveStartupAbilities();
 };

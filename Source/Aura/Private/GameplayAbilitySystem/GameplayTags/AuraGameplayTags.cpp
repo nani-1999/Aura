@@ -7,6 +7,7 @@
 FAuraAttributeTags FAuraGameplayTags::AttributeTags;
 FAuraMessageTags FAuraGameplayTags::MessageTags;
 FAuraCharacterClassTags FAuraGameplayTags::CharacterClassTags;
+FAuraAbilityTags FAuraGameplayTags::AbilityTags;
 
 void FAuraGameplayTags::AddNativeGameplayTags() {
 
@@ -46,6 +47,10 @@ void FAuraGameplayTags::AddNativeGameplayTags() {
 	GameplayTagsManager.AddNativeGameplayTag(FName("CharacterClass.Elementalist"));
 	GameplayTagsManager.AddNativeGameplayTag(FName("CharacterClass.Ranger"));
 	GameplayTagsManager.AddNativeGameplayTag(FName("CharacterClass.Warrior"));
+
+	// Ability
+	GameplayTagsManager.AddNativeGameplayTag(FName("Ability.HitReact"));
+	GameplayTagsManager.AddNativeGameplayTag(FName("Ability.FireBall"));
 }
 
 void FAuraGameplayTags::CopyNativeGameplayTags() {
@@ -84,4 +89,8 @@ void FAuraGameplayTags::CopyNativeGameplayTags() {
 	CharacterClassTags.CharacterClass_Elementalist = FGameplayTag::RequestGameplayTag(FName("CharacterClass.Elementalist"));
 	CharacterClassTags.CharacterClass_Ranger = FGameplayTag::RequestGameplayTag(FName("CharacterClass.Ranger"));
 	CharacterClassTags.CharacterClass_Warrior = FGameplayTag::RequestGameplayTag(FName("CharacterClass.Warrior"));
+
+	// Ability
+	AbilityTags.Ability_HitReact = FGameplayTag::RequestGameplayTag(FName("Ability.HitReact"));
+	AbilityTags.Ability_FireBall = FGameplayTag::RequestGameplayTag(FName("Ability.FireBall"));
 }

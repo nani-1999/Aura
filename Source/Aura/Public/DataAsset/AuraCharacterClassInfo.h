@@ -8,6 +8,7 @@
 #include "AuraCharacterClassInfo.generated.h"
 
 class UGameplayEffect;
+class UGameplayAbility;
 
 USTRUCT()
 struct FCharacterClassSpecificInfo {
@@ -23,17 +24,21 @@ class AURA_API UAuraCharacterClassInfo : public UDataAsset
 {
 	GENERATED_BODY()
 	
+protected:
+	// ClassSpecific
+	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults|Attributes|ClassSpecific")
+	TMap<FGameplayTag, FCharacterClassSpecificInfo> ClassSpecificInfo;
+
 public:
 	// Common
 	//// Effect
-	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults|AttributeDefaults")
+	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults|Attributes")
 	TSubclassOf<UGameplayEffect> Vital_AttributeDefaults;
-	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults|AttributeDefaults")
+	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults|Attributes")
 	TSubclassOf<UGameplayEffect> Secondary_AttributeDefaults;
-
-	// ClassSpecific
-	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults|AttributeDefaults|ClassSpecific")
-	TMap<FGameplayTag, FCharacterClassSpecificInfo> ClassSpecificInfo;
+	//// Ability
+	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults|Ability")
+	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 
 	// Getters
 	TSubclassOf<UGameplayEffect>& GetPrimaryAttributeDefaults(const FGameplayTag& CharacterClassTag);

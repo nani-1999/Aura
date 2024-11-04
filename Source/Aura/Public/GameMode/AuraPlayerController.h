@@ -11,8 +11,6 @@ class UInputAction;
 struct FInputActionValue;
 class IHighlightInterface;
 
-class UAuraMessage;
-
 UCLASS()
 class AURA_API AAuraPlayerController : public APlayerController
 {
@@ -45,8 +43,4 @@ protected:
 	// TraceUnderCursor
 	void TraceUnderCursor();
 	TScriptInterface<IHighlightInterface> TracedHighlightInterface;
-
-	// Test
-	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults | Test")
-	TSubclassOf<UAuraMessage> TestMessageBP;
 };
