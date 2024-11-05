@@ -9,7 +9,6 @@
 #include "InputActionValue.h" // FInputActionValue
 #include "Interface/HighlightInterface.h"
 
-#include "UI/Widget/AuraMessage.h"
 #include "GameplayTagContainer.h"
 #include "Character/AuraCharacter.h"
 #include "Aura/Nani/NaniUtility.h"

@@ -29,7 +29,7 @@ void AAuraEnemy::BeginPlay() {
 	Weapon->SetRenderCustomDepth(false);
 
 	// AbilitySystem
-	InitAbilitySystem();
+	if (HasAuthority()) InitAbilitySystem();
 }
 
 void AAuraEnemy::Highlight() {
@@ -42,9 +42,6 @@ void AAuraEnemy::UnHighlight() {
 }
 
 void AAuraEnemy::InitAbilitySystem() {
-
-	if (!HasAuthority()) return;
-
 	// AbilityActorInfo
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 

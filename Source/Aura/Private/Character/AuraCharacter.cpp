@@ -38,6 +38,10 @@ void AAuraCharacter::BeginPlay() {
 
 }
 
+void AAuraCharacter::Test() { 
+	NANI_LOG(Warning, "%s | Test", *GetName()); 
+}
+
 UAbilitySystemComponent* AAuraCharacter::GetAbilitySystemComponent() const {
 	return GetPlayerState<AAuraPlayerState>()->GetAbilitySystemComponent();
 }
@@ -52,27 +56,20 @@ int32 AAuraCharacter::GetCharacterLevel() const {
 void AAuraCharacter::PossessedBy(AController* NewController) {
 	Super::PossessedBy(NewController);
 
-	NANI_LOG(Warning, "%s | PossessedBy()", *GetName());
-
 	// AbilitySystem
-	InitAbilitySystem();
+	InitAbilitySystem(); //obviously has authority at this point, no need for HasAuthority() check
 
 	// HUD
-	InitLocalPlayerHUD();
+	if (IsLocallyControlled()) InitLocalPlayerHUD();
 }
 void AAuraCharacter::OnRep_PlayerState() {
 	Super::OnRep_PlayerState();
 
 	// HUD
-	InitLocalPlayerHUD();
+	if (IsLocallyControlled()) InitLocalPlayerHUD();
 }
 
 void AAuraCharacter::InitAbilitySystem() {
-
-	// this will only be executed on authority
-
-	if (!HasAuthority()) return;
-
 	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
 	AAuraPlayerState* AuraPS = GetPlayerState<AAuraPlayerState>();
 
@@ -83,11 +80,6 @@ void AAuraCharacter::InitAbilitySystem() {
 }
 
 void AAuraCharacter::InitLocalPlayerHUD() {
-
-	// this will only be executed on local player
-
-	if (!IsLocallyControlled()) return;
-
 	//Overlay
 	// setting up Overlay locally controlled player
 	APlayerController* PC = GetController<APlayerController>();

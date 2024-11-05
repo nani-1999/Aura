@@ -27,7 +27,7 @@ public:
 	virtual void OnRep_PlayerState() override;
 
 	// Test
-	void Test() { UE_LOG(LogTemp, Warning, TEXT("%s | Test"), *GetName()); }
+	void Test();
 
 protected:
 	virtual void BeginPlay() override;

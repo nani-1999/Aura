@@ -10,6 +10,8 @@
 #include "DataAsset/AuraCharacterClassInfo.h"
 #include "Abilities/GameplayAbility.h"
 
+#include "Aura/Nani/NaniUtility.h"
+
 AAuraCharacterBase::AAuraCharacterBase() :
 	CharacterLevel{ 1 }
 {
@@ -32,10 +34,8 @@ void AAuraCharacterBase::BeginPlay()
 }
 
 void AAuraCharacterBase::InitAbilitySystem() {
-
 	// must be called after ASC's AbilityActorInfo is set
-
-	if (!HasAuthority()) return;
+	NANI_LOG(Warning, "InitAbilitySystem");
 
 	// Attribute Defaults
 	InitAttributeDefaults();
