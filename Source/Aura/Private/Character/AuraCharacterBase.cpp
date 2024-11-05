@@ -65,7 +65,7 @@ void AAuraCharacterBase::GiveStartupAbilities() {
 	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
 
 	// giving common abilities
-	for (TSubclassOf<UGameplayAbility>& AbilityClass : CharacterClassInfo->StartupAbilities) {
+	for (TSubclassOf<UGameplayAbility>& AbilityClass : CharacterClassInfo->CommonAbilities) {
 		const FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, GetCharacterLevel());
 		ASC->GiveAbility(AbilitySpec);
 	}

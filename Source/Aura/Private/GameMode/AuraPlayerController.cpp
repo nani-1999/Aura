@@ -2,14 +2,14 @@
 
 
 #include "GameMode/AuraPlayerController.h"
-#include "InputMappingContext.h" // UInputMappingContext
-#include "InputAction.h" // UInputAction
+//#include "InputMappingContext.h" // UInputMappingContext
+//#include "InputAction.h" // UInputAction
+#include "DataAsset/AuraInputConfig.h"
 #include "EnhancedInputSubsystems.h" // UEnhancedInputLocalPlayerSubsystem
 #include "Input/AuraEnhancedInputComponent.h" // UAuraEnhancedInputComponent
 #include "InputActionValue.h" // FInputActionValue
 #include "Interface/HighlightInterface.h"
 
-#include "GameplayTagContainer.h"
 #include "Character/AuraCharacter.h"
 #include "Aura/Nani/NaniUtility.h"
 
@@ -21,12 +21,14 @@ void AAuraPlayerController::BeginPlay() {
 	Super::BeginPlay();
 
 	// Enhanced Input Subsystem
-	//since we added "EnhancedInput" modules in Build.cs
+	// since we added "EnhancedInput" modules in Build.cs and EnhancedInput Class in project settings
 	UEnhancedInputLocalPlayerSubsystem* EnhancedInputSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
 	//check(EnhancedInputSubsystem); //since we use replication we won't checking this
 
 	// Input Mapping Context
-	if (EnhancedInputSubsystem)	EnhancedInputSubsystem->AddMappingContext(IMC_Aura, 0);
+	// adding mapping context to local player's input subsystem
+	checkf(InputConfig, TEXT("AuraPlayerController | InputConfig is Invlaid"));
+	if (EnhancedInputSubsystem)	EnhancedInputSubsystem->AddMappingContext(InputConfig->IMC_Aura, 0);
 
 	// Mouse Cursor - Settings
 	bShowMouseCursor = true;
@@ -57,8 +59,10 @@ void AAuraPlayerController::SetupInputComponent() {
 	// AuraEnhancedInputComponent
 	UAuraEnhancedInputComponent* AuraEnhancedInputComponent = CastChecked<UAuraEnhancedInputComponent>(InputComponent);
 
-	AuraEnhancedInputComponent->BindAction(IA_Move, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
-	AuraEnhancedInputComponent->BindAction(IA_Test, ETriggerEvent::Started, this, &AAuraPlayerController::TestPressed);
+	AuraEnhancedInputComponent->BindAction(InputConfig->IA_Move, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+	AuraEnhancedInputComponent->BindActionsWithTag(InputConfig->AbilityInputActions, this, &AAuraPlayerController::AbilityInputPressed, &AAuraPlayerController::AbilityInputReleased);
+
+	AuraEnhancedInputComponent->BindAction(InputConfig->IA_Test, ETriggerEvent::Started, this, &AAuraPlayerController::TestPressed);
 }
 
 void AAuraPlayerController::Move(const FInputActionValue& Value) {
@@ -76,7 +80,13 @@ void AAuraPlayerController::Move(const FInputActionValue& Value) {
 		PossessedPawn->AddMovementInput(RightDirection, Value2D.Y);
 	}
 }
-void AAuraPlayerController::TestPressed(const FInputActionValue& Value) {
+void AAuraPlayerController::AbilityInputPressed(const FGameplayTag InputTag) {
+	NANI_LOG(Warning, "%s Pressed", *InputTag.ToString());
+}
+void AAuraPlayerController::AbilityInputReleased(const FGameplayTag InputTag) {
+	NANI_LOG(Warning, "%s Released", *InputTag.ToString());
+}
+void AAuraPlayerController::TestPressed() {
 	NANI_LOG(Warning, "%s | TestPressed", *GetName());
 
 	AAuraCharacter* AuraChar = GetPawn<AAuraCharacter>();

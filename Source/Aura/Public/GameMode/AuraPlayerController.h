@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "GameplayTagContainer.h"
 #include "AuraPlayerController.generated.h"
 
-class UInputMappingContext;
-class UInputAction;
+class UAuraInputConfig;
 struct FInputActionValue;
 class IHighlightInterface;
 
@@ -23,22 +23,19 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void PlayerTick(float DeltaTime) override;
 
-	// Input
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UInputMappingContext> IMC_Aura;
-
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UInputAction> IA_Move;
-
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UInputAction> IA_Test;
-
 	// InputComponent
 	virtual void SetupInputComponent() override;
 
+	// Input Configuration
+	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults|Input")
+	TObjectPtr<UAuraInputConfig> InputConfig;
+
 	// Input Binding
 	void Move(const FInputActionValue& Value);
-	void TestPressed(const FInputActionValue& Value);
+	void AbilityInputPressed(const FGameplayTag InputTag);
+	void AbilityInputReleased(const FGameplayTag InputTag);
+	//test
+	void TestPressed();
 
 	// TraceUnderCursor
 	void TraceUnderCursor();

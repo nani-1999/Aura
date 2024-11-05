@@ -8,6 +8,7 @@ FAuraAttributeTags FAuraGameplayTags::AttributeTags;
 FAuraMessageTags FAuraGameplayTags::MessageTags;
 FAuraCharacterClassTags FAuraGameplayTags::CharacterClassTags;
 FAuraAbilityTags FAuraGameplayTags::AbilityTags;
+FAuraInputTags FAuraGameplayTags::InputTags;
 
 void FAuraGameplayTags::AddNativeGameplayTags() {
 
@@ -51,6 +52,11 @@ void FAuraGameplayTags::AddNativeGameplayTags() {
 	// Ability
 	GameplayTagsManager.AddNativeGameplayTag(FName("Ability.HitReact"));
 	GameplayTagsManager.AddNativeGameplayTag(FName("Ability.FireBall"));
+
+	// Input
+	GameplayTagsManager.AddNativeGameplayTag(FName("Input.1"));
+	GameplayTagsManager.AddNativeGameplayTag(FName("Input.2"));
+	GameplayTagsManager.AddNativeGameplayTag(FName("Input.3"));
 }
 
 void FAuraGameplayTags::CopyNativeGameplayTags() {
@@ -93,4 +99,9 @@ void FAuraGameplayTags::CopyNativeGameplayTags() {
 	// Ability
 	AbilityTags.Ability_HitReact = FGameplayTag::RequestGameplayTag(FName("Ability.HitReact"));
 	AbilityTags.Ability_FireBall = FGameplayTag::RequestGameplayTag(FName("Ability.FireBall"));
+
+	// Input
+	InputTags.Input_1 = FGameplayTag::RequestGameplayTag(FName("Input.1"));
+	InputTags.Input_2 = FGameplayTag::RequestGameplayTag(FName("Input.2"));
+	InputTags.Input_3 = FGameplayTag::RequestGameplayTag(FName("Input.3"));
 }
