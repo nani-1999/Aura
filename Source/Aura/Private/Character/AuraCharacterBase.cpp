@@ -33,6 +33,9 @@ void AAuraCharacterBase::BeginPlay()
 	
 }
 
+//
+//============================================ Ability System ============================================
+//
 void AAuraCharacterBase::InitAbilitySystem() {
 	// must be called after ASC's AbilityActorInfo is set
 	NANI_LOG(Warning, "InitAbilitySystem");
@@ -44,6 +47,9 @@ void AAuraCharacterBase::InitAbilitySystem() {
 	GiveStartupAbilities();
 }
 
+//
+//============================================ Attribute Defaults ============================================
+//
 void AAuraCharacterBase::InitAttributeDefaults() {
 	// checking
 	checkf(CharacterClassInfo, TEXT("AuraCharacterBase | CharacterClassInfo is Invalid | ObjectName: %s"), *GetName());
@@ -54,10 +60,13 @@ void AAuraCharacterBase::InitAttributeDefaults() {
 
 	// Applying secondaryattributes first, since they are inf effect
 	ASC->ApplyGameplayEffectToSelf(CharacterClassInfo->Secondary_AttributeDefaults.GetDefaultObject(), GetCharacterLevel(), EffectContextHandle);
-	ASC->ApplyGameplayEffectToSelf(CharacterClassInfo->GetPrimaryAttributeDefaults(GetCharacterClass()).GetDefaultObject(), GetCharacterLevel(), EffectContextHandle);
+	ASC->ApplyGameplayEffectToSelf(CharacterClassInfo->GetCharacterClassSpecificInfo(GetCharacterClass()).Primary_AttributeDefaults.GetDefaultObject(), GetCharacterLevel(), EffectContextHandle);
 	ASC->ApplyGameplayEffectToSelf(CharacterClassInfo->Vital_AttributeDefaults.GetDefaultObject(), GetCharacterLevel(), EffectContextHandle);
 }
 
+//
+//============================================ Abilities ============================================
+//
 void AAuraCharacterBase::GiveStartupAbilities() {
 	// checking
 	checkf(CharacterClassInfo, TEXT("AuraCharacterBase | CharacterClassInfo is Invalid | ObjectName: %s"), *GetName());
@@ -66,6 +75,12 @@ void AAuraCharacterBase::GiveStartupAbilities() {
 
 	// giving common abilities
 	for (TSubclassOf<UGameplayAbility>& AbilityClass : CharacterClassInfo->CommonAbilities) {
+		const FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, GetCharacterLevel());
+		ASC->GiveAbility(AbilitySpec);
+	}
+
+	// giving class specific abilities
+	for (TSubclassOf<UGameplayAbility>& AbilityClass : CharacterClassInfo->GetCharacterClassSpecificInfo(GetCharacterClass()).ClassSpecificAbilities) {
 		const FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, GetCharacterLevel());
 		ASC->GiveAbility(AbilitySpec);
 	}

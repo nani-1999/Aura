@@ -14,6 +14,9 @@ UAuraAttributeSet::UAuraAttributeSet() {
 	InitMaxMana(100.f);
 }
 
+//
+//============================================ Network ============================================
+//
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
@@ -35,46 +38,6 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, ManaRegeneration, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
-}
-
-void UAuraAttributeSet::PreAttributeBaseChange(const FGameplayAttribute& Attribute, float& NewValue) const {
-	//const func
-
-	// called by base only
-	// clamping for attributes which have upper limit
-	// no clamping on MaxHealth, since it doesn't have upper limit
-
-	if (Attribute == GetHealthAttribute()) {
-		NewValue = FMath::Clamp<float>(NewValue, 0.f, GetMaxHealth());
-	}
-	else if (Attribute == GetManaAttribute()) {
-		NewValue = FMath::Clamp<float>(NewValue, 0.f, GetMaxMana());
-	}
-
-	Super::PreAttributeBaseChange(Attribute, NewValue);
-}
-void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) {
-	//non-const func
-
-	// called by base or non-additive
-	// clamping for attribute which have upper limit that changes
-	// change for attribute that depend one other attribute that changes
-	//no clamping on Health, since non-additive effects won't be applied on it
-
-	if (Attribute == GetMaxHealthAttribute()) {
-		if (GetHealth() > NewValue) SetHealth(NewValue);
-	}
-	else if (Attribute == GetMaxManaAttribute()) {
-		if (GetMana() > NewValue) SetMana(NewValue);
-	}
-
-	Super::PreAttributeChange(Attribute, NewValue);
-}
-
-void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) {
-	Super::PostGameplayEffectExecute(Data);
-
-	//called only when effect changes Base Value
 }
 
 void UAuraAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const {
@@ -127,4 +90,50 @@ void UAuraAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHeal
 }
 void UAuraAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, MaxMana, OldMaxMana);
+}
+
+//
+//============================================ Attribute Change ============================================
+//
+void UAuraAttributeSet::PreAttributeBaseChange(const FGameplayAttribute& Attribute, float& NewValue) const {
+	//const func
+
+	// called by base only
+	// clamping for attributes which have upper limit
+	// no clamping on MaxHealth, since it doesn't have upper limit
+
+	if (Attribute == GetHealthAttribute()) {
+		NewValue = FMath::Clamp<float>(NewValue, 0.f, GetMaxHealth());
+	}
+	else if (Attribute == GetManaAttribute()) {
+		NewValue = FMath::Clamp<float>(NewValue, 0.f, GetMaxMana());
+	}
+
+	Super::PreAttributeBaseChange(Attribute, NewValue);
+}
+void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) {
+	//non-const func
+
+	// called by base or non-additive
+	// clamping for attribute which have upper limit that changes
+	// change for attribute that depend one other attribute that changes
+	//no clamping on Health, since non-additive effects won't be applied on it
+
+	if (Attribute == GetMaxHealthAttribute()) {
+		if (GetHealth() > NewValue) SetHealth(NewValue);
+	}
+	else if (Attribute == GetMaxManaAttribute()) {
+		if (GetMana() > NewValue) SetMana(NewValue);
+	}
+
+	Super::PreAttributeChange(Attribute, NewValue);
+}
+
+//
+//============================================ Effect ============================================
+//
+void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) {
+	Super::PostGameplayEffectExecute(Data);
+
+	//called only when effect changes Base Value
 }

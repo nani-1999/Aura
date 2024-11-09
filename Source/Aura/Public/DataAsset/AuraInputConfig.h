@@ -30,13 +30,16 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "InputMappingContext")
 	TObjectPtr<UInputMappingContext> IMC_Aura;
 
-	UPROPERTY(EditDefaultsOnly, Category = "InputActions|Movemento")
+	UPROPERTY(EditDefaultsOnly, Category = "InputAction|Movement")
+	TObjectPtr<UInputAction> IA_RMB;
+
+	UPROPERTY(EditDefaultsOnly, Category = "InputAction|Movement")
 	TObjectPtr<UInputAction> IA_Move;
 
-	UPROPERTY(EditDefaultsOnly, Category = "InputActions|Ability")
+	UPROPERTY(EditDefaultsOnly, Category = "InputAction|Ability")
 	TArray<FAuraInputAction> AbilityInputActions;
 
 	//test
-	UPROPERTY(EditDefaultsOnly, Category = "InputActions|Test")
+	UPROPERTY(EditDefaultsOnly, Category = "InputAction|Test")
 	TObjectPtr<UInputAction> IA_Test;
 };

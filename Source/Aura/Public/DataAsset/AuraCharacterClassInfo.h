@@ -14,15 +14,15 @@ USTRUCT()
 struct FCharacterClassSpecificInfo {
 	GENERATED_BODY()
 
+	// Tag
 	UPROPERTY(EditDefaultsOnly)
 	FGameplayTag CharacterClassTag;
 
 	// Effect
-	UPROPERTY(EditDefaultsOnly, Category = "ClassSpecificDefaults|Attributes")
+	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UGameplayEffect> Primary_AttributeDefaults = nullptr; //data in struct must be pointered or reffered
-
 	// Ability
-	UPROPERTY(EditDefaultsOnly, Category = "Ability")
+	UPROPERTY(EditDefaultsOnly)
 	TArray<TSubclassOf<UGameplayAbility>> ClassSpecificAbilities;
 };
 
@@ -33,14 +33,11 @@ class AURA_API UAuraCharacterClassInfo : public UDataAsset
 	
 protected:
 	// ClassSpecific
-	//UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults|Attributes|ClassSpecific")
-	//TMap<FGameplayTag, FCharacterClassSpecificInfo> ClassSpecificInfo;
-
 	UPROPERTY(EditDefaultsOnly, Category = "ClassSpecificDefaults")
 	TArray<FCharacterClassSpecificInfo> ClassSpecificInfo;
 
 public:
-	// Common
+	// ClassCommon
 	//// Effect
 	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults|Attributes")
 	TSubclassOf<UGameplayEffect> Vital_AttributeDefaults;
@@ -51,5 +48,5 @@ public:
 	TArray<TSubclassOf<UGameplayAbility>> CommonAbilities;
 
 	// Getters
-	TSubclassOf<UGameplayEffect> GetPrimaryAttributeDefaults(const FGameplayTag& ClassTag);
+	FCharacterClassSpecificInfo& GetCharacterClassSpecificInfo(const FGameplayTag& ClassTag);
 };

@@ -11,6 +11,7 @@
 #include "UI/Widget/AuraAttributeMenu.h"
 #include "Components/TextBlock.h"
 #include "UI/Widget/AuraLabel.h"
+#include "GameplayAbilitySystem/GameplayTags/AuraGameplayTags.h"
 
 #include "Aura/Nani/NaniUtility.h"
 
@@ -64,12 +65,21 @@ void UAuraOverlayManager::SetupOverlay(UAuraOverlay* OverlayVal) {
 	ASC->GetGameplayAttributeValueChangeDelegate(UAuraAttributeSet::GetMaxManaAttribute()).AddUObject(this, &UAuraOverlayManager::MaxManaChanged);
 }
 
+//
+//============================================ Effect AssetTags ============================================
+//
 void UAuraOverlayManager::AppliedEffectAssetTags(const FGameplayTagContainer& Tags) {
 	for (const FGameplayTag& Tag : Tags) {
-		Overlay->DisplayMessage(*Tag.ToString());
+		// checking for message tags only
+		if (Tag.MatchesTag(FAuraGameplayTags::GetMessageTags().Message_Parent)) {
+			Overlay->DisplayMessage(*Tag.ToString());
+		}
 	}
 }
 
+//
+//============================================ Attribute Menu ============================================
+//
 void UAuraOverlayManager::InitAttributeMenu() {
 	// Getting Overlay's PlayerController
 	APlayerController* PC = Overlay->GetOwningPlayer();
@@ -96,6 +106,9 @@ void UAuraOverlayManager::InitAttributeMenu() {
 	Overlay->AttributeMenu->Secondary_MaxMana->SetLabelValue(FText::AsNumber(AuraAS->GetMaxMana()));
 }
 
+//
+//============================================ Attribute Changes ============================================
+//
 void UAuraOverlayManager::HealthChanged(const FOnAttributeChangeData& Data) {
 	Overlay->Health_ProgressBar->SetValue(Data.NewValue);
 }

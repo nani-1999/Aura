@@ -14,22 +14,20 @@ class AURA_API UAuraEnhancedInputComponent : public UEnhancedInputComponent
 	GENERATED_BODY()
 	
 public:
-	template<class UserClass, typename PressedFuncType, typename ReleasedFuncType>
-	void BindActionsWithTag(const TArray<FAuraInputAction>& InputActions, UserClass* Object, PressedFuncType PressedFunc, ReleasedFuncType ReleasedFunc);
+	template<class UserClass, typename FuncType>
+	void BindActionsWithTag(const TArray<FAuraInputAction>& InputActions, UserClass* Object, FuncType Func);
 };
 
-template<class UserClass, typename PressedFuncType, typename ReleasedFuncType>
-void UAuraEnhancedInputComponent::BindActionsWithTag(const TArray<FAuraInputAction>& InputActions, UserClass* Object, PressedFuncType PressedFunc, ReleasedFuncType ReleasedFunc) {
+template<class UserClass, typename FuncType>
+void UAuraEnhancedInputComponent::BindActionsWithTag(const TArray<FAuraInputAction>& InputActions, UserClass* Object, FuncType Func) {
 
 	for (const FAuraInputAction& AuraIA : InputActions) {
+		// checking
 		checkf(AuraIA.InputAction, TEXT("AuraEnhancedInputComponent | InputAction is Invalid"));
 		checkf(AuraIA.InputActionTag.IsValid(), TEXT("AuraEnhancedInputComponent | Invalid Tag when binding InputAction"));
-
-		if (PressedFunc) {
-			BindAction(AuraIA.InputAction, ETriggerEvent::Started, Object, PressedFunc, AuraIA.InputActionTag);
-		}
-		if (ReleasedFunc) {
-			BindAction(AuraIA.InputAction, ETriggerEvent::Completed, Object, ReleasedFunc, AuraIA.InputActionTag);
-		}
+		
+		// Binding with Tag
+		BindAction(AuraIA.InputAction, ETriggerEvent::Started, Object, Func, AuraIA.InputActionTag);
+		BindAction(AuraIA.InputAction, ETriggerEvent::Completed, Object, Func, AuraIA.InputActionTag);
 	}
 }

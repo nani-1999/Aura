@@ -10,6 +10,7 @@
 */
 
 struct FAuraAttributeTags {
+	FGameplayTag Attribute_Parent;
 	// Vital
 	FGameplayTag Attribute_Vital_Health;
 	FGameplayTag Attribute_Vital_Mana;
@@ -31,24 +32,30 @@ struct FAuraAttributeTags {
 	FGameplayTag Attribute_Secondary_MaxMana;
 };
 struct FAuraMessageTags {
+	FGameplayTag Message_Parent;
 	// Pick Up
+	FGameplayTag Message_PickUp_Parent;
 	FGameplayTag Message_PickUp_HealthPotion;
 	FGameplayTag Message_PickUp_HealthCrystal;
 	FGameplayTag Message_PickUp_ManaPotion;
 	FGameplayTag Message_PickUp_ManaShard;
 	// Quest
+	FGameplayTag Message_Quest_Parent;
 	FGameplayTag Message_Quest_Beginner;
 };
 struct FAuraCharacterClassTags {
+	FGameplayTag CharacterClass_Parent;
 	FGameplayTag CharacterClass_Elementalist;
 	FGameplayTag CharacterClass_Ranger;
 	FGameplayTag CharacterClass_Warrior;
 };
 struct FAuraAbilityTags {
+	FGameplayTag Ability_Parent;
 	FGameplayTag Ability_HitReact;
 	FGameplayTag Ability_FireBall;
 };
 struct FAuraInputTags {
+	FGameplayTag Input_Parent;
 	FGameplayTag Input_1;
 	FGameplayTag Input_2;
 	FGameplayTag Input_3;

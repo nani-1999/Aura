@@ -18,6 +18,9 @@ AAuraPlayerState::AAuraPlayerState() :
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>(FName("AttributeSet"));
 }
 
+//
+//============================================ Network ============================================
+//
 void AAuraPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 

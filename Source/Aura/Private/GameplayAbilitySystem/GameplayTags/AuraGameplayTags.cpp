@@ -62,6 +62,7 @@ void FAuraGameplayTags::AddNativeGameplayTags() {
 void FAuraGameplayTags::CopyNativeGameplayTags() {
 
 	// Attribute
+	AttributeTags.Attribute_Parent = FGameplayTag::RequestGameplayTag(FName("Attribute"));
 	//// Vital
 	AttributeTags.Attribute_Vital_Health = FGameplayTag::RequestGameplayTag(FName("Attribute.Vital.Health"));
 	AttributeTags.Attribute_Vital_Mana = FGameplayTag::RequestGameplayTag(FName("Attribute.Vital.Mana"));
@@ -83,24 +84,30 @@ void FAuraGameplayTags::CopyNativeGameplayTags() {
 	AttributeTags.Attribute_Secondary_MaxMana = FGameplayTag::RequestGameplayTag(FName("Attribute.Secondary.MaxMana"));
 
 	// Message
+	MessageTags.Message_Parent = FGameplayTag::RequestGameplayTag(FName("Message"));
 	//// Pick Up
+	MessageTags.Message_PickUp_Parent = FGameplayTag::RequestGameplayTag(FName("Message.PickUp"));
 	MessageTags.Message_PickUp_HealthPotion = FGameplayTag::RequestGameplayTag(FName("Message.PickUp.HealthPotion"));
 	MessageTags.Message_PickUp_HealthCrystal = FGameplayTag::RequestGameplayTag(FName("Message.PickUp.HealthCrystal"));
 	MessageTags.Message_PickUp_ManaPotion = FGameplayTag::RequestGameplayTag(FName("Message.PickUp.ManaPotion"));
 	MessageTags.Message_PickUp_ManaShard = FGameplayTag::RequestGameplayTag(FName("Message.PickUp.ManaShard"));
 	//// Quest
+	MessageTags.Message_Quest_Parent = FGameplayTag::RequestGameplayTag(FName("Message.Quest"));
 	MessageTags.Message_Quest_Beginner = FGameplayTag::RequestGameplayTag(FName("Message.Quest.Beginner"));
 
 	// Character Class
+	CharacterClassTags.CharacterClass_Parent = FGameplayTag::RequestGameplayTag(FName("CharacterClass"));
 	CharacterClassTags.CharacterClass_Elementalist = FGameplayTag::RequestGameplayTag(FName("CharacterClass.Elementalist"));
 	CharacterClassTags.CharacterClass_Ranger = FGameplayTag::RequestGameplayTag(FName("CharacterClass.Ranger"));
 	CharacterClassTags.CharacterClass_Warrior = FGameplayTag::RequestGameplayTag(FName("CharacterClass.Warrior"));
 
 	// Ability
+	AbilityTags.Ability_Parent = FGameplayTag::RequestGameplayTag(FName("Ability"));
 	AbilityTags.Ability_HitReact = FGameplayTag::RequestGameplayTag(FName("Ability.HitReact"));
 	AbilityTags.Ability_FireBall = FGameplayTag::RequestGameplayTag(FName("Ability.FireBall"));
 
 	// Input
+	InputTags.Input_Parent = FGameplayTag::RequestGameplayTag(FName("Input"));
 	InputTags.Input_1 = FGameplayTag::RequestGameplayTag(FName("Input.1"));
 	InputTags.Input_2 = FGameplayTag::RequestGameplayTag(FName("Input.2"));
 	InputTags.Input_3 = FGameplayTag::RequestGameplayTag(FName("Input.3"));

@@ -32,6 +32,9 @@ void AAuraEnemy::BeginPlay() {
 	if (HasAuthority()) InitAbilitySystem();
 }
 
+//
+//============================================ Highlight ============================================
+//
 void AAuraEnemy::Highlight() {
 	GetMesh()->SetRenderCustomDepth(true);
 	Weapon->SetRenderCustomDepth(true);
@@ -41,6 +44,9 @@ void AAuraEnemy::UnHighlight() {
 	Weapon->SetRenderCustomDepth(false);
 }
 
+//
+//============================================ Ability System ============================================
+//
 void AAuraEnemy::InitAbilitySystem() {
 	// AbilityActorInfo
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);

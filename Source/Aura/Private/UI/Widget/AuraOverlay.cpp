@@ -17,6 +17,9 @@ void UAuraOverlay::NativeOnInitialized() {
 	AttributeMenu_Btn->SetIsEnabled(true);
 }
 
+//
+//============================================ Message ============================================
+//
 void UAuraOverlay::DisplayMessage(const FName MessageName) {
 	// Getting Message Assets for Displaying Message Widget on Overlay
 	// can use DataAsset which we can have a function to get Specific TableRow based on MessageName, i.e., Message.Quest, Message.Pickup
@@ -40,6 +43,9 @@ void UAuraOverlay::DisplayMessage(const FName MessageName) {
 	}
 }
 
+//
+//============================================ Attribute Menu ============================================
+//
 void UAuraOverlay::AttributeMenu_Btn_Clicked() {
 	checkf(AttributeMenuClass, TEXT("AttributeMenuClass is Invalid | in AuraOverlay.cpp | ObjectName: %s"), *GetName());
 

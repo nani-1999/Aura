@@ -34,6 +34,9 @@ void AEffectActor::BeginPlay() {
 	}
 }
 
+//
+//============================================ Box Collision ============================================
+//
 void AEffectActor::BoxCollisionOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSwEEAP, const FHitResult& SwEEAPResult) {
 	
 	if (const IAbilitySystemInterface* ASI = Cast<IAbilitySystemInterface>(OtherActor)) {
@@ -65,6 +68,9 @@ void AEffectActor::BoxCollisionOverlapEnd(UPrimitiveComponent* OverlappedCompone
 	}
 }
 
+//
+//============================================ Effect ============================================
+//
 void AEffectActor::ApplyEffectToTargetASC(UAbilitySystemComponent* TargetASC) {
 	// ContextHandle
 	FGameplayEffectContextHandle EffectContextHandle = TargetASC->MakeEffectContext(); //instigator is set by makecontexthandle
@@ -81,6 +87,9 @@ void AEffectActor::ApplyEffectToTargetASC(UAbilitySystemComponent* TargetASC) {
 	if (EffectApplicationPolicy == EEffectApplicationPolicy::EEAP_ApplyAndRemove) ActiveEffects.Add(TargetASC, ActiveEffectHandle);
 }
 
+//
+//============================================ Asset Tags ============================================
+//
 void AEffectActor::BroadcastAssetTagsToTargetASC(UAbilitySystemComponent* TargetASC) {
 	// Getting AssetTags from Effect Blueprint
 	const FGameplayTagContainer AssetTags = EffectBP.GetDefaultObject()->InheritableGameplayEffectTags.CombinedTags;

@@ -5,12 +5,10 @@
 #include "GameplayEffect.h"
 #include "Abilities/GameplayAbility.h"
 
-TSubclassOf<UGameplayEffect> UAuraCharacterClassInfo::GetPrimaryAttributeDefaults(const FGameplayTag& ClassTag) {
+FCharacterClassSpecificInfo& UAuraCharacterClassInfo::GetCharacterClassSpecificInfo(const FGameplayTag& ClassTag) {
 	for (FCharacterClassSpecificInfo& Info : ClassSpecificInfo) {
-		if (Info.CharacterClassTag.MatchesTagExact(ClassTag)) {
-			return Info.Primary_AttributeDefaults;
-		}
+		if (Info.CharacterClassTag.MatchesTagExact(ClassTag)) return Info;
 	}
-	checkf(false, TEXT("AuraCharacterClassInfo | Unable to Find PrimaryAttributeDefaults for CharacterClassTag: %s"), *ClassTag.ToString());
-	return nullptr;
+	checkf(false, TEXT("AuraCharacterClassInfo | Not a Valid CharacterClass Tag when Accessing FCharacterClassSpecificInfo"));
+	return ClassSpecificInfo[0];
 }

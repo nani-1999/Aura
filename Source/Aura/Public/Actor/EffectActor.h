@@ -9,11 +9,11 @@
 
 UENUM()
 enum class EEffectApplicationPolicy : uint8 {
-	//EEAP_Apply,           //ApplyEffect OnOverlapBegin
-	EEAP_ApplyAndDestroy,   //ApplyEffect OnOverlapBegin and Destroy Immediately
-	EEAP_ApplyAndRemove,    //ApplyEffect OnOverlapBegin and RemoveEffect OnOverlapEnd
-	EEAP_None,              //disables collision
-	EEAP_MAX
+	//EEAP_Apply,               //ApplyEffect OnOverlapBegin
+	//EEAP_ApplyWaitAndDestroy, //ApplyEffect OnOverlayBegin, Wait sometime and Destroy
+	EEAP_ApplyAndDestroy,       //ApplyEffect OnOverlapBegin and Destroy Immediately
+	EEAP_ApplyAndRemove,        //ApplyEffect OnOverlapBegin and RemoveEffect OnOverlapEnd
+	EEAP_None                  //disables collision
 };
 
 class UBoxComponent;

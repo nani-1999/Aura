@@ -9,6 +9,7 @@
 #include "AttributeSet.h"
 #include "GameMode/AuraPlayerState.h"
 #include "UI/HUD/AuraHUD.h"
+#include "GameplayAbilitySystem/GameplayAbility/AuraGameplayAbility.h"
 
 #include "Aura/Nani/NaniUtility.h"
 
@@ -38,10 +39,9 @@ void AAuraCharacter::BeginPlay() {
 
 }
 
-void AAuraCharacter::Test() { 
-	NANI_LOG(Warning, "%s | Test", *GetName()); 
-}
-
+//
+//============================================ Getters ============================================
+//
 UAbilitySystemComponent* AAuraCharacter::GetAbilitySystemComponent() const {
 	return GetPlayerState<AAuraPlayerState>()->GetAbilitySystemComponent();
 }
@@ -53,6 +53,9 @@ int32 AAuraCharacter::GetCharacterLevel() const {
 	return GetPlayerState<AAuraPlayerState>()->GetCharacterLevel();
 }
 
+//
+//============================================ Network ============================================
+//
 void AAuraCharacter::PossessedBy(AController* NewController) {
 	Super::PossessedBy(NewController);
 
@@ -69,6 +72,9 @@ void AAuraCharacter::OnRep_PlayerState() {
 	if (IsLocallyControlled()) InitLocalPlayerHUD();
 }
 
+//
+//============================================ Ability System ============================================
+//
 void AAuraCharacter::InitAbilitySystem() {
 	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
 	AAuraPlayerState* AuraPS = GetPlayerState<AAuraPlayerState>();
@@ -79,6 +85,9 @@ void AAuraCharacter::InitAbilitySystem() {
 	Super::InitAbilitySystem();
 }
 
+//
+//============================================ HUD ============================================
+//
 void AAuraCharacter::InitLocalPlayerHUD() {
 	//Overlay
 	// setting up Overlay locally controlled player
@@ -89,4 +98,39 @@ void AAuraCharacter::InitLocalPlayerHUD() {
 	// @Important, this will only be triggered in Servers
 	// even if you bind it in client and apply effect on client, it worn't trigger
 	//ASC->OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &AAuraCharacter::EffectAppliedToSelf);
+}
+
+//
+//============================================ Input ============================================
+//
+void AAuraCharacter::Test(const bool bTestPressed) {
+	if (bTestPressed) {
+		NANI_LOG(Warning, "%s | TestPressed", *GetName());
+	}
+	else {
+		NANI_LOG(Warning, "%s | TestReleased", *GetName());
+	}
+}
+void AAuraCharacter::AbilityInput(const bool bAbilityInputPressed, const FGameplayTag& InputTag) {
+	//Since, Enemy Also has AuraAbilityComponent and Enemy doesn't have input, so Ability Input must be here
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+
+	for (FGameplayAbilitySpec& AbilitySpec : ASC->GetActivatableAbilities()) {
+		if (UAuraGameplayAbility* AuraGA = Cast<UAuraGameplayAbility>(AbilitySpec.Ability)) {
+
+			if (AuraGA->AbilityInputTag.MatchesTagExact(InputTag)) {
+
+				if (bAbilityInputPressed) {
+					ASC->AbilitySpecInputPressed(AbilitySpec);
+					if (!AbilitySpec.IsActive()) ASC->TryActivateAbility(AbilitySpec.Handle);
+					return; //to preventing further loop and activating multiple abilities with same inputtag
+				}
+				else {
+					ASC->AbilitySpecInputReleased(AbilitySpec);
+					return;
+				}
+
+			}
+		}
+	}
 }

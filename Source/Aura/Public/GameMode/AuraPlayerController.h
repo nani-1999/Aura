@@ -10,6 +10,7 @@
 class UAuraInputConfig;
 struct FInputActionValue;
 class IHighlightInterface;
+class USplineComponent;
 
 UCLASS()
 class AURA_API AAuraPlayerController : public APlayerController
@@ -31,13 +32,30 @@ protected:
 	TObjectPtr<UAuraInputConfig> InputConfig;
 
 	// Input Binding
+	//// Test
+	void Test(const FInputActionValue& Value);
+	bool bTestPressed;
+	//// Move
 	void Move(const FInputActionValue& Value);
-	void AbilityInputPressed(const FGameplayTag InputTag);
-	void AbilityInputReleased(const FGameplayTag InputTag);
-	//test
-	void TestPressed();
+	//// Ability
+	void AbilityInput(const FInputActionValue& Value, const FGameplayTag InputTag);
+	bool bAbilityInputPressed;
+	//// RMB
+	void RMB(const FInputActionValue& Value);
+	bool bRMBPressed;
 
 	// TraceUnderCursor
 	void TraceUnderCursor();
+	//// Highlight
 	TScriptInterface<IHighlightInterface> TracedHighlightInterface;
+
+	// Auto Move
+	UPROPERTY()
+	TObjectPtr<USplineComponent> AutoMoveSpline;
+	void UpdateSplineAndAutoMove();
+	FVector NavPathFinalDestination;
+	float AcceptanceDistance;
+	bool bAutoMove;
+	void AutoMove();
+	void StopAutoMove();
 };

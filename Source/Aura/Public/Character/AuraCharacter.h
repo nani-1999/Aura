@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AuraCharacterBase.h"
+#include "GameplayTagContainer.h"
 #include "AuraCharacter.generated.h"
 
 class USpringArmComponent;
@@ -26,8 +27,11 @@ public:
 	/** client only, called when a playerstate is ready and replicating */
 	virtual void OnRep_PlayerState() override;
 
-	// Test
-	void Test();
+	// Input
+	//// Ability
+	void AbilityInput(const bool bAbilityInputPressed, const FGameplayTag& InputTag);
+	//// Test
+	void Test(const bool bTestPressed);
 
 protected:
 	virtual void BeginPlay() override;
