@@ -37,9 +37,10 @@ void AEffectActor::BeginPlay() {
 //
 //============================================ Box Collision ============================================
 //
-void AEffectActor::BoxCollisionOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSwEEAP, const FHitResult& SwEEAPResult) {
-	
-	if (const IAbilitySystemInterface* ASI = Cast<IAbilitySystemInterface>(OtherActor)) {
+void AEffectActor::OverlapBeginActor(AActor* OverlayActor) {
+	//can't virtualize the callbacks that are binded to collisioncomp
+
+	if (const IAbilitySystemInterface* ASI = Cast<IAbilitySystemInterface>(OverlayActor)) {
 
 		UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(ASI->GetAbilitySystemComponent());
 
@@ -47,6 +48,7 @@ void AEffectActor::BoxCollisionOverlapBegin(UPrimitiveComponent* OverlappedCompo
 			NANI_LOG(Warning, "%s | Applying Effect on Authority", *GetName());
 			// Applying Effect on Authority
 			ApplyEffectToTargetASC(AuraASC);
+			//ApplyEffectToTarget(AActor* SourceActor, AActor* TargetActor, UAbilitySystemComponent* ASC);
 		}
 		if (AuraASC->IsLocalASC()) {
 			// this will only be happening locally
@@ -57,10 +59,8 @@ void AEffectActor::BoxCollisionOverlapBegin(UPrimitiveComponent* OverlappedCompo
 		if (EffectApplicationPolicy == EEffectApplicationPolicy::EEAP_ApplyAndDestroy) Destroy();
 	}
 }
-
-void AEffectActor::BoxCollisionOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
-
-	if (const IAbilitySystemInterface* ASI = Cast<IAbilitySystemInterface>(OtherActor)) {
+void AEffectActor::OverlapEndActor(AActor* OverlapActor) {
+	if (const IAbilitySystemInterface* ASI = Cast<IAbilitySystemInterface>(OverlapActor)) {
 		if (!HasAuthority()) return;
 
 		UAbilitySystemComponent* ASC = ASI->GetAbilitySystemComponent();
@@ -74,7 +74,7 @@ void AEffectActor::BoxCollisionOverlapEnd(UPrimitiveComponent* OverlappedCompone
 void AEffectActor::ApplyEffectToTargetASC(UAbilitySystemComponent* TargetASC) {
 	// ContextHandle
 	FGameplayEffectContextHandle EffectContextHandle = TargetASC->MakeEffectContext(); //instigator is set by makecontexthandle
-	EffectContextHandle.AddSourceObject(this); //source is setting here
+	EffectContextHandle.AddSourceObject(this); //source is set here
 
 	// EffectSpecHandle
 	const FGameplayEffectSpecHandle EffectSpecHandle = TargetASC->MakeOutgoingSpec(EffectBP, EffectLevel, EffectContextHandle);

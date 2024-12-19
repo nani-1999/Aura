@@ -9,11 +9,11 @@
 
 UENUM()
 enum class EEffectApplicationPolicy : uint8 {
-	//EEAP_Apply,               //ApplyEffect OnOverlapBegin
-	//EEAP_ApplyWaitAndDestroy, //ApplyEffect OnOverlayBegin, Wait sometime and Destroy
-	EEAP_ApplyAndDestroy,       //ApplyEffect OnOverlapBegin and Destroy Immediately
-	EEAP_ApplyAndRemove,        //ApplyEffect OnOverlapBegin and RemoveEffect OnOverlapEnd
-	EEAP_None                  //disables collision
+	//EEAP_Apply,                        //ApplyEffect OnOverlapBegin
+	//EEAP_ApplyAndDestroyOrWaitDestroy, //ApplyEffect And Destroy OnOverlapBegin Or Destroy itself after sometime
+	EEAP_ApplyAndDestroy,                //ApplyEffect And Destroy OnOverlapBegin
+	EEAP_ApplyAndRemove,                 //ApplyEffect OnOverlapBegin and RemoveEffect OnOverlapEnd
+	EEAP_None                            //disables collision
 };
 
 class UBoxComponent;
@@ -35,10 +35,13 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UBoxComponent> BoxCollision;
 
+	// Overlap
 	UFUNCTION()
-	void BoxCollisionOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSwEEAP, const FHitResult& SwEEAPResult);
+	void BoxCollisionOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSwEEAP, const FHitResult& SwEEAPResult) { OverlapBeginActor(OtherActor); }
 	UFUNCTION()
-	void BoxCollisionOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	void BoxCollisionOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) { OverlapEndActor(OtherActor); }
+	virtual void OverlapBeginActor(AActor* OverlapActor);
+	virtual void OverlapEndActor(AActor* OverlapActor);
 
 	// Effect Policy
 	UPROPERTY(EditDefaultsOnly, Category = "ClassDefaults | EffectPolicy")
@@ -58,5 +61,4 @@ protected:
 	// Effect Level
 	UPROPERTY(EditAnywhere, Category = "ClassDefaults | EffectLevel")
 	float EffectLevel;
-
 };

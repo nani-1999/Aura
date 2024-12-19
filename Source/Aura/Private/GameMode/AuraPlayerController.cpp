@@ -163,7 +163,7 @@ void AAuraPlayerController::UpdateSplineAndAutoMove() {
 	FHitResult CursorHit;
 	if (PossessedPawn && GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, CursorHit)) {
 		NavPathFinalDestination = CursorHit.Location;
-		// Navigation Path b/w Cursor Hit Location and Possessed Pawn Location
+		// getting Navigation Path Points b/w Cursor Hit Location and Possessed Pawn Location
 		// NavBoundsVolume must in level floor
 		// NavigationSystem in build.cs
 		// AllowClientSideNavigation must be enabled in project settings
@@ -171,7 +171,7 @@ void AAuraPlayerController::UpdateSplineAndAutoMove() {
 
 			AutoMoveSpline->ClearSplinePoints();
 			for (const FVector& Loc : NavPath->PathPoints) {
-				DrawDebugPoint(GetWorld(), Loc, 10.f, FColor::Red, false, 3.f); // Debug
+				DrawDebugPoint(GetWorld(), Loc, 10.f, FColor::Green, false, 3.f); // Debug
 				AutoMoveSpline->AddSplinePoint(Loc, ESplineCoordinateSpace::World);
 			}
 			bAutoMove = true;

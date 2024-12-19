@@ -17,3 +17,5 @@
 		default : \
 			UE_LOG(LogTemp, Verbosity, TEXT("MAX? | " ## Str), ##__VA_ARGS__); \
 	} \
+
+#define ECC_NonPhysical ECollisionChannel::ECC_GameTraceChannel1
