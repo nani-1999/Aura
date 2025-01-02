@@ -14,6 +14,7 @@ AAuraProjectile::AAuraProjectile() :
 	ProjectileLifeSpan{ 1.f }
 {
 	PrimaryActorTick.bCanEverTick = false;
+	bReplicates = true; //marking this class for replication, will be on server
 
 	ProjectileComp = CreateDefaultSubobject<UProjectileMovementComponent>(FName("ProjectileComp"));
 	ProjectileComp->InitialSpeed = 550.f;
@@ -32,10 +33,10 @@ AAuraProjectile::AAuraProjectile() :
 void AAuraProjectile::BeginPlay() {
 	Super::BeginPlay();
 
-	SetLifeSpan(ProjectileLifeSpan); //set timer instead // explode at end or skip timer if overlap
-
 	BoxCollision->OnComponentBeginOverlap.AddDynamic(this, &AAuraProjectile::BoxCollisionBeginOverlap);
 	BoxCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
+	SetLifeSpan(ProjectileLifeSpan); //set timer instead // explode at end or skip timer if overlap
 }
 
 void AAuraProjectile::BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
@@ -47,6 +48,10 @@ void AAuraProjectile::BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedCo
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation());
 		// Play Impact Sound
 		UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation());
+
+		if (HasAuthority()) {
+			Destroy();
+		}
 	}
 	else {
 		NANI_LOG(Error, "%s Projectile Overlap Error, Invlaid Overlapped Actor", *GetName());

@@ -23,7 +23,9 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 
+	// Combat Interface
 	virtual int32 GetCharacterLevel() const override { return CharacterLevel; }
+	virtual FTransform GetCombatWeaponSocketTransform() const override;
 
 	// for registering property replication
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;

@@ -26,7 +26,9 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
 	virtual UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 
+	// Combat Interface
 	virtual int32 GetCharacterLevel() const override { return CharacterLevel; }
+	virtual FTransform GetCombatWeaponSocketTransform() const override;
 
 	const FGameplayTag& GetCharacterClass() const { return CharacterClass; }
 

@@ -9,6 +9,7 @@
 #include "GameplayEffect.h"
 #include "DataAsset/AuraCharacterClassInfo.h"
 #include "Abilities/GameplayAbility.h"
+#include "Engine/SkeletalMeshSocket.h"
 
 #include "Aura/Nani/NaniUtility.h"
 
@@ -84,4 +85,13 @@ void AAuraCharacterBase::GiveStartupAbilities() {
 		const FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, GetCharacterLevel());
 		ASC->GiveAbility(AbilitySpec);
 	}
+}
+
+//
+//============================================ Combat Interface ============================================
+//
+FTransform AAuraCharacterBase::GetCombatWeaponSocketTransform() const {
+	const USkeletalMeshSocket* WeaponSocket = Weapon->GetSocketByName(FName("CombatWeaponSocket"));
+	checkf(WeaponSocket, TEXT("Invalid WeaponSocket | ObjectName: %s"), *GetName());
+	return WeaponSocket->GetSocketTransform(Weapon);
 }

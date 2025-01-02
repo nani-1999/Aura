@@ -52,7 +52,7 @@ struct FAuraCharacterClassTags {
 struct FAuraAbilityTags {
 	FGameplayTag Ability_Parent;
 	FGameplayTag Ability_HitReact;
-	FGameplayTag Ability_FireBall;
+	FGameplayTag Ability_FireBolt;
 };
 struct FAuraInputTags {
 	FGameplayTag Input_Parent;

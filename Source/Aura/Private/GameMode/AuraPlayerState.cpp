@@ -26,3 +26,11 @@ void AAuraPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 
 	DOREPLIFETIME(AAuraPlayerState, CharacterLevel);
 }
+
+//
+//============================================ Combat Interface ============================================
+//
+FTransform AAuraPlayerState::GetCombatWeaponSocketTransform() const {
+	ICombatInterface* CombatInterface = Cast<ICombatInterface>(AbilitySystemComponent->GetAvatarActor());
+	return CombatInterface->GetCombatWeaponSocketTransform();
+}

@@ -33,6 +33,9 @@ public:
 	//// Test
 	void Test(const bool bTestPressed);
 
+	// CombatInterface
+	virtual int32 GetCharacterLevel() const override;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -45,8 +48,6 @@ protected:
 	// AbilitySystem
 	virtual void InitAbilitySystem() override;
 
-	// Character Level
-	virtual int32 GetCharacterLevel() const override;
 
 	// HUD
 	void InitLocalPlayerHUD();

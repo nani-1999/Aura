@@ -19,7 +19,7 @@ AAuraCharacter::AAuraCharacter() {
 	CameraBoom->SetupAttachment(GetRootComponent());
 	CameraBoom->SetUsingAbsoluteRotation(true);
 	CameraBoom->bUsePawnControlRotation = false;
-	CameraBoom->TargetArmLength = 750.f;
+	CameraBoom->TargetArmLength = 800.f;
 	CameraBoom->SetRelativeRotation(FRotator(-30.f, 0.f, 0.f));
 
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(FName("CameraComponent"));
@@ -47,10 +47,6 @@ UAbilitySystemComponent* AAuraCharacter::GetAbilitySystemComponent() const {
 }
 UAttributeSet* AAuraCharacter::GetAttributeSet() const {
 	return GetPlayerState<AAuraPlayerState>()->GetAttributeSet();
-}
-
-int32 AAuraCharacter::GetCharacterLevel() const {
-	return GetPlayerState<AAuraPlayerState>()->GetCharacterLevel();
 }
 
 //
@@ -112,7 +108,7 @@ void AAuraCharacter::Test(const bool bTestPressed) {
 	}
 }
 void AAuraCharacter::AbilityInput(const bool bAbilityInputPressed, const FGameplayTag& InputTag) {
-	//Since, Enemy Also has AuraAbilityComponent and Enemy doesn't have input, so Ability Input must be here
+	//Since, Enemy Also has AuraAbilities and Enemy doesn't have input, so Ability Input must be here
 	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
 
 	for (FGameplayAbilitySpec& AbilitySpec : ASC->GetActivatableAbilities()) {
@@ -122,7 +118,7 @@ void AAuraCharacter::AbilityInput(const bool bAbilityInputPressed, const FGamepl
 
 				if (bAbilityInputPressed) {
 					ASC->AbilitySpecInputPressed(AbilitySpec);
-					if (!AbilitySpec.IsActive()) ASC->TryActivateAbility(AbilitySpec.Handle);
+					if (!AbilitySpec.IsActive()) ASC->TryActivateAbility(AbilitySpec.Handle); // TryActivateAbility will do the auth check, so no need here
 					return; //to preventing further loop and activating multiple abilities with same inputtag
 				}
 				else {
@@ -136,5 +132,8 @@ void AAuraCharacter::AbilityInput(const bool bAbilityInputPressed, const FGamepl
 }
 
 //
-//============================================ Ability ============================================
+//============================================ Combat Interface ============================================
 //
+int32 AAuraCharacter::GetCharacterLevel() const {
+	return GetPlayerState<AAuraPlayerState>()->GetCharacterLevel();
+}
